@@ -4,23 +4,39 @@ import { WorkExperience } from "@/components/WorkExperience";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-background text-foreground selection:bg-primary/20 selection:text-primary">
+    <div className="min-h-screen bg-background text-foreground selection:bg-foreground/10">
       <Navbar />
       <Hero />
       <WorkExperience />
 
       {/* Footer */}
-      <footer className="border-t border-border/60 py-8 mt-8">
-        <div className="max-w-6xl mx-auto px-6 md:px-10 flex flex-col md:flex-row items-center justify-between gap-4">
+      <footer
+        className="border-t py-8"
+        style={{
+          borderColor: "rgba(0,0,0,0.07)",
+          background: "#F5F5F5",
+        }}
+      >
+        <div
+          className="max-w-6xl mx-auto px-6 md:px-10 flex flex-col md:flex-row items-center justify-between gap-3"
+        >
           <span
-            className="text-[0.833rem] text-muted-foreground"
-            style={{ fontFamily: "'Raleway', sans-serif" }}
+            style={{
+              fontFamily: "'Raleway', sans-serif",
+              fontSize: "0.833rem",
+              color: "#888888",
+            }}
           >
             Designed & built with care — Riya Sharma, 2024
           </span>
           <span
-            className="text-[0.694rem] text-muted-foreground/60 uppercase tracking-widest"
-            style={{ fontFamily: "'Raleway', sans-serif" }}
+            style={{
+              fontFamily: "'Raleway', sans-serif",
+              fontSize: "0.579rem",
+              color: "#BBBBBB",
+              textTransform: "uppercase",
+              letterSpacing: "0.15em",
+            }}
           >
             UX Designer · Product Thinker
           </span>
