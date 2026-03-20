@@ -277,7 +277,7 @@ export function Hero() {
             />
           ))}
 
-          {/* Card 3 — Palette swatch (back) — always dark card */}
+          {/* Card 3 — Palette swatch (back) — frosted glass */}
           <div
             ref={el => cardsRef.current[0] = el}
             className="absolute transition-transform duration-[120ms] ease-out"
@@ -285,13 +285,15 @@ export function Hero() {
               top: "8%", right: "10%",
               width: 172, height: 132,
               transformStyle: "preserve-3d",
-              background: "#1A1A1A",
-              border: "1px solid rgba(255,255,255,0.08)",
+              background: heroDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.05)",
+              border: heroDark ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(0,0,0,0.08)",
               borderRadius: 13,
               padding: "14px 16px",
+              backdropFilter: "blur(18px)",
+              WebkitBackdropFilter: "blur(18px)",
               boxShadow: heroDark
-                ? "0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06)"
-                : "0 8px 32px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.06)",
+                ? "0 8px 32px rgba(0,0,0,0.35)"
+                : "0 8px 32px rgba(0,0,0,0.1)",
               zIndex: 10,
             }}
           >
@@ -299,21 +301,26 @@ export function Hero() {
               fontFamily: "'Poppins', sans-serif",
               fontSize: "0.52rem", fontWeight: 700,
               letterSpacing: "0.1em", textTransform: "uppercase",
-              color: "rgba(255,255,255,0.3)", marginBottom: 8,
+              color: heroDark ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.3)", marginBottom: 8,
             }}>
               Palette
             </p>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 5, height: 60 }}>
-              {["#F5F5F5", "#D5D5D5", "#A5A5A5", "#757575", "#484848", "#2E2E2E", "#1A1A1A", "#0D0D0D"].map(c => (
-                <div key={c} style={{
+              {(heroDark
+                ? ["rgba(255,255,255,0.9)", "rgba(255,255,255,0.65)", "rgba(255,255,255,0.4)", "rgba(255,255,255,0.22)",
+                   "rgba(255,255,255,0.12)", "rgba(255,255,255,0.07)", "rgba(255,255,255,0.04)", "rgba(255,255,255,0.02)"]
+                : ["rgba(0,0,0,0.85)", "rgba(0,0,0,0.6)", "rgba(0,0,0,0.38)", "rgba(0,0,0,0.2)",
+                   "rgba(0,0,0,0.1)", "rgba(0,0,0,0.06)", "rgba(0,0,0,0.03)", "rgba(0,0,0,0.015)"]
+              ).map((c, i) => (
+                <div key={i} style={{
                   background: c, borderRadius: 7,
-                  border: c === "#0D0D0D" ? "1px solid rgba(255,255,255,0.12)" : "none",
+                  border: i === 7 ? (heroDark ? "1px solid rgba(255,255,255,0.12)" : "1px solid rgba(0,0,0,0.1)") : "none",
                 }} />
               ))}
             </div>
           </div>
 
-          {/* Card 2 — Stats (middle) — always dark card */}
+          {/* Card 2 — Stats (middle) — frosted glass */}
           <div
             ref={el => cardsRef.current[1] = el}
             className="absolute transition-transform duration-[100ms] ease-out"
@@ -321,13 +328,15 @@ export function Hero() {
               top: "44%", right: "30%",
               width: 210, height: 175,
               transformStyle: "preserve-3d",
-              background: "#121212",
-              border: "1px solid rgba(255,255,255,0.07)",
+              background: heroDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.04)",
+              border: heroDark ? "1px solid rgba(255,255,255,0.09)" : "1px solid rgba(0,0,0,0.07)",
               borderRadius: 14,
               padding: "18px 20px",
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
               boxShadow: heroDark
-                ? "0 12px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05)"
-                : "0 12px 40px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05)",
+                ? "0 12px 40px rgba(0,0,0,0.4)"
+                : "0 12px 40px rgba(0,0,0,0.1)",
               display: "flex", flexDirection: "column", justifyContent: "space-between",
               zIndex: 20,
             }}
@@ -337,14 +346,14 @@ export function Hero() {
                 fontFamily: "'Poppins', sans-serif",
                 fontSize: "0.52rem", fontWeight: 700,
                 letterSpacing: "0.1em", textTransform: "uppercase",
-                color: "rgba(255,255,255,0.3)", marginBottom: 4,
+                color: heroDark ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.3)", marginBottom: 4,
               }}>
                 Impact
               </p>
               <h3 style={{
                 fontFamily: "'Poppins', sans-serif",
                 fontSize: "1.2rem", fontWeight: 800, lineHeight: 1.2,
-                color: "#F5F5F5", margin: 0,
+                color: heroDark ? "rgba(255,255,255,0.88)" : "rgba(0,0,0,0.82)", margin: 0,
               }}>
                 12 Products<br />Designed
               </h3>
@@ -355,14 +364,16 @@ export function Hero() {
                   flex: 1, borderRadius: "3px 3px 0 0",
                   height: `${h}%`,
                   background: i === 5
-                    ? "rgba(255,255,255,0.78)"
-                    : `rgba(255,255,255,${0.1 + (h / 100) * 0.22})`,
+                    ? (heroDark ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.6)")
+                    : (heroDark
+                        ? `rgba(255,255,255,${0.08 + (h / 100) * 0.18})`
+                        : `rgba(0,0,0,${0.06 + (h / 100) * 0.16})`),
                 }} />
               ))}
             </div>
           </div>
 
-          {/* Card 1 — Wireframe (front) — always white card */}
+          {/* Card 1 — Wireframe (front) — frosted glass */}
           <div
             ref={el => cardsRef.current[2] = el}
             className="absolute transition-transform duration-[80ms] ease-out"
@@ -370,45 +381,65 @@ export function Hero() {
               top: "2%", right: "44%",
               width: 225, height: 245,
               transformStyle: "preserve-3d",
-              background: "#FFFFFF",
-              border: "1px solid rgba(0,0,0,0.07)",
+              background: heroDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.04)",
+              border: heroDark ? "1px solid rgba(255,255,255,0.12)" : "1px solid rgba(0,0,0,0.08)",
               borderRadius: 16,
               padding: "16px 18px",
+              backdropFilter: "blur(24px)",
+              WebkitBackdropFilter: "blur(24px)",
               boxShadow: heroDark
-                ? "0 20px 60px rgba(0,0,0,0.5), 0 4px 12px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.95)"
-                : "0 20px 60px rgba(0,0,0,0.13), 0 4px 12px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.95)",
+                ? "0 20px 60px rgba(0,0,0,0.45), 0 4px 12px rgba(0,0,0,0.25)"
+                : "0 20px 60px rgba(0,0,0,0.1), 0 4px 12px rgba(0,0,0,0.05)",
               zIndex: 30,
             }}
           >
             <div style={{ display: "flex", gap: 6, marginBottom: 14 }}>
-              {["#D8D8D8", "#E4E4E4", "#EBEBEB"].map((c, i) => (
-                <div key={i} style={{ width: 9, height: 9, borderRadius: "50%", background: c }} />
+              {[0.25, 0.15, 0.1].map((op, i) => (
+                <div key={i} style={{
+                  width: 9, height: 9, borderRadius: "50%",
+                  background: heroDark ? `rgba(255,255,255,${op})` : `rgba(0,0,0,${op})`,
+                }} />
               ))}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
               <div style={{
                 width: "100%", height: 82, borderRadius: 11,
-                background: "linear-gradient(135deg, #F0F0F0, #E8E8E8)",
-                border: "1px solid rgba(0,0,0,0.05)",
+                background: heroDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.05)",
+                border: heroDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(0,0,0,0.06)",
                 display: "flex", alignItems: "center", justifyContent: "center",
               }}>
                 <div style={{
                   width: 32, height: 32, borderRadius: "50%",
-                  background: "rgba(0,0,0,0.08)",
+                  background: heroDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.08)",
                   display: "flex", alignItems: "center", justifyContent: "center",
                 }}>
-                  <div style={{ width: 12, height: 12, borderRadius: 3, background: "rgba(0,0,0,0.2)" }} />
+                  <div style={{
+                    width: 12, height: 12, borderRadius: 3,
+                    background: heroDark ? "rgba(255,255,255,0.22)" : "rgba(0,0,0,0.18)",
+                  }} />
                 </div>
               </div>
-              <div style={{ width: "76%", height: 7, borderRadius: 4, background: "#E8E8E8" }} />
-              <div style={{ width: "56%", height: 7, borderRadius: 4, background: "#EEEEEE" }} />
+              <div style={{ width: "76%", height: 7, borderRadius: 4, background: heroDark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.1)" }} />
+              <div style={{ width: "56%", height: 7, borderRadius: 4, background: heroDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.06)" }} />
               <div style={{ display: "flex", gap: 8, marginTop: 6 }}>
-                <div style={{ flex: 1, height: 28, borderRadius: 100, background: "#1A1A1A" }} />
-                <div style={{ flex: 1, height: 28, borderRadius: 100, background: "#EDEDED", border: "1px solid rgba(0,0,0,0.08)" }} />
+                <div style={{
+                  flex: 1, height: 28, borderRadius: 100,
+                  background: heroDark ? "rgba(255,255,255,0.82)" : "rgba(0,0,0,0.78)",
+                }} />
+                <div style={{
+                  flex: 1, height: 28, borderRadius: 100,
+                  background: heroDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.07)",
+                  border: heroDark ? "1px solid rgba(255,255,255,0.12)" : "1px solid rgba(0,0,0,0.1)",
+                }} />
               </div>
               <div style={{ display: "flex", gap: 10, marginTop: 2 }}>
                 {[60, 40, 55].map((w, i) => (
-                  <div key={i} style={{ width: `${w}%`, height: 5, borderRadius: 4, background: i === 0 ? "#D0D0D0" : "#EBEBEB" }} />
+                  <div key={i} style={{
+                    width: `${w}%`, height: 5, borderRadius: 4,
+                    background: i === 0
+                      ? (heroDark ? "rgba(255,255,255,0.18)" : "rgba(0,0,0,0.15)")
+                      : (heroDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.07)"),
+                  }} />
                 ))}
               </div>
             </div>
