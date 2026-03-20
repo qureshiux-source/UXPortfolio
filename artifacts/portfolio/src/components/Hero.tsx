@@ -125,7 +125,6 @@ export function Hero() {
                 : "linear-gradient(135deg, #111111 0%, #666666 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
             }}>
               Experiences
             </span>
