@@ -1,6 +1,13 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useTourHighlight } from "@/contexts/TourContext";
+
+const CAT_HIGHLIGHT: Record<string, number> = {
+  "skill-ux":       0,
+  "skill-frontend": 1,
+  "skill-strategy": 2,
+};
 
 const NOISE = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`;
 
@@ -96,6 +103,10 @@ function FlipTile({ tool, isDark }: { tool: typeof TOOLS[0]; isDark: boolean }) 
 export function Skills() {
   const isDark = useDark();
 
+  const highlight    = useTourHighlight();
+  const tourSkill    = !!(highlight && CAT_HIGHLIGHT[highlight] !== undefined);
+  const highlightedCat = highlight ? (CAT_HIGHLIGHT[highlight] ?? -1) : -1;
+
   const bg      = isDark ? "#060606" : "#FAFAFA";
   const eyebrow = isDark ? "#606060" : "#707070";
   const titleClr = isDark ? "#F5F5F5" : "#080808";
@@ -143,16 +154,24 @@ export function Skills() {
 
         {/* Category columns — no card borders */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)" }}>
-          {CATEGORIES.map((cat, ci) => (
+          {CATEGORIES.map((cat, ci) => {
+            const isTourHl = tourSkill && ci === highlightedCat;
+            const isDimmed = tourSkill && !isTourHl;
+            return (
             <motion.div
               key={cat.title}
               initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
+              animate={{ opacity: tourSkill ? (isDimmed ? 0.25 : 1) : 1, y: 0 }}
               transition={{ duration: 0.28, delay: ci * 0.08 }}
               style={{
                 padding: "clamp(14px, 2vh, 20px) clamp(16px, 2vw, 24px)",
                 borderLeft: ci > 0 ? `1px solid ${divider}` : "none",
                 display: "flex", flexDirection: "column", gap: 12,
+                transition: "opacity 0.28s ease",
+                borderRadius: isTourHl ? 10 : 0,
+                outline: isTourHl
+                  ? `1.5px solid ${isDark ? "rgba(255,255,255,0.35)" : "rgba(0,0,0,0.3)"}`
+                  : "none",
               }}
             >
               <span style={{
@@ -173,7 +192,8 @@ export function Skills() {
                 ))}
               </div>
             </motion.div>
-          ))}
+            );
+          })}
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>

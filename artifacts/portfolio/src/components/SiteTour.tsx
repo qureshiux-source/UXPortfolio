@@ -1,363 +1,284 @@
 import { useEffect, useState, useRef, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { X, ChevronRight, ChevronLeft } from "lucide-react";
+import { motion } from "framer-motion";
+import { X, ChevronRight, ChevronLeft, Play } from "lucide-react";
 
-const STEP_DURATION = 3600; // ms visible per step (after scroll settles)
-const SCROLL_SETTLE  = 700; // ms to wait after triggering scroll
+const STEP_DURATION = 2800;
+const SCROLL_SETTLE  = 680;
 
-const STEPS = [
-  {
-    section: 0,
-    eyebrow: "01 / 07  ·  INTRO",
-    title: "Design Lead & Accessibility Specialist",
-    body: "4+ years shaping accessible, intentional digital products — from government portals to fintech flows. Every pixel is deliberate.",
-  },
-  {
-    section: 1,
-    eyebrow: "02 / 07  ·  EXPERIENCE",
-    title: "Currently Leading Design at Wired Hub",
-    body: "UI/UX Design Lead across 10+ Government & Real Estate products. Enforcing WCAG 2.1 AA, building a shared component library, and cutting handoff time by 40%.",
-  },
-  {
-    section: 2,
-    eyebrow: "03 / 07  ·  CASE STUDIES",
-    title: "Deep-Dive Explorations",
-    body: "A fintech onboarding redesign that cut drop-off 42%. A scalable design system adopted by 4 product teams. Research → wireframe → test → ship.",
-  },
-  {
-    section: 3,
-    eyebrow: "04 / 07  ·  PROJECTS",
-    title: "Focused, High-Impact Executions",
-    body: "Banking App Redesign · E-commerce Checkout (+18% conversion) · Analytics Dashboard for 200K+ users. Clarity at every touchpoint.",
-  },
-  {
-    section: 4,
-    eyebrow: "05 / 07  ·  SKILLS",
-    title: "Figma Expert · WCAG Specialist",
-    body: "Full design-to-dev fluency: Figma, ProtoPie, Storybook, Design Tokens, and 4 years with WCAG accessibility tools. Hover the tiles to see proficiency.",
-  },
-  {
-    section: 5,
-    eyebrow: "06 / 07  ·  CREDENTIALS",
-    title: "10+ Certifications & BCS in HCI",
-    body: "Google UX Professional Certificate · Microsoft UX Specialisation · IxDF UX Research & Strategy · BCS in Human-Computer Interaction — Sukkur IBA University.",
-  },
-  {
-    section: 6,
-    eyebrow: "07 / 07  ·  CONTACT",
-    title: "Open to Opportunities",
-    body: "Building accessible, intentional, delightful digital products. Let's collaborate on something meaningful.",
-  },
+export const STEPS = [
+  { section: 0, highlight: null,             label: "Design Lead & Accessibility Specialist" },
+  { section: 1, highlight: "work-wired-hub", label: "Wired Hub — Design Lead" },
+  { section: 1, highlight: "work-exclusive", label: "Exclusive Digitals — Senior UI Designer" },
+  { section: 1, highlight: "work-dcode",     label: "Dcode Dynamics — UI/UX Designer" },
+  { section: 2, highlight: "case-1",         label: "Case Study: Onboarding Redesign −42% drop-off" },
+  { section: 2, highlight: "case-2",         label: "Case Study: Scalable Component Library" },
+  { section: 3, highlight: "proj-1",         label: "Project: Banking App Redesign" },
+  { section: 3, highlight: "proj-2",         label: "Project: E-commerce Checkout +18%" },
+  { section: 3, highlight: "proj-3",         label: "Project: Analytics Platform UI" },
+  { section: 4, highlight: "skill-ux",       label: "Skills: Core UX Logic" },
+  { section: 4, highlight: "skill-frontend", label: "Skills: Frontend Engineering" },
+  { section: 4, highlight: "skill-strategy", label: "Skills: Product Strategy" },
+  { section: 5, highlight: "cred-1",         label: "Google UX Professional Certificate" },
+  { section: 5, highlight: "cred-2",         label: "Microsoft UX Design Specialization" },
+  { section: 5, highlight: "cred-3",         label: "IxDF UX Research & Strategy" },
+  { section: 5, highlight: "cred-5",         label: "BCS in Human-Computer Interaction" },
+  { section: 6, highlight: null,             label: "Open to Opportunities · Let's Collaborate" },
 ];
 
 interface Props {
   scrollEl: React.RefObject<HTMLDivElement | null>;
   isDark: boolean;
   onClose: () => void;
+  onHighlight: (h: string | null) => void;
 }
 
-export function SiteTour({ scrollEl, isDark, onClose }: Props) {
-  const [step, setStep]           = useState(0);
-  const [visible, setVisible]     = useState(false);
-  const [progress, setProgress]   = useState(0);
-  const timerRef   = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const progressRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const closedRef  = useRef(false);
+export function SiteTour({ scrollEl, isDark, onClose, onHighlight }: Props) {
+  const [step, setStep]         = useState(0);
+  const [progress, setProgress] = useState(0);
 
-  /* ── Colors — no new hues, pure existing palette ─────────────────── */
-  const ringColor  = isDark ? "rgba(255,255,255,0.9)"  : "rgba(0,0,0,0.85)";
-  const tipBg      = isDark ? "#F5F5F5" : "#0A0A0A";
-  const tipFg      = isDark ? "#0A0A0A" : "#F5F5F5";
-  const tipMuted   = isDark ? "rgba(0,0,0,0.45)"       : "rgba(255,255,255,0.5)";
-  const tipBorder  = isDark ? "rgba(0,0,0,0.1)"        : "rgba(255,255,255,0.12)";
-  const skipBg     = isDark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.55)";
-  const skipFg     = isDark ? "#0A0A0A" : "#F5F5F5";
-  const progTrack  = isDark ? "rgba(0,0,0,0.15)"       : "rgba(255,255,255,0.15)";
-  const progFill   = isDark ? "rgba(0,0,0,0.6)"        : "rgba(255,255,255,0.85)";
-  const btnBdr     = isDark ? "rgba(0,0,0,0.2)"        : "rgba(255,255,255,0.2)";
-  const scrimEnd   = isDark ? "rgba(0,0,0,0.82)"       : "rgba(0,0,0,0.78)";
+  /* Stable refs — never cause useCallback invalidation */
+  const closedRef      = useRef(false);
+  const stepRef        = useRef(0);
+  const timerRef       = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const intervalRef    = useRef<ReturnType<typeof setInterval> | null>(null);
+  const onHighlightRef = useRef(onHighlight);
+  const onCloseRef     = useRef(onClose);
+  const scrollElRef    = useRef(scrollEl);
+  // Keep prop refs current every render
+  onHighlightRef.current = onHighlight;
+  onCloseRef.current     = onClose;
+  scrollElRef.current    = scrollEl;
+
+  /* ── Palette: matches inverted navbar ──────────────────────────────── */
+  const barBg    = isDark ? "rgba(245,245,245,0.95)" : "rgba(8,8,8,0.93)";
+  const barBdr   = isDark ? "rgba(0,0,0,0.1)"        : "rgba(255,255,255,0.1)";
+  const txt      = isDark ? "#0A0A0A"                : "#F0F0F0";
+  const muted    = isDark ? "rgba(0,0,0,0.38)"       : "rgba(255,255,255,0.38)";
+  const sep      = isDark ? "rgba(0,0,0,0.12)"       : "rgba(255,255,255,0.12)";
+  const iconBg   = isDark ? "rgba(0,0,0,0.07)"       : "rgba(255,255,255,0.08)";
+  const progFill = isDark ? "rgba(0,0,0,0.7)"        : "rgba(255,255,255,0.8)";
+  const ringClr  = isDark ? "rgba(255,255,255,0.85)" : "rgba(0,0,0,0.8)";
   /* ─────────────────────────────────────────────────────────────────── */
 
+  /* clearTimers — stable, no deps */
   const clearTimers = useCallback(() => {
     if (timerRef.current)    clearTimeout(timerRef.current);
-    if (progressRef.current) clearInterval(progressRef.current);
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    timerRef.current = null;
+    intervalRef.current = null;
   }, []);
 
-  const goToStep = useCallback((idx: number) => {
-    if (closedRef.current) return;
-    clearTimers();
-    setVisible(false);
-    setProgress(0);
-
-    /* Scroll scroll-snap container to target section */
-    if (scrollEl.current) {
-      scrollEl.current.scrollTo({
-        top: STEPS[idx].section * window.innerHeight,
-        behavior: "smooth",
-      });
-    }
-
-    /* Wait for scroll to settle, then show tooltip and start timer */
-    timerRef.current = setTimeout(() => {
-      if (closedRef.current) return;
-      setStep(idx);
-      setVisible(true);
-
-      /* Progress bar */
-      const tick = 50;
-      let elapsed = 0;
-      progressRef.current = setInterval(() => {
-        elapsed += tick;
-        setProgress(Math.min(elapsed / STEP_DURATION, 1));
-        if (elapsed >= STEP_DURATION) {
-          clearInterval(progressRef.current!);
-          /* Auto-advance */
-          if (idx < STEPS.length - 1) {
-            goToStep(idx + 1);
-          } else {
-            /* Tour finished */
-            timerRef.current = setTimeout(() => {
-              if (!closedRef.current) close();
-            }, 600);
-          }
-        }
-      }, tick);
-    }, SCROLL_SETTLE);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clearTimers, scrollEl]);
-
+  /* close — stable, uses refs for callbacks */
   const close = useCallback(() => {
     closedRef.current = true;
     clearTimers();
-    setVisible(false);
-    onClose();
-  }, [clearTimers, onClose]);
+    onHighlightRef.current(null);
+    onCloseRef.current();
+  }, [clearTimers]);
+
+  /* goToStep — stable, calls itself via ref to avoid stale closure */
+  const goToStepRef = useRef<(idx: number) => void>(() => {});
+
+  const goToStep = useCallback((idx: number) => {
+    if (closedRef.current || idx >= STEPS.length) return;
+    clearTimers();
+    setProgress(0);
+
+    const prevSection = STEPS[stepRef.current]?.section ?? -1;
+    const nextSection = STEPS[idx].section;
+    const sameSection = idx > 0 && prevSection === nextSection;
+
+    if (!sameSection) {
+      const el = scrollElRef.current?.current;
+      if (el) el.scrollTo({ top: nextSection * window.innerHeight, behavior: "smooth" });
+    }
+
+    const settle = sameSection ? 0 : SCROLL_SETTLE;
+
+    timerRef.current = setTimeout(() => {
+      if (closedRef.current) return;
+      stepRef.current = idx;
+      setStep(idx);
+      onHighlightRef.current(STEPS[idx].highlight);
+
+      const tick = 50;
+      let elapsed = 0;
+      intervalRef.current = setInterval(() => {
+        if (closedRef.current) { clearInterval(intervalRef.current!); return; }
+        elapsed += tick;
+        setProgress(Math.min(elapsed / STEP_DURATION, 1));
+        if (elapsed >= STEP_DURATION) {
+          clearInterval(intervalRef.current!);
+          intervalRef.current = null;
+          if (idx < STEPS.length - 1) {
+            goToStepRef.current(idx + 1);
+          } else {
+            close();
+          }
+        }
+      }, tick);
+    }, settle);
+  }, [clearTimers, close]);
+
+  /* Keep goToStep ref current so the interval always calls the latest */
+  goToStepRef.current = goToStep;
 
   /* Start on mount */
   useEffect(() => {
     closedRef.current = false;
-    goToStep(0);
-    return () => { closedRef.current = true; clearTimers(); };
+    goToStepRef.current(0);
+    return () => {
+      closedRef.current = true;
+      clearTimers();
+      onHighlightRef.current(null);
+    };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  /* Keyboard: Escape = close, → = next, ← = prev */
+  /* Keyboard: Escape / ← → */
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (e.key === "Escape") { close(); }
-      if (e.key === "ArrowRight" && step < STEPS.length - 1) { goToStep(step + 1); }
-      if (e.key === "ArrowLeft"  && step > 0)                { goToStep(step - 1); }
+      if (e.key === "Escape")     { close(); }
+      if (e.key === "ArrowRight") { goToStepRef.current(stepRef.current + 1); }
+      if (e.key === "ArrowLeft")  { if (stepRef.current > 0) goToStepRef.current(stepRef.current - 1); }
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [close, goToStep, step]);
+  }, [close]);
 
-  const currentStep = STEPS[step];
+  const current = STEPS[step];
+
+  const iconBtn = (
+    onClick: () => void,
+    children: React.ReactNode,
+    label: string,
+    disabled?: boolean,
+  ) => (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={label}
+      style={{
+        all: "unset", cursor: disabled ? "default" : "pointer",
+        width: 28, height: 28, borderRadius: "50%",
+        background: disabled ? "transparent" : iconBg,
+        display: "flex", alignItems: "center", justifyContent: "center",
+        opacity: disabled ? 0.25 : 1,
+        transition: "opacity 0.18s, background 0.18s",
+        flexShrink: 0,
+      }}
+    >
+      {children}
+    </button>
+  );
 
   return (
     <>
-      {/* Focus ring — viewport border, pointer-events: none */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
+      {/* Subtle viewport focus ring */}
+      <div
+        aria-hidden
         style={{
           position: "fixed", inset: 0, zIndex: 9990,
-          border: `2.5px solid ${ringColor}`,
-          pointerEvents: "none",
-          boxSizing: "border-box",
+          border: `2px solid ${ringClr}`,
+          pointerEvents: "none", boxSizing: "border-box",
+          opacity: 0.3,
         }}
       />
 
-      {/* Bottom scrim — gradient so tooltip stays readable regardless of section bg */}
-      <div style={{
-        position: "fixed", bottom: 0, left: 0, right: 0, height: 220,
-        background: `linear-gradient(to bottom, transparent 0%, ${scrimEnd} 100%)`,
-        pointerEvents: "none", zIndex: 9991,
-      }} />
-
-      {/* Skip button — top right */}
-      <motion.button
-        initial={{ opacity: 0, y: -8 }}
+      {/* ── Compact single-row bar ── */}
+      <motion.div
+        role="region"
+        aria-label="Site tour"
+        initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.25 }}
-        onClick={close}
-        aria-label="Close tour"
+        transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
         style={{
-          position: "fixed", top: 72, right: 18, zIndex: 9999,
-          display: "flex", alignItems: "center", gap: 6,
-          fontFamily: "'Raleway', sans-serif",
-          fontSize: "0.62rem", fontWeight: 700,
-          letterSpacing: "0.12em", textTransform: "uppercase",
-          padding: "7px 14px", borderRadius: 100,
-          background: skipBg,
-          color: skipFg,
-          border: "none", cursor: "pointer",
-          backdropFilter: "blur(12px)",
-          WebkitBackdropFilter: "blur(12px)",
+          position: "fixed", bottom: 20, left: 20,
+          zIndex: 9999,
+          display: "flex", alignItems: "center",
+          height: 42,
+          background: barBg,
+          border: `1px solid ${barBdr}`,
+          borderRadius: 100,
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          boxShadow: isDark
+            ? "0 4px 24px rgba(0,0,0,0.18)"
+            : "0 4px 24px rgba(0,0,0,0.45)",
+          overflow: "hidden",
+          maxWidth: "calc(100vw - 40px)",
         }}
       >
-        <X size={11} />
-        Skip Tour
-      </motion.button>
-
-      {/* Step counter dots — bottom left */}
-      <div style={{
-        position: "fixed", bottom: 160, left: "50%",
-        transform: "translateX(-50%)",
-        display: "flex", gap: 6, zIndex: 9992,
-        pointerEvents: "none",
-      }}>
-        {STEPS.map((_, i) => (
-          <div key={i} style={{
-            width: i === step ? 16 : 5,
-            height: 5, borderRadius: 100,
-            background: i === step
-              ? (isDark ? "rgba(245,245,245,0.9)" : "rgba(245,245,245,0.9)")
-              : "rgba(245,245,245,0.3)",
-            transition: "width 0.3s ease, background 0.3s ease",
-          }} />
-        ))}
-      </div>
-
-      {/* Tooltip card */}
-      <AnimatePresence mode="wait">
-        {visible && (
+        {/* Progress line — top edge */}
+        <div style={{
+          position: "absolute", top: 0, left: 0, right: 0, height: 2,
+          background: isDark ? "rgba(0,0,0,0.06)" : "rgba(255,255,255,0.06)",
+          overflow: "hidden",
+        }}>
           <motion.div
+            style={{ height: "100%", background: progFill, transformOrigin: "left", scaleX: progress }}
+          />
+        </div>
+
+        {/* Content row */}
+        <div style={{
+          display: "flex", alignItems: "center", gap: 8,
+          padding: "0 8px 0 14px", width: "100%",
+        }}>
+          <Play size={10} style={{ color: txt, opacity: 0.5, flexShrink: 0, fill: txt }} aria-hidden />
+
+          <motion.span
             key={step}
-            initial={{ opacity: 0, y: 16, scale: 0.97 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -8, scale: 0.97 }}
-            transition={{ duration: 0.28, ease: [0.4, 0, 0.2, 1] }}
+            initial={{ opacity: 0, x: 6 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.2 }}
             style={{
-              position: "fixed",
-              bottom: "clamp(18px, 4vh, 36px)",
-              left: "50%", transform: "translateX(-50%)",
-              zIndex: 9999,
-              width: "min(520px, calc(100vw - 32px))",
-              background: tipBg,
-              borderRadius: 18,
-              padding: "clamp(18px, 3vw, 26px) clamp(20px, 3vw, 28px)",
-              border: `1px solid ${tipBorder}`,
-              boxShadow: isDark
-                ? "0 24px 64px rgba(0,0,0,0.8)"
-                : "0 24px 64px rgba(0,0,0,0.55)",
+              fontFamily: "'Raleway', sans-serif",
+              fontSize: "0.72rem", fontWeight: 700,
+              letterSpacing: "0.01em",
+              color: txt,
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              maxWidth: "clamp(160px, 28vw, 300px)",
+              flexShrink: 1,
             }}
           >
-            {/* Progress bar */}
-            <div style={{
-              position: "absolute", top: 0, left: 0, right: 0, height: 3,
-              background: progTrack, borderRadius: "18px 18px 0 0", overflow: "hidden",
-            }}>
-              <motion.div
-                style={{
-                  height: "100%", background: progFill,
-                  transformOrigin: "left", scaleX: progress,
-                }}
-              />
-            </div>
+            {current.label}
+          </motion.span>
 
-            {/* Eyebrow */}
-            <div style={{
-              fontFamily: "'Raleway', sans-serif",
-              fontSize: "0.55rem", fontWeight: 700,
-              letterSpacing: "0.18em", textTransform: "uppercase",
-              color: tipMuted, marginBottom: 8,
-            }}>
-              {currentStep.eyebrow}
-            </div>
+          <span style={{
+            fontFamily: "'Raleway', sans-serif",
+            fontSize: "0.58rem", fontWeight: 700,
+            color: muted, flexShrink: 0,
+            letterSpacing: "0.04em",
+          }}>
+            {step + 1}/{STEPS.length}
+          </span>
 
-            {/* Title */}
-            <h3 style={{
-              fontFamily: "'Poppins', sans-serif",
-              fontSize: "clamp(0.95rem, 2vw, 1.15rem)",
-              fontWeight: 800, letterSpacing: "-0.02em",
-              lineHeight: 1.2, color: tipFg,
-              margin: "0 0 8px",
-            }}>
-              {currentStep.title}
-            </h3>
+          <div style={{ width: 1, height: 16, background: sep, flexShrink: 0 }} />
 
-            {/* Body */}
-            <p style={{
-              fontFamily: "'Raleway', sans-serif",
-              fontSize: "clamp(0.75rem, 1.2vw, 0.84rem)",
-              lineHeight: 1.65, fontWeight: 500,
-              color: tipFg, opacity: 0.72, margin: 0,
-            }}>
-              {currentStep.body}
-            </p>
+          {iconBtn(
+            () => { if (stepRef.current > 0) goToStepRef.current(stepRef.current - 1); },
+            <ChevronLeft size={13} style={{ color: txt }} />,
+            "Previous step",
+            step === 0,
+          )}
 
-            {/* Manual nav */}
-            <div style={{
-              display: "flex", alignItems: "center",
-              justifyContent: "space-between",
-              marginTop: 16, paddingTop: 14,
-              borderTop: `1px solid ${tipBorder}`,
-            }}>
-              <button
-                onClick={() => { if (step > 0) goToStep(step - 1); }}
-                disabled={step === 0}
-                style={{
-                  all: "unset", cursor: step === 0 ? "default" : "pointer",
-                  display: "flex", alignItems: "center", gap: 5,
-                  fontFamily: "'Raleway', sans-serif",
-                  fontSize: "0.62rem", fontWeight: 700,
-                  letterSpacing: "0.08em", textTransform: "uppercase",
-                  color: step === 0 ? tipMuted : tipFg,
-                  opacity: step === 0 ? 0.35 : 1,
-                  transition: "opacity 0.18s",
-                }}
-              >
-                <ChevronLeft size={13} /> Prev
-              </button>
+          {step < STEPS.length - 1
+            ? iconBtn(
+                () => goToStepRef.current(stepRef.current + 1),
+                <ChevronRight size={13} style={{ color: txt }} />,
+                "Next step",
+              )
+            : iconBtn(close, <ChevronRight size={13} style={{ color: txt }} />, "Finish tour")
+          }
 
-              <span style={{
-                fontFamily: "'Raleway', sans-serif",
-                fontSize: "0.55rem", fontWeight: 700,
-                letterSpacing: "0.1em", color: tipMuted,
-              }}>
-                {step + 1} / {STEPS.length}
-              </span>
+          <div style={{ width: 1, height: 16, background: sep, flexShrink: 0 }} />
 
-              {step < STEPS.length - 1 ? (
-                <button
-                  onClick={() => goToStep(step + 1)}
-                  style={{
-                    all: "unset", cursor: "pointer",
-                    display: "flex", alignItems: "center", gap: 5,
-                    fontFamily: "'Raleway', sans-serif",
-                    fontSize: "0.62rem", fontWeight: 700,
-                    letterSpacing: "0.08em", textTransform: "uppercase",
-                    padding: "6px 14px", borderRadius: 100,
-                    border: `1px solid ${btnBdr}`,
-                    color: tipFg, background: "transparent",
-                    transition: "background 0.18s",
-                  }}
-                >
-                  Next <ChevronRight size={13} />
-                </button>
-              ) : (
-                <button
-                  onClick={close}
-                  style={{
-                    all: "unset", cursor: "pointer",
-                    display: "flex", alignItems: "center", gap: 5,
-                    fontFamily: "'Raleway', sans-serif",
-                    fontSize: "0.62rem", fontWeight: 700,
-                    letterSpacing: "0.08em", textTransform: "uppercase",
-                    padding: "6px 16px", borderRadius: 100,
-                    background: progFill, color: tipBg,
-                  }}
-                >
-                  Finish <ChevronRight size={13} />
-                </button>
-              )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          {iconBtn(close, <X size={12} style={{ color: txt }} />, "Close tour")}
+        </div>
+      </motion.div>
     </>
   );
 }

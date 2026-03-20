@@ -2,6 +2,13 @@ import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, ArrowUpRight } from "lucide-react";
+import { useTourHighlight } from "@/contexts/TourContext";
+
+const HIGHLIGHT_TO_JOB: Record<string, string> = {
+  "work-wired-hub": "wired-hub",
+  "work-exclusive": "exclusive-digitals",
+  "work-dcode":     "dcode-dynamics",
+};
 
 const NOISE = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`;
 
@@ -75,6 +82,13 @@ export function WorkExperience() {
   const isDark = useDark();
   const [active, setActive] = useState(JOBS[0].id);
   const activeJob = JOBS.find(j => j.id === active)!;
+
+  /* Tour: auto-switch active job and surface highlight */
+  const highlight = useTourHighlight();
+  const tourWork  = !!(highlight && HIGHLIGHT_TO_JOB[highlight]);
+  useEffect(() => {
+    if (highlight && HIGHLIGHT_TO_JOB[highlight]) setActive(HIGHLIGHT_TO_JOB[highlight]);
+  }, [highlight]);
 
   /* ── Palette ──────────────────────────────────────── */
   const bg        = isDark ? "#030303" : "#FFFFFF";
@@ -160,6 +174,8 @@ export function WorkExperience() {
 
             {JOBS.map((job, idx) => {
               const isActive = job.id === active;
+              const isTourHighlighted = tourWork && isActive;
+              const isTourDimmed      = tourWork && !isActive;
               return (
                 <button
                   key={job.id}
@@ -170,8 +186,11 @@ export function WorkExperience() {
                     width: "100%",
                     paddingBottom: idx < JOBS.length - 1 ? "clamp(22px, 3.5vh, 38px)" : 0,
                     position: "relative",
+                    opacity: isTourDimmed ? 0.28 : 1,
+                    transition: "opacity 0.3s ease",
                   }}
                 >
+                  {/* dot */}
                   <div style={{
                     width: isActive ? 12 : 8,
                     height: isActive ? 12 : 8,
@@ -185,7 +204,19 @@ export function WorkExperience() {
                       : "none",
                     transition: "all 0.22s ease",
                     position: "relative", zIndex: 1,
-                  }} />
+                  }}>
+                    {/* tour pulse ring */}
+                    {isTourHighlighted && (
+                      <motion.div
+                        style={{
+                          position: "absolute", inset: -6, borderRadius: "50%",
+                          border: `1.5px solid ${dotActive}`, pointerEvents: "none",
+                        }}
+                        animate={{ scale: [1, 1.8, 1], opacity: [0.75, 0, 0.75] }}
+                        transition={{ duration: 1.3, repeat: Infinity, ease: "easeInOut" }}
+                      />
+                    )}
+                  </div>
 
                   <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
                     {job.tag && (

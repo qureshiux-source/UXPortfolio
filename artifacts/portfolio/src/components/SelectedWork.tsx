@@ -1,6 +1,7 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
+import { useTourHighlight } from "@/contexts/TourContext";
 
 const NOISE_SVG = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`;
 
@@ -76,6 +77,10 @@ export function CaseStudiesSection() {
   const c = { isDark, ...palette(isDark) };
   const [hovered, setHovered] = useState<number | null>(null);
 
+  const highlight = useTourHighlight();
+  const tourCase  = !!(highlight?.startsWith("case-"));
+  const ringColor = isDark ? "rgba(255,255,255,0.75)" : "rgba(0,0,0,0.7)";
+
   return (
     <div style={{
       height: "100vh", background: c.bg,
@@ -121,20 +126,28 @@ export function CaseStudiesSection() {
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: "clamp(14px, 2vh, 22px)" }}>
-          {CASE_STUDIES.map((cs) => (
+          {CASE_STUDIES.map((cs) => {
+            const isTourHl = highlight === `case-${cs.id}`;
+            const isDimmed = tourCase && !isTourHl;
+            return (
             <div
               key={cs.id}
               onMouseEnter={() => setHovered(cs.id)}
               onMouseLeave={() => setHovered(null)}
               style={{
                 background: hovered === cs.id ? c.cardHover : c.cardBg,
-                border: `1px solid ${c.cardBorder}`,
+                border: isTourHl ? `1.5px solid ${ringColor}` : `1px solid ${c.cardBorder}`,
                 borderRadius: 14,
                 padding: "clamp(20px, 2.5vh, 28px) clamp(20px, 2.5vw, 32px)",
                 cursor: "pointer",
-                transition: "background 0.22s ease",
+                transition: "all 0.28s ease",
                 display: "grid", gridTemplateColumns: "1fr auto",
                 gap: 16, alignItems: "start",
+                opacity: isDimmed ? 0.3 : 1,
+                transform: isTourHl ? "scale(1.015)" : "scale(1)",
+                boxShadow: isTourHl
+                  ? (isDark ? "0 0 0 4px rgba(255,255,255,0.06)" : "0 0 0 4px rgba(0,0,0,0.06)")
+                  : "none",
               }}
             >
               <div>
@@ -185,7 +198,8 @@ export function CaseStudiesSection() {
                 }} />
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>
@@ -196,6 +210,10 @@ export function ProjectsSection() {
   const isDark = useDark();
   const c = { isDark, ...palette(isDark) };
   const [hovered, setHovered] = useState<number | null>(null);
+
+  const highlight = useTourHighlight();
+  const tourProj  = !!(highlight?.startsWith("proj-"));
+  const ringColor = isDark ? "rgba(255,255,255,0.75)" : "rgba(0,0,0,0.7)";
 
   return (
     <div style={{
@@ -236,19 +254,27 @@ export function ProjectsSection() {
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "clamp(12px, 1.5vw, 18px)" }}>
-          {PROJECTS.map((proj) => (
+          {PROJECTS.map((proj) => {
+            const isTourHl = highlight === `proj-${proj.id}`;
+            const isDimmed = tourProj && !isTourHl;
+            return (
             <div
               key={proj.id}
               onMouseEnter={() => setHovered(proj.id)}
               onMouseLeave={() => setHovered(null)}
               style={{
                 background: hovered === proj.id ? c.cardHover : c.cardBg,
-                border: `1px solid ${c.cardBorder}`,
+                border: isTourHl ? `1.5px solid ${ringColor}` : `1px solid ${c.cardBorder}`,
                 borderRadius: 14,
                 padding: "clamp(18px, 2.5vh, 26px) clamp(18px, 2vw, 24px)",
                 cursor: "pointer",
-                transition: "background 0.22s ease",
+                transition: "all 0.28s ease",
                 display: "flex", flexDirection: "column", gap: 10,
+                opacity: isDimmed ? 0.3 : 1,
+                transform: isTourHl ? "scale(1.025)" : "scale(1)",
+                boxShadow: isTourHl
+                  ? (isDark ? "0 0 0 4px rgba(255,255,255,0.06)" : "0 0 0 4px rgba(0,0,0,0.06)")
+                  : "none",
               }}
             >
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -289,7 +315,8 @@ export function ProjectsSection() {
                 }} />
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>

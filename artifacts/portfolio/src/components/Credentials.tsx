@@ -2,6 +2,7 @@ import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ExternalLink, Award, ArrowUpRight } from "lucide-react";
+import { useTourHighlight } from "@/contexts/TourContext";
 
 const NOISE_SVG = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`;
 
@@ -26,6 +27,10 @@ export function Credentials() {
   const isDark = useDark();
   const [selected, setSelected] = useState<typeof CERTS[0] | null>(null);
   const [hoveredId, setHoveredId] = useState<number | null>(null);
+
+  const highlight  = useTourHighlight();
+  const tourCred   = !!(highlight?.startsWith("cred-"));
+  const ringColor  = isDark ? "rgba(255,255,255,0.55)" : "rgba(0,0,0,0.45)";
 
   const bg        = isDark ? "#030303" : "#FFFFFF";
   const eyebrow   = isDark ? "#606060" : "#707070";
@@ -95,12 +100,14 @@ export function Credentials() {
 
         <div style={{ display: "flex", flexDirection: "column" }}>
           {CERTS.map((cert, i) => {
-            const isHovered = hoveredId === cert.id;
+            const isHovered   = hoveredId === cert.id;
+            const isTourHl    = highlight === `cred-${cert.id}`;
+            const isDimmed    = tourCred && !isTourHl;
             return (
               <motion.button
                 key={cert.id}
                 initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
+                animate={{ opacity: isDimmed ? 0.25 : 1, y: 0 }}
                 transition={{ duration: 0.24, delay: i * 0.065 }}
                 onClick={() => setSelected(cert)}
                 onMouseEnter={() => setHoveredId(cert.id)}
@@ -111,9 +118,12 @@ export function Credentials() {
                   gap: "clamp(12px, 2vw, 20px)",
                   padding: "clamp(12px, 1.8vh, 18px) clamp(10px, 1.2vw, 16px)",
                   borderBottom: i < CERTS.length - 1 ? `1px solid ${divider}` : "none",
-                  background: isHovered ? hoverBg : "transparent",
+                  background: isTourHl
+                    ? (isDark ? "rgba(255,255,255,0.045)" : "rgba(0,0,0,0.035)")
+                    : isHovered ? hoverBg : "transparent",
                   borderRadius: 8,
-                  transition: "background 0.18s", width: "100%",
+                  outline: isTourHl ? `1.5px solid ${ringColor}` : "none",
+                  transition: "background 0.22s, opacity 0.28s, outline 0.22s", width: "100%",
                 }}
               >
                 <div style={{

@@ -8,6 +8,8 @@ import { WorkExperience } from "@/components/WorkExperience";
 import { Skills } from "@/components/Skills";
 import { Credentials } from "@/components/Credentials";
 import { SiteTour } from "@/components/SiteTour";
+import { TourHighlightContext } from "@/contexts/TourContext";
+import type { TourHighlight } from "@/contexts/TourContext";
 
 const NOISE_SVG = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`;
 
@@ -145,7 +147,8 @@ export default function Home() {
   const isDark = mounted ? resolvedTheme === "dark" : system;
 
   /* ─── Site Tour ─────────────────────────────────────────────────────── */
-  const [tourActive, setTourActive] = useState(false);
+  const [tourActive, setTourActive]       = useState(false);
+  const [tourHighlight, setTourHighlight] = useState<TourHighlight>(null);
   const startTour = useCallback(() => setTourActive(true), []);
 
   /* ─── Performance: zero setState on scroll ─────────────────────────── */
@@ -194,7 +197,8 @@ export default function Home() {
         <SiteTour
           scrollEl={scrollRef}
           isDark={isDark}
-          onClose={() => setTourActive(false)}
+          onClose={() => { setTourActive(false); setTourHighlight(null); }}
+          onHighlight={setTourHighlight}
         />
       )}
 
@@ -242,37 +246,39 @@ export default function Home() {
         Resume
       </a>
 
-      {/* Scroll-snap container */}
-      <div
-        ref={scrollRef}
-        onScroll={handleScroll}
-        style={{
-          height: "100vh", overflowY: "scroll",
-          scrollSnapType: "y mandatory",
-          scrollBehavior: "smooth",
-          willChange: "scroll-position",
-        }}
-      >
-        <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
-          <Hero onStartTour={startTour} />
-        </section>
-        <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
-          <WorkExperience />
-        </section>
-        <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
-          <CaseStudiesSection />
-        </section>
-        <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
-          <ProjectsSection />
-        </section>
-        <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
-          <Skills />
-        </section>
-        <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
-          <Credentials />
-        </section>
-        <Footer isDark={isDark} />
-      </div>
+      {/* Scroll-snap container wrapped in highlight context */}
+      <TourHighlightContext.Provider value={tourHighlight}>
+        <div
+          ref={scrollRef}
+          onScroll={handleScroll}
+          style={{
+            height: "100vh", overflowY: "scroll",
+            scrollSnapType: "y mandatory",
+            scrollBehavior: "smooth",
+            willChange: "scroll-position",
+          }}
+        >
+          <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
+            <Hero onStartTour={startTour} />
+          </section>
+          <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
+            <WorkExperience />
+          </section>
+          <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
+            <CaseStudiesSection />
+          </section>
+          <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
+            <ProjectsSection />
+          </section>
+          <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
+            <Skills />
+          </section>
+          <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
+            <Credentials />
+          </section>
+          <Footer isDark={isDark} />
+        </div>
+      </TourHighlightContext.Provider>
     </>
   );
 }
