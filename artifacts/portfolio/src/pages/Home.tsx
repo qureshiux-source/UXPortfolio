@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
+import { CaseStudiesSection, ProjectsSection } from "@/components/SelectedWork";
 import { WorkExperience } from "@/components/WorkExperience";
 
 export default function Home() {
@@ -20,12 +21,22 @@ export default function Home() {
           <Hero />
         </section>
 
-        {/* Section 2: Work Experience */}
+        {/* Section 2: Case Studies */}
+        <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
+          <CaseStudiesSection />
+        </section>
+
+        {/* Section 3: Projects */}
+        <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
+          <ProjectsSection />
+        </section>
+
+        {/* Section 4: Work Experience */}
         <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
           <WorkExperience />
         </section>
 
-        {/* Section 3: Footer snap target */}
+        {/* Section 5: Footer */}
         <section
           style={{
             scrollSnapAlign: "start",
