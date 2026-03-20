@@ -21,11 +21,7 @@ export function Hero() {
         if (!card) return;
         const depth = (index + 1) * 8;
         const rot = (index + 1) * 1.0;
-        card.style.transform = `
-          translate(${xPos * depth}px, ${yPos * depth}px)
-          rotateX(${yPos * -rot}deg)
-          rotateY(${xPos * rot}deg)
-        `;
+        card.style.transform = `translate(${xPos * depth}px, ${yPos * depth}px) rotateX(${yPos * -rot}deg) rotateY(${xPos * rot}deg)`;
       });
       dotsRef.current.forEach((dot, index) => {
         if (!dot) return;
@@ -48,89 +44,45 @@ export function Hero() {
         marginTop: 64,
         minHeight: "calc(100vh - 64px)",
         perspective: "1200px",
+        background: "#F8F8F8",
       }}
     >
-      {/* ── SPLIT BACKGROUND ── */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div
-          className="absolute top-0 bottom-0 left-0"
-          style={{
-            width: "57%",
-            background: "linear-gradient(160deg, #FAFAFA 0%, #F0F0F0 100%)",
-          }}
-        />
-        <div
-          className="absolute top-0 bottom-0 right-0"
-          style={{
-            width: "43%",
-            background: "linear-gradient(210deg, #1C1C1C 0%, #0D0D0D 100%)",
-          }}
-        />
-        {/* Soft blend at seam */}
-        <div
-          className="absolute inset-y-0"
-          style={{
-            left: "calc(57% - 45px)",
-            width: "90px",
-            background: "linear-gradient(90deg, #F0F0F0 0%, #0D0D0D 100%)",
-            filter: "blur(30px)",
-            opacity: 0.45,
-          }}
-        />
-        {/* Fabric fold overlays */}
-        <div
-          className="absolute inset-y-0 left-0"
-          style={{
-            width: "57%",
-            background:
-              "radial-gradient(ellipse 55% 45% at 18% 25%, rgba(0,0,0,0.02) 0%, transparent 70%)," +
-              "radial-gradient(ellipse 40% 55% at 78% 82%, rgba(0,0,0,0.015) 0%, transparent 65%)",
-          }}
-        />
-        <div
-          className="absolute inset-y-0 right-0"
-          style={{
-            width: "43%",
-            background:
-              "radial-gradient(ellipse 55% 40% at 72% 22%, rgba(255,255,255,0.04) 0%, transparent 70%)," +
-              "radial-gradient(ellipse 45% 55% at 28% 78%, rgba(255,255,255,0.02) 0%, transparent 65%)",
-          }}
-        />
-      </div>
+      {/* Subtle fabric fold texture — full background */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse 70% 50% at 15% 20%, rgba(0,0,0,0.016) 0%, transparent 70%)," +
+            "radial-gradient(ellipse 50% 60% at 85% 80%, rgba(0,0,0,0.012) 0%, transparent 65%)," +
+            "radial-gradient(ellipse 40% 40% at 60% 40%, rgba(0,0,0,0.008) 0%, transparent 60%)",
+        }}
+      />
 
-      {/* ── CONTENT GRID ── */}
+      {/* Content grid */}
       <div
         className="max-w-6xl mx-auto w-full grid grid-cols-1 md:grid-cols-12 relative z-10"
         style={{ padding: "48px 40px", gap: 32, alignItems: "center" }}
       >
 
-        {/* LEFT: Text + skills + stats */}
+        {/* LEFT: Text */}
         <div className="md:col-span-7 flex flex-col gap-5">
 
-          {/* Eyebrow */}
           <div className="flex items-center gap-2">
-            <span style={{ width: 6, height: 6, borderRadius: "50%", background: "rgba(0,0,0,0.3)", flexShrink: 0 }} />
+            <span style={{ width: 6, height: 6, borderRadius: "50%", background: "rgba(0,0,0,0.28)", flexShrink: 0 }} />
             <span style={{
               fontFamily: "'Raleway', sans-serif",
-              fontSize: "0.66rem",
-              fontWeight: 700,
-              letterSpacing: "0.16em",
-              textTransform: "uppercase",
-              color: "#999999",
+              fontSize: "0.66rem", fontWeight: 700,
+              letterSpacing: "0.16em", textTransform: "uppercase", color: "#999999",
             }}>
               UX Designer & Product Thinker
             </span>
           </div>
 
-          {/* H1 */}
           <h1 style={{
             fontFamily: "'Poppins', sans-serif",
             fontSize: "clamp(1.9rem, 3.5vw, 2.8rem)",
-            fontWeight: 800,
-            lineHeight: 1.1,
-            letterSpacing: "-0.02em",
-            color: "#0D0D0D",
-            margin: 0,
+            fontWeight: 800, lineHeight: 1.1,
+            letterSpacing: "-0.02em", color: "#0D0D0D", margin: 0,
           }}>
             Designing{" "}
             <span style={{
@@ -147,38 +99,28 @@ export function Hero() {
               Matter
               <span style={{
                 position: "absolute", bottom: -2, left: 0, right: 0,
-                height: 2, borderRadius: 2, background: "rgba(0,0,0,0.12)",
+                height: 2, borderRadius: 2, background: "rgba(0,0,0,0.1)",
               }} />
             </span>
           </h1>
 
-          {/* Body */}
           <p style={{
             fontFamily: "'Raleway', sans-serif",
-            fontSize: "0.97rem",
-            lineHeight: 1.75,
-            color: "#555555",
-            maxWidth: 490,
-            margin: 0,
+            fontSize: "0.97rem", lineHeight: 1.75,
+            color: "#555555", maxWidth: 490, margin: 0,
           }}>
             I craft human-centered digital products with thoughtful interactions and clear visual hierarchies. From research to high-fidelity pixels — I make complex simple.
           </p>
 
-          {/* CTAs */}
           <div className="flex items-center gap-3 flex-wrap">
             <button
               className="flex items-center gap-2 group transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
               style={{
                 fontFamily: "'Poppins', sans-serif",
-                fontSize: "0.82rem",
-                fontWeight: 700,
-                letterSpacing: "0.03em",
-                padding: "11px 26px",
-                borderRadius: 100,
-                border: "none",
-                cursor: "pointer",
-                background: "#0D0D0D",
-                color: "#FAFAFA",
+                fontSize: "0.82rem", fontWeight: 700,
+                letterSpacing: "0.03em", padding: "11px 26px",
+                borderRadius: 100, border: "none", cursor: "pointer",
+                background: "#0D0D0D", color: "#FAFAFA",
                 boxShadow: "0 4px 18px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.08)",
               }}
             >
@@ -186,18 +128,14 @@ export function Hero() {
               <MoveRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-200" />
             </button>
             <button
-              className="flex items-center gap-2 group transition-all duration-200 hover:bg-black/[0.04]"
+              className="flex items-center gap-2 transition-all duration-200 hover:bg-black/[0.04]"
               style={{
                 fontFamily: "'Poppins', sans-serif",
-                fontSize: "0.82rem",
-                fontWeight: 600,
-                letterSpacing: "0.02em",
-                padding: "10px 26px",
-                borderRadius: 100,
-                cursor: "pointer",
+                fontSize: "0.82rem", fontWeight: 600,
+                letterSpacing: "0.02em", padding: "10px 26px",
+                borderRadius: 100, cursor: "pointer",
                 border: "1.5px solid rgba(0,0,0,0.16)",
-                color: "#1A1A1A",
-                background: "rgba(255,255,255,0.55)",
+                color: "#1A1A1A", background: "rgba(255,255,255,0.7)",
               }}
             >
               <MessageCircle className="w-3.5 h-3.5" />
@@ -205,19 +143,15 @@ export function Hero() {
             </button>
           </div>
 
-          {/* Skills tags */}
           <div className="flex flex-wrap gap-2">
             {["Figma", "User Research", "Prototyping", "Design Systems", "Accessibility", "UX Writing"].map(tag => (
               <span key={tag} style={{
                 fontFamily: "'Raleway', sans-serif",
-                fontSize: "0.65rem",
-                fontWeight: 700,
-                letterSpacing: "0.06em",
-                textTransform: "uppercase",
-                padding: "5px 12px",
-                borderRadius: 100,
-                background: "#F0F0F0",
-                border: "1px solid rgba(0,0,0,0.08)",
+                fontSize: "0.65rem", fontWeight: 700,
+                letterSpacing: "0.06em", textTransform: "uppercase",
+                padding: "5px 12px", borderRadius: 100,
+                background: "#EFEFEF",
+                border: "1px solid rgba(0,0,0,0.07)",
                 color: "#555555",
               }}>
                 {tag}
@@ -225,7 +159,6 @@ export function Hero() {
             ))}
           </div>
 
-          {/* Divider + Stats */}
           <div style={{ borderTop: "1px solid rgba(0,0,0,0.07)", paddingTop: 16 }}>
             <div className="flex items-center gap-8 flex-wrap">
               {[
@@ -236,42 +169,32 @@ export function Hero() {
                 <div key={label} style={{ display: "flex", flexDirection: "column", gap: 2 }}>
                   <span style={{
                     fontFamily: "'Poppins', sans-serif",
-                    fontSize: "1.4rem",
-                    fontWeight: 800,
-                    lineHeight: 1,
-                    letterSpacing: "-0.02em",
-                    color: "#0D0D0D",
+                    fontSize: "1.4rem", fontWeight: 800,
+                    lineHeight: 1, letterSpacing: "-0.02em", color: "#0D0D0D",
                   }}>
                     {value}
                   </span>
                   <span style={{
                     fontFamily: "'Raleway', sans-serif",
-                    fontSize: "0.58rem",
-                    fontWeight: 700,
-                    letterSpacing: "0.13em",
-                    textTransform: "uppercase",
-                    color: "#BBBBBB",
+                    fontSize: "0.58rem", fontWeight: 700,
+                    letterSpacing: "0.13em", textTransform: "uppercase", color: "#BBBBBB",
                   }}>
                     {label}
                   </span>
                 </div>
               ))}
-
-              {/* Vertical divider + feature row */}
-              <div style={{ width: 1, height: 36, background: "rgba(0,0,0,0.08)", margin: "0 4px" }} />
+              <div style={{ width: 1, height: 36, background: "rgba(0,0,0,0.08)" }} />
               <div className="flex items-center gap-3">
                 {[
                   { icon: Layers, label: "Systems" },
                   { icon: Users, label: "Research" },
                   { icon: Zap, label: "Delivery" },
                 ].map(({ icon: Icon, label }) => (
-                  <div key={label} className="flex items-center gap-1.5" style={{ color: "#888888" }}>
-                    <Icon className="w-3 h-3" />
+                  <div key={label} className="flex items-center gap-1.5">
+                    <Icon className="w-3 h-3" style={{ color: "#999999" }} />
                     <span style={{
                       fontFamily: "'Raleway', sans-serif",
-                      fontSize: "0.65rem",
-                      fontWeight: 600,
-                      color: "#888888",
+                      fontSize: "0.65rem", fontWeight: 600, color: "#888888",
                     }}>
                       {label}
                     </span>
@@ -280,20 +203,27 @@ export function Hero() {
               </div>
             </div>
           </div>
-
         </div>
 
-        {/* RIGHT: Interactive 3D Cards */}
+        {/* RIGHT: Parallax cards on a unified background */}
         <div
           className="md:col-span-5 hidden md:block relative"
           style={{ height: "min(400px, calc(100vh - 280px))", perspective: "1000px" }}
         >
+          {/* Subtle dark card zone hint — soft ellipse shadow */}
+          <div
+            className="absolute inset-0 pointer-events-none rounded-3xl"
+            style={{
+              background: "radial-gradient(ellipse 90% 80% at 60% 50%, rgba(0,0,0,0.04) 0%, transparent 80%)",
+            }}
+          />
+
           {/* Floating dots */}
           {[
-            { top: "6%", left: "8%", size: 6 },
-            { top: "82%", left: "80%", size: 4 },
-            { top: "55%", left: "2%", size: 5 },
-            { top: "92%", left: "42%", size: 5 },
+            { top: "6%", left: "8%", size: 6, opacity: 0.18 },
+            { top: "82%", left: "80%", size: 4, opacity: 0.14 },
+            { top: "55%", left: "2%", size: 5, opacity: 0.16 },
+            { top: "92%", left: "42%", size: 5, opacity: 0.12 },
           ].map((dot, i) => (
             <div
               key={i}
@@ -302,7 +232,7 @@ export function Hero() {
               style={{
                 top: dot.top, left: dot.left,
                 width: dot.size, height: dot.size,
-                background: "rgba(255,255,255,0.22)",
+                background: `rgba(0,0,0,${dot.opacity})`,
               }}
             />
           ))}
@@ -319,7 +249,7 @@ export function Hero() {
               border: "1px solid rgba(255,255,255,0.08)",
               borderRadius: 13,
               padding: "14px 16px",
-              boxShadow: "0 8px 32px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.06)",
+              boxShadow: "0 8px 32px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.06)",
               zIndex: 10,
             }}
           >
@@ -353,7 +283,7 @@ export function Hero() {
               border: "1px solid rgba(255,255,255,0.07)",
               borderRadius: 14,
               padding: "18px 20px",
-              boxShadow: "0 12px 40px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.05)",
+              boxShadow: "0 12px 40px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.05)",
               display: "flex", flexDirection: "column", justifyContent: "space-between",
               zIndex: 20,
             }}
@@ -396,11 +326,11 @@ export function Hero() {
               top: "2%", right: "44%",
               width: 225, height: 245,
               transformStyle: "preserve-3d",
-              background: "#FAFAFA",
-              border: "1px solid rgba(0,0,0,0.06)",
+              background: "#FFFFFF",
+              border: "1px solid rgba(0,0,0,0.07)",
               borderRadius: 16,
               padding: "16px 18px",
-              boxShadow: "0 20px 60px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.95), inset 0 -1px 0 rgba(0,0,0,0.04)",
+              boxShadow: "0 20px 60px rgba(0,0,0,0.13), 0 4px 12px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.95)",
               zIndex: 30,
             }}
           >
@@ -430,8 +360,7 @@ export function Hero() {
                 <div style={{ flex: 1, height: 28, borderRadius: 100, background: "#1A1A1A" }} />
                 <div style={{ flex: 1, height: 28, borderRadius: 100, background: "#EDEDED", border: "1px solid rgba(0,0,0,0.08)" }} />
               </div>
-              {/* Mini nav skeleton */}
-              <div style={{ display: "flex", gap: 10, marginTop: 4 }}>
+              <div style={{ display: "flex", gap: 10, marginTop: 2 }}>
                 {[60, 40, 55].map((w, i) => (
                   <div key={i} style={{ width: `${w}%`, height: 5, borderRadius: 4, background: i === 0 ? "#D0D0D0" : "#EBEBEB" }} />
                 ))}
@@ -449,11 +378,11 @@ export function Hero() {
         <span style={{
           fontFamily: "'Raleway', sans-serif",
           fontSize: "0.52rem", letterSpacing: "0.2em",
-          textTransform: "uppercase", color: "rgba(0,0,0,0.22)",
+          textTransform: "uppercase", color: "rgba(0,0,0,0.2)",
         }}>
           Scroll
         </span>
-        <div style={{ width: 1, height: 26, background: "linear-gradient(to bottom, rgba(0,0,0,0.18), transparent)" }} />
+        <div style={{ width: 1, height: 26, background: "linear-gradient(to bottom, rgba(0,0,0,0.15), transparent)" }} />
       </div>
     </section>
   );
