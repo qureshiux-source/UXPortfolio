@@ -270,19 +270,19 @@ export default function Home() {
           <Hero />
         </section>
 
-        {/* 2 — Case Studies */}
+        {/* 2 — Interactive Work Dashboard */}
+        <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
+          <WorkExperience />
+        </section>
+
+        {/* 3 — Case Studies */}
         <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
           <CaseStudiesSection />
         </section>
 
-        {/* 3 — Projects */}
+        {/* 4 — Projects */}
         <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
           <ProjectsSection />
-        </section>
-
-        {/* 4 — Interactive Work Dashboard */}
-        <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
-          <WorkExperience />
         </section>
 
         {/* 5 — Technical Spec Skills */}
