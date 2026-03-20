@@ -62,52 +62,55 @@ const JOBS = [
   },
 ];
 
-export function WorkExperience() {
+function useDark() {
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   useEffect(() => { setMounted(true); }, []);
-  const isDark = mounted && resolvedTheme === "dark";
+  const system = typeof document !== "undefined"
+    ? document.documentElement.classList.contains("dark") : false;
+  return mounted ? resolvedTheme === "dark" : system;
+}
 
+export function WorkExperience() {
+  const isDark = useDark();
   const [active, setActive] = useState(JOBS[0].id);
   const activeJob = JOBS.find(j => j.id === active)!;
 
-  /* ── Palette ────────────────────────────────────── */
-  const bg          = isDark ? "#0D0D0D" : "#F6F6F6";
-  const eyebrow     = isDark ? "#6A6A6A" : "#606060";
-  const titleClr    = isDark ? "#F0F0F0" : "#0A0A0A";
-  const divider     = isDark ? "rgba(255,255,255,0.09)" : "rgba(0,0,0,0.09)";
+  /* ── Palette ──────────────────────────────────────── */
+  const bg        = isDark ? "#030303" : "#FFFFFF";
+  const eyebrow   = isDark ? "#606060" : "#707070";
+  const titleClr  = isDark ? "#F5F5F5" : "#080808";
+  const divider   = isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.09)";
 
-  /* Vertical dot-line timeline */
-  const dotActive   = isDark ? "#FFFFFF" : "#0A0A0A";
-  const dotBorder   = isDark ? "rgba(255,255,255,0.22)" : "rgba(0,0,0,0.18)";
-  const lineClr     = isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)";
-  const activeTxt   = isDark ? "#F0F0F0" : "#0A0A0A";
-  const inactTxt    = isDark ? "#5A5A5A" : "#9A9A9A";
-  const inactSub    = isDark ? "#444444" : "#BBBBBB";
-  const tagBg       = isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.055)";
-  const tagTxt      = isDark ? "#7A7A7A" : "#606060";
+  /* Vertical dot+line */
+  const dotActive  = isDark ? "#FFFFFF" : "#050505";
+  const dotBorder  = isDark ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.2)";
+  const lineClr    = isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)";
+  const activeTxt  = isDark ? "#F5F5F5" : "#080808";
+  const inactTxt   = isDark ? "#484848" : "#B0B0B0";
+  const inactSub   = isDark ? "#353535" : "#C8C8C8";
+  const tagBg      = isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.05)";
+  const tagTxt     = isDark ? "#686868" : "#686868";
 
   /* Right content */
-  const checkTxt    = isDark ? "#C8C8C8" : "#1A1A1A";
-  const checkIcon   = isDark ? "#FFFFFF" : "#0A0A0A";
-  const projTitle   = isDark ? "#E8E8E8" : "#0A0A0A";
-  const projSep     = isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)";
-  /* ─────────────────────────────────────────────── */
+  const checkTxt  = isDark ? "#C0C0C0" : "#181818";
+  const checkIcon = isDark ? "#F0F0F0" : "#080808";
+  const projTitle = isDark ? "#E8E8E8" : "#080808";
+  const projSep   = isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)";
+  /* ─────────────────────────────────────────────────── */
 
   return (
-    <div
-      style={{
-        height: "100vh", background: bg,
-        display: "flex", flexDirection: "column",
-        justifyContent: "center", overflow: "hidden",
-        position: "relative", transition: "background 0.4s",
-      }}
-    >
-      {/* Noise layer */}
+    <div style={{
+      height: "100vh", background: bg,
+      display: "flex", flexDirection: "column",
+      justifyContent: "center", overflow: "hidden",
+      position: "relative", transition: "background 0.4s",
+    }}>
+      {/* Noise */}
       <div style={{
         position: "absolute", inset: 0, pointerEvents: "none",
         backgroundImage: NOISE, backgroundSize: "180px 180px",
-        opacity: isDark ? 0.05 : 0.022,
+        opacity: isDark ? 0.055 : 0.022,
         mixBlendMode: "overlay" as const,
       }} />
 
@@ -120,7 +123,7 @@ export function WorkExperience() {
         position: "relative", zIndex: 1,
       }}>
 
-        {/* ── Header ───────────────────────────────── */}
+        {/* Header */}
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
             <div style={{ width: 22, height: 1, background: eyebrow }} />
@@ -139,7 +142,7 @@ export function WorkExperience() {
           }}>Where I've Led</h2>
         </div>
 
-        {/* ── Two-column: Dot Timeline + Open Content ── */}
+        {/* Two-column */}
         <div style={{
           display: "grid",
           gridTemplateColumns: "clamp(160px, 22%, 220px) 1fr",
@@ -148,16 +151,11 @@ export function WorkExperience() {
           paddingTop: 8,
         }}>
 
-          {/* LEFT — Vertical dot+line timeline (no box) */}
+          {/* LEFT — Vertical dot+line (no box) */}
           <div style={{ position: "relative", paddingTop: 4 }}>
-            {/* Connecting line */}
             <div style={{
-              position: "absolute",
-              left: 5,
-              top: 10,
-              bottom: 10,
-              width: 1,
-              background: lineClr,
+              position: "absolute", left: 5, top: 10, bottom: 10,
+              width: 1, background: lineClr,
             }} />
 
             {JOBS.map((job, idx) => {
@@ -167,52 +165,44 @@ export function WorkExperience() {
                   key={job.id}
                   onClick={() => setActive(job.id)}
                   style={{
-                    all: "unset",
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "flex-start",
-                    gap: 16,
+                    all: "unset", cursor: "pointer",
+                    display: "flex", alignItems: "flex-start", gap: 16,
                     width: "100%",
                     paddingBottom: idx < JOBS.length - 1 ? "clamp(22px, 3.5vh, 38px)" : 0,
                     position: "relative",
                   }}
                 >
-                  {/* Dot */}
                   <div style={{
                     width: isActive ? 12 : 8,
                     height: isActive ? 12 : 8,
-                    borderRadius: "50%",
-                    flexShrink: 0,
+                    borderRadius: "50%", flexShrink: 0,
                     marginTop: isActive ? 3 : 5,
                     marginLeft: isActive ? 0 : 2,
                     background: isActive ? dotActive : "transparent",
                     border: isActive ? "none" : `1.5px solid ${dotBorder}`,
                     boxShadow: isActive
-                      ? (isDark ? "0 0 0 3px rgba(255,255,255,0.1)" : "0 0 0 3px rgba(0,0,0,0.08)")
+                      ? (isDark ? "0 0 0 3px rgba(255,255,255,0.08)" : "0 0 0 3px rgba(0,0,0,0.06)")
                       : "none",
                     transition: "all 0.22s ease",
                     position: "relative", zIndex: 1,
                   }} />
 
-                  {/* Label */}
                   <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
                     {job.tag && (
                       <span style={{
                         fontFamily: "'Raleway', sans-serif",
                         fontSize: "0.5rem", fontWeight: 700,
                         letterSpacing: "0.1em", textTransform: "uppercase",
-                        color: isDark ? "#5EFF80" : "#1A7A32",
-                        marginBottom: 1,
+                        color: isDark ? "#5EFF80" : "#1A7A32", marginBottom: 1,
                       }}>{job.tag}</span>
                     )}
                     <span style={{
                       fontFamily: "'Poppins', sans-serif",
                       fontSize: "clamp(0.78rem, 1.05vw, 0.9rem)",
-                      fontWeight: isActive ? 700 : 500,
+                      fontWeight: isActive ? 700 : 400,
                       letterSpacing: "-0.01em",
                       color: isActive ? activeTxt : inactTxt,
-                      lineHeight: 1.2,
-                      transition: "color 0.2s",
+                      lineHeight: 1.2, transition: "color 0.2s",
                     }}>{job.company}</span>
                     <span style={{
                       fontFamily: "'Raleway', sans-serif",
@@ -226,7 +216,7 @@ export function WorkExperience() {
             })}
           </div>
 
-          {/* RIGHT — Open editorial content (no box) */}
+          {/* RIGHT — Open editorial (no box) */}
           <div style={{
             borderLeft: `1px solid ${divider}`,
             paddingLeft: "clamp(20px, 3vw, 36px)",
@@ -241,26 +231,21 @@ export function WorkExperience() {
                 transition={{ duration: 0.26, ease: [0.4, 0, 0.2, 1] }}
                 style={{ display: "flex", flexDirection: "column", gap: "clamp(14px, 2.2vh, 20px)" }}
               >
-                {/* Role + meta */}
                 <div>
                   <h3 style={{
                     fontFamily: "'Poppins', sans-serif",
                     fontSize: "clamp(1.1rem, 1.8vw, 1.4rem)",
                     fontWeight: 800, letterSpacing: "-0.022em",
-                    color: titleClr, margin: "0 0 4px",
-                    lineHeight: 1.1,
+                    color: titleClr, margin: "0 0 4px", lineHeight: 1.1,
                   }}>{activeJob.role}</h3>
                   <span style={{
                     fontFamily: "'Raleway', sans-serif",
-                    fontSize: "0.72rem", fontWeight: 600,
-                    color: eyebrow,
+                    fontSize: "0.72rem", fontWeight: 600, color: eyebrow,
                   }}>{activeJob.company} · {activeJob.period}</span>
                 </div>
 
-                {/* Separator */}
                 <div style={{ height: 1, background: divider }} />
 
-                {/* Impact Checkpoints — flat list */}
                 <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
                   <span style={{
                     fontFamily: "'Raleway', sans-serif",
@@ -275,37 +260,30 @@ export function WorkExperience() {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.2, delay: i * 0.055 }}
                       style={{
-                        display: "flex",
-                        alignItems: "flex-start",
-                        gap: 10,
+                        display: "flex", alignItems: "flex-start", gap: 10,
                         padding: "clamp(6px, 1vh, 9px) 0",
                         borderBottom: i < activeJob.checkpoints.length - 1
                           ? `1px solid ${projSep}` : "none",
                       }}
                     >
                       <div style={{
-                        width: 15, height: 15,
-                        borderRadius: "50%",
-                        background: isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.055)",
+                        width: 15, height: 15, borderRadius: "50%", flexShrink: 0, marginTop: 1,
+                        background: isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.05)",
                         display: "flex", alignItems: "center", justifyContent: "center",
-                        flexShrink: 0, marginTop: 1,
                       }}>
                         <Check size={8} style={{ color: checkIcon }} strokeWidth={3} />
                       </div>
                       <span style={{
                         fontFamily: "'Raleway', sans-serif",
                         fontSize: "clamp(0.72rem, 1vw, 0.8rem)",
-                        fontWeight: 600, lineHeight: 1.55,
-                        color: checkTxt,
+                        fontWeight: 600, lineHeight: 1.55, color: checkTxt,
                       }}>{cp}</span>
                     </motion.div>
                   ))}
                 </div>
 
-                {/* Separator */}
                 <div style={{ height: 1, background: divider }} />
 
-                {/* Projects — flat rows */}
                 <div>
                   <span style={{
                     fontFamily: "'Raleway', sans-serif",
@@ -321,8 +299,7 @@ export function WorkExperience() {
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.2, delay: 0.15 + i * 0.06 }}
                         style={{
-                          display: "flex",
-                          alignItems: "center",
+                          display: "flex", alignItems: "center",
                           justifyContent: "space-between",
                           padding: "clamp(7px, 1.1vh, 10px) 0",
                           borderBottom: i < activeJob.projects.length - 1
@@ -336,22 +313,19 @@ export function WorkExperience() {
                             fontSize: "0.52rem", fontWeight: 700,
                             letterSpacing: "0.1em", textTransform: "uppercase",
                             padding: "2px 7px", borderRadius: 100,
-                            background: tagBg, color: tagTxt,
-                            flexShrink: 0,
+                            background: tagBg, color: tagTxt, flexShrink: 0,
                           }}>{proj.tag}</span>
                           <span style={{
                             fontFamily: "'Poppins', sans-serif",
                             fontSize: "clamp(0.72rem, 1vw, 0.82rem)",
-                            fontWeight: 600, letterSpacing: "-0.01em",
-                            color: projTitle,
+                            fontWeight: 600, letterSpacing: "-0.01em", color: projTitle,
                           }}>{proj.title}</span>
                         </div>
                         <div style={{ display: "flex", alignItems: "center", gap: 4, flexShrink: 0 }}>
                           <span style={{
                             fontFamily: "'Raleway', sans-serif",
                             fontSize: "0.55rem", fontWeight: 700,
-                            letterSpacing: "0.06em", textTransform: "uppercase",
-                            color: eyebrow,
+                            letterSpacing: "0.06em", textTransform: "uppercase", color: eyebrow,
                           }}>Case Study</span>
                           <ArrowUpRight size={10} style={{ color: eyebrow }} />
                         </div>

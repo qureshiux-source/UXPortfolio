@@ -11,14 +11,14 @@ import { Credentials } from "@/components/Credentials";
 const NOISE_SVG = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`;
 
 function Footer({ isDark }: { isDark: boolean }) {
-  const bg       = isDark ? "#0A0A0A" : "#F0F0F0";
-  const title    = isDark ? "#F5F5F5" : "#0A0A0A";
-  const sub      = isDark ? "#8A8A8A" : "#525252";
-  const ctaBg    = isDark ? "#F5F5F5" : "#0A0A0A";
-  const ctaFg    = isDark ? "#0A0A0A" : "#F5F5F5";
-  const linkClr  = isDark ? "#6E6E6E" : "#737373";
-  const divider  = isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)";
-  const fine     = isDark ? "#555555" : "#AAAAAA";
+  const bg      = isDark ? "#020202" : "#FFFFFF";
+  const title   = isDark ? "#F5F5F5" : "#080808";
+  const sub     = isDark ? "#707070" : "#606060";
+  const ctaBg   = isDark ? "#F5F5F5" : "#0A0A0A";
+  const ctaFg   = isDark ? "#0A0A0A" : "#F5F5F5";
+  const linkClr = isDark ? "#505050" : "#909090";
+  const divider = isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.09)";
+  const fine    = isDark ? "#404040" : "#C8C8C8";
 
   return (
     <section
@@ -139,7 +139,9 @@ export default function Home() {
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   useEffect(() => { setMounted(true); }, []);
-  const isDark = mounted && resolvedTheme === "dark";
+  const system = typeof document !== "undefined"
+    ? document.documentElement.classList.contains("dark") : false;
+  const isDark = mounted ? resolvedTheme === "dark" : system;
 
   /* ─── Performance: zero setState on scroll ─────────────────────────── */
   const scrollRef      = useRef<HTMLDivElement>(null);

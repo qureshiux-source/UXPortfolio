@@ -28,11 +28,23 @@ const TOOLS = [
   { name: "Framer",     level: "Intermediate", years: "1 Year"  },
 ];
 
+function useDark() {
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+  const system = typeof document !== "undefined"
+    ? document.documentElement.classList.contains("dark") : false;
+  return mounted ? resolvedTheme === "dark" : system;
+}
+
 function FlipTile({ tool, isDark }: { tool: typeof TOOLS[0]; isDark: boolean }) {
   const [flipped, setFlipped] = useState(false);
-  const frontTxt = isDark ? "#C0C0C0" : "#2A2A2A";
-  const backBg   = isDark ? "#FFFFFF" : "#0A0A0A";
-  const backFg   = isDark ? "#0A0A0A" : "#FFFFFF";
+  const frontBg  = isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.03)";
+  const frontBdr = isDark ? "rgba(255,255,255,0.09)" : "rgba(0,0,0,0.08)";
+  const frontTxt = isDark ? "#B0B0B0" : "#282828";
+  const backBg   = isDark ? "#F5F5F5" : "#0A0A0A";
+  const backFg   = isDark ? "#0A0A0A" : "#F5F5F5";
+  const backSub  = isDark ? "rgba(0,0,0,0.45)" : "rgba(255,255,255,0.55)";
 
   return (
     <div
@@ -45,23 +57,19 @@ function FlipTile({ tool, isDark }: { tool: typeof TOOLS[0]; isDark: boolean }) 
         transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
         style={{ width: "100%", height: "100%", position: "relative", transformStyle: "preserve-3d" }}
       >
-        {/* Front */}
         <div style={{
           position: "absolute", inset: 0,
           backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden",
-          background: isDark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.03)",
-          borderRadius: 10,
-          border: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.07)"}`,
+          background: frontBg, borderRadius: 10,
+          border: `1px solid ${frontBdr}`,
           display: "flex", alignItems: "center", justifyContent: "center",
         }}>
           <span style={{
             fontFamily: "'Poppins', sans-serif",
             fontSize: "clamp(0.68rem, 0.95vw, 0.8rem)",
-            fontWeight: 700, letterSpacing: "-0.01em",
-            color: frontTxt,
+            fontWeight: 700, letterSpacing: "-0.01em", color: frontTxt,
           }}>{tool.name}</span>
         </div>
-        {/* Back */}
         <div style={{
           position: "absolute", inset: 0,
           backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden",
@@ -77,8 +85,7 @@ function FlipTile({ tool, isDark }: { tool: typeof TOOLS[0]; isDark: boolean }) 
           }}>{tool.level}</span>
           <span style={{
             fontFamily: "'Raleway', sans-serif",
-            fontSize: "0.56rem", fontWeight: 700,
-            color: isDark ? "rgba(0,0,0,0.5)" : "rgba(255,255,255,0.6)",
+            fontSize: "0.56rem", fontWeight: 700, color: backSub,
           }}>{tool.years}</span>
         </div>
       </motion.div>
@@ -87,33 +94,27 @@ function FlipTile({ tool, isDark }: { tool: typeof TOOLS[0]; isDark: boolean }) 
 }
 
 export function Skills() {
-  const { resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => { setMounted(true); }, []);
-  const isDark = mounted && resolvedTheme === "dark";
+  const isDark = useDark();
 
-  const bg       = isDark ? "#0D0D0D" : "#F6F6F6";
-  const eyebrow  = isDark ? "#6A6A6A" : "#606060";
-  const titleClr = isDark ? "#F0F0F0" : "#0A0A0A";
-  const catTitle = isDark ? "#CCCCCC" : "#1A1A1A";
-  const tagBg    = isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.055)";
-  const tagTxt   = isDark ? "#8A8A8A" : "#525252";
-  const divider  = isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)";
+  const bg      = isDark ? "#060606" : "#FAFAFA";
+  const eyebrow = isDark ? "#606060" : "#707070";
+  const titleClr = isDark ? "#F5F5F5" : "#080808";
+  const catTitle = isDark ? "#C0C0C0" : "#181818";
+  const tagBg   = isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.05)";
+  const tagTxt  = isDark ? "#808080" : "#505050";
+  const divider = isDark ? "rgba(255,255,255,0.09)" : "rgba(0,0,0,0.08)";
 
   return (
-    <div
-      style={{
-        height: "100vh", background: bg,
-        display: "flex", flexDirection: "column",
-        justifyContent: "center", overflow: "hidden",
-        position: "relative", transition: "background 0.4s",
-      }}
-    >
+    <div style={{
+      height: "100vh", background: bg,
+      display: "flex", flexDirection: "column",
+      justifyContent: "center", overflow: "hidden",
+      position: "relative", transition: "background 0.4s",
+    }}>
       <div style={{
         position: "absolute", inset: 0, pointerEvents: "none",
         backgroundImage: NOISE, backgroundSize: "180px 180px",
-        opacity: isDark ? 0.05 : 0.022,
-        mixBlendMode: "overlay" as const,
+        opacity: isDark ? 0.055 : 0.022, mixBlendMode: "overlay" as const,
       }} />
 
       <div style={{
@@ -123,32 +124,25 @@ export function Skills() {
         display: "flex", flexDirection: "column",
         gap: "clamp(22px, 3.5vh, 36px)",
       }}>
-        {/* Header */}
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
             <div style={{ width: 22, height: 1, background: eyebrow }} />
             <span style={{
               fontFamily: "'Raleway', sans-serif",
               fontSize: "0.59rem", fontWeight: 700,
-              letterSpacing: "0.2em", textTransform: "uppercase",
-              color: eyebrow,
+              letterSpacing: "0.2em", textTransform: "uppercase", color: eyebrow,
             }}>Technical Specification</span>
           </div>
           <h2 style={{
             fontFamily: "'Poppins', sans-serif",
             fontSize: "clamp(1.6rem, 3vw, 2.4rem)",
             fontWeight: 800, lineHeight: 1.1,
-            letterSpacing: "-0.025em",
-            color: titleClr, margin: 0,
+            letterSpacing: "-0.025em", color: titleClr, margin: 0,
           }}>Skills & Tools</h2>
         </div>
 
-        {/* Category blocks — less boxy: just a left-border accent */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: "clamp(0px, 0vw, 0px)",
-        }}>
+        {/* Category columns — no card borders */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)" }}>
           {CATEGORIES.map((cat, ci) => (
             <motion.div
               key={cat.title}
@@ -182,24 +176,17 @@ export function Skills() {
           ))}
         </div>
 
-        {/* Divider row */}
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
           <div style={{ flex: 1, height: 1, background: divider }} />
           <span style={{
             fontFamily: "'Raleway', sans-serif",
             fontSize: "0.55rem", fontWeight: 700,
-            letterSpacing: "0.14em", textTransform: "uppercase",
-            color: eyebrow,
+            letterSpacing: "0.14em", textTransform: "uppercase", color: eyebrow,
           }}>hover to reveal proficiency</span>
           <div style={{ flex: 1, height: 1, background: divider }} />
         </div>
 
-        {/* Tool orbit flip tiles */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(6, 1fr)",
-          gap: "clamp(8px, 1.2vw, 14px)",
-        }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: "clamp(8px, 1.2vw, 14px)" }}>
           {TOOLS.map((tool, i) => (
             <motion.div
               key={tool.name}
