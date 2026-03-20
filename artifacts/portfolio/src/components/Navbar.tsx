@@ -40,7 +40,7 @@ export function Navbar() {
                 color: isDark ? "#F5F5F5" : "#0D0D0D",
               }}
             >
-              Riya Sharma
+              Haseeb Qureshi
             </span>
             <span
               className="block mt-0.5 shrink-0 rounded-full"

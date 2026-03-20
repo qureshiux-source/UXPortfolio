@@ -1,115 +1,135 @@
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
-import { MoveRight, MessageCircle, Layers, Users, Zap } from "lucide-react";
+import { MoveRight, MessageCircle } from "lucide-react";
 
 export function Hero() {
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   useEffect(() => { setMounted(true); }, []);
 
-  // When nav is light → hero is dark; when nav is dark → hero is light
   const heroDark = !mounted || resolvedTheme !== "dark";
 
-  const bg = heroDark ? "#0D0D0D" : "#F8F8F8";
-  const headingColor = heroDark ? "#F5F5F5" : "#0D0D0D";
-  const bodyColor = heroDark ? "rgba(255,255,255,0.55)" : "#555555";
-  const eyebrowColor = heroDark ? "rgba(255,255,255,0.35)" : "#999999";
-  const dotColor = heroDark ? "rgba(255,255,255,0.25)" : "rgba(0,0,0,0.28)";
-  const dividerColor = heroDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.07)";
-  const statValue = heroDark ? "#F5F5F5" : "#0D0D0D";
-  const statLabel = heroDark ? "rgba(255,255,255,0.3)" : "#BBBBBB";
-  const iconColor = heroDark ? "rgba(255,255,255,0.4)" : "#999999";
-  const iconLabelColor = heroDark ? "rgba(255,255,255,0.45)" : "#888888";
-  const tagBg = heroDark ? "rgba(255,255,255,0.07)" : "#EFEFEF";
-  const tagBorder = heroDark ? "rgba(255,255,255,0.09)" : "rgba(0,0,0,0.07)";
-  const tagColor = heroDark ? "rgba(255,255,255,0.45)" : "#555555";
-  const scrollColor = heroDark ? "rgba(255,255,255,0.18)" : "rgba(0,0,0,0.2)";
-  const scrollLine = heroDark
+  const bg            = heroDark ? "#0D0D0D" : "#F8F8F8";
+  const headingColor  = heroDark ? "#F5F5F5" : "#0D0D0D";
+  const subColor      = heroDark ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.45)";
+  const eyebrowColor  = heroDark ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.3)";
+  const dotColor      = heroDark ? "rgba(255,255,255,0.25)" : "rgba(0,0,0,0.25)";
+  const dividerColor  = heroDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.07)";
+  const metricVal     = heroDark ? "#F5F5F5" : "#0D0D0D";
+  const metricLbl     = heroDark ? "rgba(255,255,255,0.35)" : "rgba(0,0,0,0.38)";
+  const metricBg      = heroDark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.03)";
+  const metricBorder  = heroDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.07)";
+  const scrollColor   = heroDark ? "rgba(255,255,255,0.18)" : "rgba(0,0,0,0.2)";
+  const scrollLine    = heroDark
     ? "linear-gradient(to bottom, rgba(255,255,255,0.15), transparent)"
     : "linear-gradient(to bottom, rgba(0,0,0,0.15), transparent)";
+
+  const METRICS = [
+    { value: "4+",          label: "Years Experience" },
+    { value: "10+",         label: "Certifications" },
+    { value: "Design Lead", label: "@ Wired Hub" },
+  ];
 
   return (
     <section
       className="relative overflow-hidden flex items-center transition-colors duration-500"
-      style={{
-        height: "100vh",
-        paddingTop: 64,
-        perspective: "1200px",
-        background: bg,
-      }}
+      style={{ height: "100vh", paddingTop: 64, background: bg }}
     >
-      {/* Fabric fold texture */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: heroDark
-            ? "radial-gradient(ellipse 70% 50% at 15% 20%, rgba(255,255,255,0.012) 0%, transparent 70%)," +
-              "radial-gradient(ellipse 50% 60% at 85% 80%, rgba(255,255,255,0.008) 0%, transparent 65%)," +
-              "radial-gradient(ellipse 40% 40% at 60% 40%, rgba(255,255,255,0.005) 0%, transparent 60%)"
-            : "radial-gradient(ellipse 70% 50% at 15% 20%, rgba(0,0,0,0.016) 0%, transparent 70%)," +
-              "radial-gradient(ellipse 50% 60% at 85% 80%, rgba(0,0,0,0.012) 0%, transparent 65%)," +
-              "radial-gradient(ellipse 40% 40% at 60% 40%, rgba(0,0,0,0.008) 0%, transparent 60%)",
-        }}
-      />
+      {/* Subtle texture */}
+      <div className="absolute inset-0 pointer-events-none" style={{
+        background: heroDark
+          ? "radial-gradient(ellipse 70% 50% at 20% 30%, rgba(255,255,255,0.012) 0%, transparent 70%)"
+          : "radial-gradient(ellipse 70% 50% at 20% 30%, rgba(0,0,0,0.014) 0%, transparent 70%)",
+      }} />
 
-      {/* Content grid */}
       <div
         className="max-w-3xl mx-auto w-full relative z-10"
-        style={{ padding: "48px 40px" }}
+        style={{ padding: "0 clamp(24px, 5vw, 48px)" }}
       >
-        {/* CENTER: Text */}
-        <div className="flex flex-col gap-5" style={{ alignItems: "center", textAlign: "center" }}>
+        <div className="flex flex-col gap-6" style={{ alignItems: "center", textAlign: "center" }}>
 
           {/* Eyebrow */}
           <div className="flex items-center gap-2">
             <span style={{ width: 6, height: 6, borderRadius: "50%", background: dotColor, flexShrink: 0 }} />
             <span style={{
               fontFamily: "'Raleway', sans-serif",
-              fontSize: "0.66rem", fontWeight: 700,
-              letterSpacing: "0.16em", textTransform: "uppercase",
+              fontSize: "0.62rem", fontWeight: 700,
+              letterSpacing: "0.2em", textTransform: "uppercase",
               color: eyebrowColor,
             }}>
-              UX Designer & Product Thinker
+              Portfolio · UI/UX Design
             </span>
+            <span style={{ width: 6, height: 6, borderRadius: "50%", background: dotColor, flexShrink: 0 }} />
           </div>
 
-          {/* H1 */}
-          <h1 style={{
-            fontFamily: "'Poppins', sans-serif",
-            fontSize: "clamp(1.9rem, 3.5vw, 2.8rem)",
-            fontWeight: 800, lineHeight: 1.1,
-            letterSpacing: "-0.02em",
-            color: headingColor,
-            margin: 0,
-          }}>
-            Designing{" "}
-            <span style={{ color: headingColor }}>
-              Experiences
-            </span>
-            <br />
-            That Actually{" "}
-            <span style={{ position: "relative", display: "inline-block" }}>
-              Matter
-              <span style={{
-                position: "absolute", bottom: -2, left: 0, right: 0,
-                height: 2, borderRadius: 2,
-                background: heroDark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.1)",
-              }} />
-            </span>
-          </h1>
+          {/* Name */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            <h1 style={{
+              fontFamily: "'Poppins', sans-serif",
+              fontSize: "clamp(2.4rem, 5vw, 4rem)",
+              fontWeight: 800, lineHeight: 1.05,
+              letterSpacing: "-0.03em",
+              color: headingColor,
+              margin: 0,
+            }}>
+              Haseeb Qureshi
+            </h1>
+            <p style={{
+              fontFamily: "'Raleway', sans-serif",
+              fontSize: "clamp(0.9rem, 1.6vw, 1.1rem)",
+              fontWeight: 500, letterSpacing: "0.01em",
+              color: subColor, margin: 0,
+            }}>
+              UI/UX Design Lead&nbsp;&nbsp;·&nbsp;&nbsp;Accessibility Specialist
+            </p>
+          </div>
 
-          {/* Body */}
-          <p style={{
-            fontFamily: "'Raleway', sans-serif",
-            fontSize: "0.97rem", lineHeight: 1.75,
-            color: bodyColor,
-            maxWidth: 560, margin: 0,
+          {/* Divider */}
+          <div style={{ width: 48, height: 1, background: dividerColor }} />
+
+          {/* Metric Bar */}
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gap: 12,
+            width: "100%",
+            maxWidth: 560,
           }}>
-            I craft human-centered digital products with thoughtful interactions and clear visual hierarchies. From research to high-fidelity pixels — I make complex simple.
-          </p>
+            {METRICS.map((m) => (
+              <div key={m.label} style={{
+                background: metricBg,
+                border: `1px solid ${metricBorder}`,
+                borderRadius: 14,
+                padding: "18px 12px",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 6,
+              }}>
+                <span style={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontSize: m.value.length > 4 ? "clamp(0.85rem, 1.5vw, 1.05rem)" : "clamp(1.4rem, 2.5vw, 1.9rem)",
+                  fontWeight: 800,
+                  letterSpacing: "-0.02em",
+                  lineHeight: 1,
+                  color: metricVal,
+                }}>
+                  {m.value}
+                </span>
+                <span style={{
+                  fontFamily: "'Raleway', sans-serif",
+                  fontSize: "0.62rem", fontWeight: 700,
+                  letterSpacing: "0.08em", textTransform: "uppercase",
+                  color: metricLbl,
+                }}>
+                  {m.label}
+                </span>
+              </div>
+            ))}
+          </div>
 
           {/* CTAs */}
-          <div className="flex items-center gap-3 flex-wrap">
+          <div className="flex items-center gap-3 flex-wrap" style={{ justifyContent: "center" }}>
             <button
               className="flex items-center gap-2 group transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
               style={{
@@ -120,14 +140,15 @@ export function Hero() {
                 background: heroDark ? "#F5F5F5" : "#0D0D0D",
                 color: heroDark ? "#0D0D0D" : "#FAFAFA",
                 boxShadow: heroDark
-                  ? "0 4px 18px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.9)"
-                  : "0 4px 18px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.08)",
+                  ? "0 4px 18px rgba(0,0,0,0.4)"
+                  : "0 4px 18px rgba(0,0,0,0.18)",
               }}
             >
               View My Work
               <MoveRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-200" />
             </button>
-            <button
+            <a
+              href="mailto:qureshi.ux@gmail.com"
               className="flex items-center gap-2 transition-all duration-200"
               style={{
                 fontFamily: "'Poppins', sans-serif",
@@ -137,77 +158,12 @@ export function Hero() {
                 border: heroDark ? "1.5px solid rgba(255,255,255,0.18)" : "1.5px solid rgba(0,0,0,0.16)",
                 color: heroDark ? "rgba(255,255,255,0.8)" : "#1A1A1A",
                 background: "transparent",
+                textDecoration: "none",
               }}
             >
               <MessageCircle className="w-3.5 h-3.5" />
               Let's Talk
-            </button>
-          </div>
-
-          {/* Skill tags */}
-          <div className="flex flex-wrap gap-2">
-            {["Figma", "User Research", "Prototyping", "Design Systems", "Accessibility", "UX Writing"].map(tag => (
-              <span key={tag} style={{
-                fontFamily: "'Raleway', sans-serif",
-                fontSize: "0.65rem", fontWeight: 700,
-                letterSpacing: "0.06em", textTransform: "uppercase",
-                padding: "5px 12px", borderRadius: 100,
-                background: tagBg,
-                border: `1px solid ${tagBorder}`,
-                color: tagColor,
-              }}>
-                {tag}
-              </span>
-            ))}
-          </div>
-
-          {/* Stats */}
-          <div style={{ borderTop: `1px solid ${dividerColor}`, paddingTop: 16 }}>
-            <div className="flex items-center gap-8 flex-wrap">
-              {[
-                { value: "12+", label: "Products" },
-                { value: "6 yrs", label: "Experience" },
-                { value: "50+", label: "Interviews" },
-              ].map(({ value, label }) => (
-                <div key={label} style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                  <span style={{
-                    fontFamily: "'Poppins', sans-serif",
-                    fontSize: "1.4rem", fontWeight: 800,
-                    lineHeight: 1, letterSpacing: "-0.02em",
-                    color: statValue,
-                  }}>
-                    {value}
-                  </span>
-                  <span style={{
-                    fontFamily: "'Raleway', sans-serif",
-                    fontSize: "0.58rem", fontWeight: 700,
-                    letterSpacing: "0.13em", textTransform: "uppercase",
-                    color: statLabel,
-                  }}>
-                    {label}
-                  </span>
-                </div>
-              ))}
-              <div style={{ width: 1, height: 36, background: dividerColor }} />
-              <div className="flex items-center gap-3">
-                {[
-                  { icon: Layers, label: "Systems" },
-                  { icon: Users, label: "Research" },
-                  { icon: Zap, label: "Delivery" },
-                ].map(({ icon: Icon, label }) => (
-                  <div key={label} className="flex items-center gap-1.5">
-                    <Icon className="w-3 h-3" style={{ color: iconColor }} />
-                    <span style={{
-                      fontFamily: "'Raleway', sans-serif",
-                      fontSize: "0.65rem", fontWeight: 600,
-                      color: iconLabelColor,
-                    }}>
-                      {label}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
+            </a>
           </div>
         </div>
       </div>
