@@ -119,13 +119,7 @@ export function Hero() {
             margin: 0,
           }}>
             Designing{" "}
-            <span style={{
-              background: heroDark
-                ? "linear-gradient(135deg, #F5F5F5 0%, #A0A0A0 100%)"
-                : "linear-gradient(135deg, #111111 0%, #666666 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-            }}>
+            <span style={{ color: headingColor }}>
               Experiences
             </span>
             <br />

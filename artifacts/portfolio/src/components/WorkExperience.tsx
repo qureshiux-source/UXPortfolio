@@ -91,13 +91,7 @@ export function WorkExperience() {
             color: titleClr, margin: 0,
           }}>
             Where I've{" "}
-            <span style={{
-              background: isDark
-                ? "linear-gradient(135deg, #F5F5F5 0%, #888888 100%)"
-                : "linear-gradient(135deg, #0D0D0D 0%, #666666 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-            }}>
+            <span style={{ color: titleClr }}>
               made an impact.
             </span>
           </h2>
