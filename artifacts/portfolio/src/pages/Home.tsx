@@ -1,5 +1,7 @@
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Download } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { CaseStudiesSection, ProjectsSection } from "@/components/SelectedWork";
@@ -7,12 +9,9 @@ import { WorkExperience } from "@/components/WorkExperience";
 import { Skills } from "@/components/Skills";
 import { Credentials } from "@/components/Credentials";
 
-function Footer() {
-  const { resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => { setMounted(true); }, []);
-  const isDark = mounted && resolvedTheme === "dark";
+const NOISE_SVG = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`;
 
+function Footer({ isDark }: { isDark: boolean }) {
   const bg        = isDark
     ? "linear-gradient(145deg, #0A0A0A 0%, #0E0E0E 50%, #080808 100%)"
     : "linear-gradient(145deg, #EBEBEB 0%, #F2F2F2 55%, #E8E8E8 100%)";
@@ -41,22 +40,22 @@ function Footer() {
         transition: "background 0.5s",
       }}
     >
-      {/* Noise texture */}
+      {/* Noise */}
       <div style={{
         position: "absolute", inset: 0, pointerEvents: "none",
-        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+        backgroundImage: NOISE_SVG,
         backgroundSize: "160px 160px",
         opacity: isDark ? 0.06 : 0.028,
         mixBlendMode: "overlay" as const,
       }} />
-      {/* Centre glow */}
+      {/* Glow */}
       <div style={{
         position: "absolute", inset: 0, pointerEvents: "none",
         background: isDark
           ? "radial-gradient(ellipse 55% 45% at 50% 50%, rgba(255,255,255,0.018) 0%, transparent 70%)"
           : "radial-gradient(ellipse 55% 45% at 50% 50%, rgba(0,0,0,0.018) 0%, transparent 70%)",
       }} />
-      {/* Edge vignette */}
+      {/* Vignette */}
       <div style={{
         position: "absolute", inset: 0, pointerEvents: "none",
         background: isDark
@@ -72,7 +71,6 @@ function Footer() {
         alignItems: "center", gap: 28,
         position: "relative", zIndex: 1,
       }}>
-        {/* Eyebrow */}
         <span style={{
           fontFamily: "'Raleway', sans-serif",
           fontSize: "0.62rem", fontWeight: 700,
@@ -82,7 +80,6 @@ function Footer() {
           Open to Opportunities
         </span>
 
-        {/* Headline */}
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           <h2 style={{
             fontFamily: "'Poppins', sans-serif",
@@ -95,14 +92,13 @@ function Footer() {
           </h2>
           <p style={{
             fontFamily: "'Raleway', sans-serif",
-            fontSize: "0.9rem", lineHeight: 1.65,
+            fontSize: "0.9rem", lineHeight: 1.65, fontWeight: 500,
             color: sub, margin: 0,
           }}>
             Building products that are accessible, intentional,<br />and genuinely delightful to use.
           </p>
         </div>
 
-        {/* Primary CTA */}
         <a
           href="mailto:qureshi.ux@gmail.com"
           style={{
@@ -121,10 +117,8 @@ function Footer() {
           qureshi.ux@gmail.com
         </a>
 
-        {/* Divider */}
         <div style={{ width: 40, height: 1, background: divider }} />
 
-        {/* Secondary links */}
         <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
           <a
             href="https://linkedin.com"
@@ -139,12 +133,8 @@ function Footer() {
               background: "transparent",
               transition: "background 0.2s, color 0.2s",
             }}
-            onMouseEnter={e => {
-              (e.target as HTMLElement).style.background = linkHovBg;
-            }}
-            onMouseLeave={e => {
-              (e.target as HTMLElement).style.background = "transparent";
-            }}
+            onMouseEnter={e => { (e.target as HTMLElement).style.background = linkHovBg; }}
+            onMouseLeave={e => { (e.target as HTMLElement).style.background = "transparent"; }}
           >
             LinkedIn
           </a>
@@ -160,18 +150,13 @@ function Footer() {
               background: "transparent",
               transition: "background 0.2s, color 0.2s",
             }}
-            onMouseEnter={e => {
-              (e.target as HTMLElement).style.background = linkHovBg;
-            }}
-            onMouseLeave={e => {
-              (e.target as HTMLElement).style.background = "transparent";
-            }}
+            onMouseEnter={e => { (e.target as HTMLElement).style.background = linkHovBg; }}
+            onMouseLeave={e => { (e.target as HTMLElement).style.background = "transparent"; }}
           >
             Download CV
           </a>
         </div>
 
-        {/* Fine print */}
         <span style={{
           fontFamily: "'Raleway', sans-serif",
           fontSize: "0.58rem", letterSpacing: "0.1em",
@@ -186,10 +171,93 @@ function Footer() {
 }
 
 export default function Home() {
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+  const isDark = mounted && resolvedTheme === "dark";
+
+  const [progress, setProgress] = useState(0);
+  const [fabVisible, setFabVisible] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const handleScroll = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const max = el.scrollHeight - el.clientHeight;
+    const p = max > 0 ? el.scrollTop / max : 0;
+    setProgress(p);
+    setFabVisible(el.scrollTop > el.clientHeight * 0.5);
+  }, []);
+
+  const progressBg = isDark ? "#FAFAFA" : "#0A0A0A";
+  const fabBg      = isDark ? "#FAFAFA" : "#0A0A0A";
+  const fabFg      = isDark ? "#0A0A0A" : "#FAFAFA";
+
   return (
     <>
       <Navbar />
+
+      {/* Scroll Progress Bar */}
+      <div style={{
+        position: "fixed",
+        top: 0, left: 0, right: 0,
+        height: 2,
+        zIndex: 9999,
+        background: isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)",
+      }}>
+        <motion.div
+          style={{
+            height: "100%",
+            background: progressBg,
+            transformOrigin: "left",
+          }}
+          animate={{ scaleX: progress }}
+          transition={{ duration: 0.1, ease: "linear" }}
+        />
+      </div>
+
+      {/* Jump to Resume FAB */}
+      <AnimatePresence>
+        {fabVisible && (
+          <motion.a
+            href="#"
+            initial={{ opacity: 0, scale: 0.8, y: 12 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 12 }}
+            transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
+            style={{
+              position: "fixed",
+              bottom: 28, right: 28,
+              zIndex: 9999,
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              fontFamily: "'Poppins', sans-serif",
+              fontSize: "0.72rem", fontWeight: 700,
+              letterSpacing: "0.03em",
+              padding: "10px 18px",
+              borderRadius: 100,
+              background: fabBg,
+              color: fabFg,
+              textDecoration: "none",
+              boxShadow: isDark
+                ? "0 8px 28px rgba(0,0,0,0.6)"
+                : "0 8px 28px rgba(0,0,0,0.18)",
+              cursor: "pointer",
+            }}
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.97 }}
+          >
+            <Download size={13} />
+            Resume
+          </motion.a>
+        )}
+      </AnimatePresence>
+
+      {/* Scroll-snap container */}
       <div
+        ref={scrollRef}
+        onScroll={handleScroll}
         style={{
           height: "100vh",
           overflowY: "scroll",
@@ -212,23 +280,23 @@ export default function Home() {
           <ProjectsSection />
         </section>
 
-        {/* 4 — Bento Experience Grid */}
+        {/* 4 — Interactive Work Dashboard */}
         <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
           <WorkExperience />
         </section>
 
-        {/* 5 — Skills & Technical Stack */}
+        {/* 5 — Technical Spec Skills */}
         <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
           <Skills />
         </section>
 
-        {/* 6 — Credentials Strip */}
+        {/* 6 — Certification Gallery */}
         <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
           <Credentials />
         </section>
 
         {/* 7 — Footer & Contact */}
-        <Footer />
+        <Footer isDark={isDark} />
       </div>
     </>
   );

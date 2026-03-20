@@ -1,0 +1,49 @@
+Prompt 1: The "Interactive Work Dashboard"
+Concept: A vertical timeline on the left that acts as a "switcher." When a job is clicked, the right side updates to show "Impact Checkpoints" and a "Project Mini-Grid."
+
+"Create a Work Experience Dashboard component in Next.js.
+
+Layout: A two-column split.
+
+Left (30%): A vertical 'Stepper' or 'Timeline' showing Company Names and Dates. Use a high-contrast 'Active' state (Deep Obsidian bg, Indigo border).
+
+Right (70%): A dynamic display area that changes based on the selected job.
+
+Content Logic: > 1. Impact Checkpoints: Instead of long paragraphs, use a grid of 4 'Achievement Cards' (e.g., 'Reduced Latency by 20%', 'Led Design for X'). Use Lucide-react 'Check' icons.
+2. Project Mini-Grid: Below the checkpoints, create a small 'Sub-Grid' of 2-3 mini-cards representing projects done at that specific job. Each mini-card should have a 'View Case Study' link.
+
+Motion: Use Framer Motion AnimatePresence so that when the user clicks a different job, the right-side content fades and slides in smoothly."
+
+Prompt 3: The "Skill Radar & Tool Orbit"
+Concept: Instead of a list of tags, we categorize skills by "Proficiency" or "Domain" (Design vs. Code) using a structured grid that looks like a technical spec sheet.
+
+"Build a Skills & Tools Section that feels like a 'Technical Specification.'
+
+The Layout: > 1. Categorized Blocks: Divide skills into 'Core UX Logic', 'Frontend Engineering', and 'Product Strategy'.
+2. The 'Tool Orbit': Create a dedicated area for software (Figma, Replit, Vercel). Instead of just icons, use a 'Bento-style' tile for each tool. On hover, the tile should flip or expand to show a 'Usage Level' (e.g., 'Expert / 4 Years').
+3. The Logic: Use a monochromatic color palette (Grays/White) to keep it 'Classy Minimal,' using indigo only for the skill progress indicators or hover states."
+
+Prompt 3: The "Certification Gallery" (Interactive Lightbox)
+Concept: A horizontal "Filmstrip" or a clean grid where certifications are displayed as high-quality cards that expand when clicked.
+
+"Create a Certification Gallery using a 'Responsive Grid.'
+
+Visual Style: > 1. Each certificate should be housed in a 'Premium Frame' (Glassmorphism card with a 1px border).
+2. Interaction: On hover, the certificate image should slightly zoom and desaturate, revealing the 'Issuer' and 'Date' in a sharp overlay.
+3. Lightbox: Implement a simple modal/lightbox using Framer Motion so when a user clicks a certificate, it expands to full screen for 'Verification' purposes.
+4. Ensure there is a 'Verify Credential' button that links to the external certificate URL."
+
+Prompt 4: The "Final Integration" & Global Polish
+Concept: Connecting these new sections into your existing portfolio and ensuring the "UX Accuracy" remains the focus.
+
+"Integrate the Work Dashboard, Skill Specification, and Certification Gallery into the main page.tsx.
+
+Final Polish:
+
+Ensure all transitions between sections are handled by 'Scroll-triggered' animations (Framer Motion).
+
+Add a 'Navigation Progress Bar' at the very top of the page that fills as the user moves through your Experience and Skills.
+
+Ensure the 'Deep Obsidian' theme is consistent across all new interactive components.
+
+UX Optimization: Add a 'Jump to Resume' floating action button in the bottom corner for quick access, reinforcing your identity as a 'Thoughtful Designer' who values user efficiency."
