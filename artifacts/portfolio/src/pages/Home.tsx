@@ -13,15 +13,17 @@ function Footer() {
   useEffect(() => { setMounted(true); }, []);
   const isDark = mounted && resolvedTheme === "dark";
 
-  const bg       = isDark ? "#0A0A0A" : "#EFEFEF";
-  const title    = isDark ? "#F5F5F5" : "#0D0D0D";
-  const sub      = isDark ? "rgba(255,255,255,0.35)" : "rgba(0,0,0,0.35)";
-  const ctaBg    = isDark ? "#F5F5F5" : "#0D0D0D";
-  const ctaColor = isDark ? "#0D0D0D" : "#F5F5F5";
-  const linkClr  = isDark ? "rgba(255,255,255,0.45)" : "rgba(0,0,0,0.42)";
-  const linkHovBg = isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.05)";
-  const divider  = isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)";
-  const fine     = isDark ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.2)";
+  const bg        = isDark
+    ? "linear-gradient(145deg, #0A0A0A 0%, #0E0E0E 50%, #080808 100%)"
+    : "linear-gradient(145deg, #EBEBEB 0%, #F2F2F2 55%, #E8E8E8 100%)";
+  const title     = isDark ? "#FAFAFA" : "#0A0A0A";
+  const sub       = isDark ? "#9A9A9A" : "#4D4D4D";
+  const ctaBg     = isDark ? "#FAFAFA" : "#0A0A0A";
+  const ctaColor  = isDark ? "#0A0A0A" : "#FAFAFA";
+  const linkClr   = isDark ? "#848484" : "#595959";
+  const linkHovBg = isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)";
+  const divider   = isDark ? "rgba(255,255,255,0.09)" : "rgba(0,0,0,0.09)";
+  const fine      = isDark ? "#6E6E6E" : "#737373";
 
   return (
     <section
@@ -39,12 +41,27 @@ function Footer() {
         transition: "background 0.5s",
       }}
     >
-      {/* Subtle radial glow */}
+      {/* Noise texture */}
+      <div style={{
+        position: "absolute", inset: 0, pointerEvents: "none",
+        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+        backgroundSize: "160px 160px",
+        opacity: isDark ? 0.06 : 0.028,
+        mixBlendMode: "overlay" as const,
+      }} />
+      {/* Centre glow */}
       <div style={{
         position: "absolute", inset: 0, pointerEvents: "none",
         background: isDark
-          ? "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(255,255,255,0.012) 0%, transparent 70%)"
-          : "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(0,0,0,0.012) 0%, transparent 70%)",
+          ? "radial-gradient(ellipse 55% 45% at 50% 50%, rgba(255,255,255,0.018) 0%, transparent 70%)"
+          : "radial-gradient(ellipse 55% 45% at 50% 50%, rgba(0,0,0,0.018) 0%, transparent 70%)",
+      }} />
+      {/* Edge vignette */}
+      <div style={{
+        position: "absolute", inset: 0, pointerEvents: "none",
+        background: isDark
+          ? "radial-gradient(ellipse 100% 100% at 50% 50%, transparent 45%, rgba(0,0,0,0.5) 100%)"
+          : "radial-gradient(ellipse 100% 100% at 50% 50%, transparent 45%, rgba(0,0,0,0.04) 100%)",
       }} />
 
       <div style={{

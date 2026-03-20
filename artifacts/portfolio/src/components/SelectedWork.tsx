@@ -2,6 +2,8 @@ import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 
+const NOISE_SVG = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`;
+
 const CASE_STUDIES = [
   {
     id: 1,
@@ -54,23 +56,24 @@ function useThemeColors() {
   const isDark = mounted && resolvedTheme === "dark";
   return {
     isDark,
-    bg:          isDark ? "#0F0F0F" : "#F8F8F8",
-    bgAlt:       isDark ? "#111111" : "#F2F2F2",
-    eyebrow:     isDark ? "rgba(255,255,255,0.28)" : "rgba(0,0,0,0.28)",
-    title:       isDark ? "#F5F5F5" : "#0D0D0D",
-    cardBg:      isDark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.03)",
-    cardBorder:  isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.07)",
-    cardHover:   isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.055)",
-    tagBg:       isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.06)",
-    tagColor:    isDark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.4)",
-    cardTitle:   isDark ? "#EFEFEF" : "#111111",
-    cardBody:    isDark ? "rgba(255,255,255,0.45)" : "rgba(0,0,0,0.45)",
-    year:        isDark ? "rgba(255,255,255,0.22)" : "rgba(0,0,0,0.22)",
-    divider:     isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)",
-    arrow:       isDark ? "rgba(255,255,255,0.25)" : "rgba(0,0,0,0.22)",
-    pillBg:      isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.05)",
-    pillColor:   isDark ? "rgba(255,255,255,0.35)" : "rgba(0,0,0,0.38)",
-    line:        isDark ? "rgba(255,255,255,0.28)" : "rgba(0,0,0,0.28)",
+    bg:         isDark ? "linear-gradient(155deg, #0F0F0F 0%, #080808 100%)" : "linear-gradient(155deg, #FFFFFF 0%, #F9F9F9 100%)",
+    bgAlt:      isDark ? "linear-gradient(155deg, #0C0C0C 0%, #111111 100%)" : "linear-gradient(155deg, #F8F8F8 0%, #EFEFEF 100%)",
+    eyebrow:    isDark ? "#848484" : "#595959",
+    title:      isDark ? "#FAFAFA" : "#0A0A0A",
+    cardBg:     isDark ? "rgba(255,255,255,0.045)" : "rgba(0,0,0,0.025)",
+    cardBorder: isDark ? "rgba(255,255,255,0.11)" : "rgba(0,0,0,0.09)",
+    cardHover:  isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.055)",
+    tagBg:      isDark ? "rgba(255,255,255,0.09)" : "rgba(0,0,0,0.07)",
+    tagColor:   isDark ? "#9A9A9A" : "#4D4D4D",
+    cardTitle:  isDark ? "#F0F0F0" : "#0A0A0A",
+    cardBody:   isDark ? "#9A9A9A" : "#4D4D4D",
+    year:       isDark ? "#6E6E6E" : "#737373",
+    divider:    isDark ? "rgba(255,255,255,0.09)" : "rgba(0,0,0,0.09)",
+    arrow:      isDark ? "#848484" : "#595959",
+    pillBg:     isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.06)",
+    pillColor:  isDark ? "#9A9A9A" : "#4D4D4D",
+    line:       isDark ? "rgba(255,255,255,0.28)" : "rgba(0,0,0,0.28)",
+    noiseOp:    isDark ? 0.06 : 0.028,
   };
 }
 
@@ -91,8 +94,21 @@ export function CaseStudiesSection() {
         position: "relative",
       }}
     >
-      <div style={{ maxWidth: 860, width: "100%", margin: "0 auto", padding: "0 clamp(24px, 5vw, 72px)", position: "relative", zIndex: 1 }}>
+      {/* Noise */}
+      <div className="absolute inset-0 pointer-events-none" style={{
+        backgroundImage: NOISE_SVG,
+        backgroundSize: "160px 160px",
+        opacity: c.noiseOp,
+        mixBlendMode: "overlay",
+      }} />
+      {/* Edge vignette */}
+      <div className="absolute inset-0 pointer-events-none" style={{
+        background: c.isDark
+          ? "radial-gradient(ellipse 100% 100% at 50% 50%, transparent 55%, rgba(0,0,0,0.28) 100%)"
+          : "radial-gradient(ellipse 100% 100% at 50% 50%, transparent 55%, rgba(0,0,0,0.03) 100%)",
+      }} />
 
+      <div style={{ maxWidth: 860, width: "100%", margin: "0 auto", padding: "0 clamp(24px, 5vw, 72px)", position: "relative", zIndex: 1 }}>
         {/* Header */}
         <div style={{ marginBottom: "clamp(28px, 4vh, 48px)" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
@@ -118,7 +134,7 @@ export function CaseStudiesSection() {
             </h2>
             <span style={{
               fontFamily: "'Raleway', sans-serif",
-              fontSize: "0.7rem", fontWeight: 600,
+              fontSize: "0.72rem", fontWeight: 600,
               color: c.tagColor, letterSpacing: "0.03em",
             }}>
               Deep-dive explorations
@@ -136,14 +152,17 @@ export function CaseStudiesSection() {
               style={{
                 background: hovered === cs.id ? c.cardHover : c.cardBg,
                 border: `1px solid ${c.cardBorder}`,
-                borderRadius: 14,
+                borderRadius: 16,
                 padding: "clamp(20px, 2.5vh, 28px) clamp(20px, 2.5vw, 32px)",
                 cursor: "pointer",
-                transition: "background 0.2s ease, border-color 0.2s ease",
+                transition: "background 0.22s ease, box-shadow 0.22s ease",
                 display: "grid",
                 gridTemplateColumns: "1fr auto",
                 gap: 16,
                 alignItems: "start",
+                boxShadow: hovered === cs.id
+                  ? c.isDark ? "0 8px 32px rgba(0,0,0,0.5)" : "0 8px 32px rgba(0,0,0,0.08)"
+                  : "none",
               }}
             >
               <div>
@@ -157,10 +176,7 @@ export function CaseStudiesSection() {
                   }}>
                     {cs.tag}
                   </span>
-                  <span style={{
-                    fontFamily: "'Poppins', sans-serif",
-                    fontSize: "0.65rem", color: c.year,
-                  }}>
+                  <span style={{ fontFamily: "'Poppins', sans-serif", fontSize: "0.65rem", color: c.year, fontWeight: 600 }}>
                     {cs.year}
                   </span>
                 </div>
@@ -176,7 +192,7 @@ export function CaseStudiesSection() {
                   fontFamily: "'Raleway', sans-serif",
                   fontSize: "clamp(0.8rem, 1.1vw, 0.88rem)",
                   lineHeight: 1.65, color: c.cardBody, margin: "0 0 14px",
-                  maxWidth: 560,
+                  maxWidth: 560, fontWeight: 500,
                 }}>
                   {cs.description}
                 </p>
@@ -196,11 +212,10 @@ export function CaseStudiesSection() {
               </div>
               <div style={{
                 width: 36, height: 36, borderRadius: "50%",
-                border: `1px solid ${c.cardBorder}`,
+                border: `1px solid ${hovered === cs.id ? c.arrow : c.cardBorder}`,
                 display: "flex", alignItems: "center", justifyContent: "center",
                 flexShrink: 0, marginTop: 4,
                 transition: "border-color 0.2s ease",
-                borderColor: hovered === cs.id ? c.arrow : c.cardBorder,
               }}>
                 <ArrowUpRight
                   size={15}
@@ -236,8 +251,21 @@ export function ProjectsSection() {
         position: "relative",
       }}
     >
-      <div style={{ maxWidth: 860, width: "100%", margin: "0 auto", padding: "0 clamp(24px, 5vw, 72px)", position: "relative", zIndex: 1 }}>
+      {/* Noise */}
+      <div className="absolute inset-0 pointer-events-none" style={{
+        backgroundImage: NOISE_SVG,
+        backgroundSize: "160px 160px",
+        opacity: c.noiseOp,
+        mixBlendMode: "overlay",
+      }} />
+      {/* Subtle radial accent */}
+      <div className="absolute inset-0 pointer-events-none" style={{
+        background: c.isDark
+          ? "radial-gradient(ellipse 70% 60% at 80% 30%, rgba(255,255,255,0.012) 0%, transparent 65%)"
+          : "radial-gradient(ellipse 70% 60% at 80% 30%, rgba(0,0,0,0.015) 0%, transparent 65%)",
+      }} />
 
+      <div style={{ maxWidth: 860, width: "100%", margin: "0 auto", padding: "0 clamp(24px, 5vw, 72px)", position: "relative", zIndex: 1 }}>
         {/* Header */}
         <div style={{ marginBottom: "clamp(28px, 4vh, 48px)" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
@@ -263,7 +291,7 @@ export function ProjectsSection() {
             </h2>
             <span style={{
               fontFamily: "'Raleway', sans-serif",
-              fontSize: "0.7rem", fontWeight: 600,
+              fontSize: "0.72rem", fontWeight: 600,
               color: c.tagColor, letterSpacing: "0.03em",
             }}>
               Focused executions
@@ -285,14 +313,17 @@ export function ProjectsSection() {
               style={{
                 background: hovered === proj.id ? c.cardHover : c.cardBg,
                 border: `1px solid ${c.cardBorder}`,
-                borderRadius: 14,
+                borderRadius: 16,
                 padding: "clamp(18px, 2.5vh, 26px) clamp(18px, 2vw, 24px)",
                 cursor: "pointer",
-                transition: "background 0.2s ease",
+                transition: "background 0.22s ease, box-shadow 0.22s ease",
                 display: "flex",
                 flexDirection: "column",
                 gap: 10,
                 position: "relative",
+                boxShadow: hovered === proj.id
+                  ? c.isDark ? "0 8px 28px rgba(0,0,0,0.5)" : "0 8px 28px rgba(0,0,0,0.07)"
+                  : "none",
               }}
             >
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -305,7 +336,7 @@ export function ProjectsSection() {
                 }}>
                   {proj.tag}
                 </span>
-                <span style={{ fontFamily: "'Poppins', sans-serif", fontSize: "0.62rem", color: c.year }}>
+                <span style={{ fontFamily: "'Poppins', sans-serif", fontSize: "0.62rem", color: c.year, fontWeight: 600 }}>
                   {proj.year}
                 </span>
               </div>
@@ -320,7 +351,8 @@ export function ProjectsSection() {
               <p style={{
                 fontFamily: "'Raleway', sans-serif",
                 fontSize: "clamp(0.75rem, 1vw, 0.83rem)",
-                lineHeight: 1.6, color: c.cardBody, margin: 0, flex: 1,
+                lineHeight: 1.62, color: c.cardBody, margin: 0, flex: 1,
+                fontWeight: 500,
               }}>
                 {proj.description}
               </p>
