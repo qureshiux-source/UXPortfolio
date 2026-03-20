@@ -62,12 +62,6 @@ const JOBS = [
   },
 ];
 
-const TIMELINE = [
-  { id: "dcode-dynamics",     label: "Dcode Dynamics",    from: "2020", to: "2021",    flex: 2 },
-  { id: "exclusive-digitals", label: "Exclusive Digitals", from: "2021", to: "2023",    flex: 4 },
-  { id: "wired-hub",          label: "Wired Hub",          from: "2023", to: "Present", flex: 4 },
-];
-
 export function WorkExperience() {
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -82,13 +76,6 @@ export function WorkExperience() {
   const eyebrow     = isDark ? "#6A6A6A" : "#606060";
   const titleClr    = isDark ? "#F0F0F0" : "#0A0A0A";
   const divider     = isDark ? "rgba(255,255,255,0.09)" : "rgba(0,0,0,0.09)";
-
-  /* Horizontal timeline bar */
-  const tlActiveBg  = isDark ? "#FFFFFF" : "#0A0A0A";
-  const tlActiveTxt = isDark ? "#000000" : "#FFFFFF";
-  const tlGhostBg   = isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.055)";
-  const tlGhostTxt  = isDark ? "#555555" : "#9A9A9A";
-  const tlMark      = isDark ? "#444444" : "#CCCCCC";
 
   /* Vertical dot-line timeline */
   const dotActive   = isDark ? "#FFFFFF" : "#0A0A0A";
@@ -150,69 +137,6 @@ export function WorkExperience() {
             fontWeight: 800, letterSpacing: "-0.025em",
             color: titleClr, margin: 0, lineHeight: 1.1,
           }}>Where I've Led</h2>
-        </div>
-
-        {/* ── Horizontal Career Timeline Bar ────────── */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-          <div style={{ display: "flex", gap: 3, height: 34, borderRadius: 10, overflow: "hidden" }}>
-            {TIMELINE.map((seg) => {
-              const isA = seg.id === active;
-              return (
-                <button
-                  key={seg.id}
-                  onClick={() => setActive(seg.id)}
-                  style={{
-                    all: "unset", flex: seg.flex, cursor: "pointer",
-                    background: isA ? tlActiveBg : tlGhostBg,
-                    display: "flex", flexDirection: "column",
-                    alignItems: "center", justifyContent: "center",
-                    padding: "0 8px", borderRadius: 8,
-                    transition: "background 0.22s",
-                    overflow: "hidden",
-                  }}
-                >
-                  <span style={{
-                    fontFamily: "'Poppins', sans-serif",
-                    fontSize: "clamp(0.58rem, 0.82vw, 0.7rem)",
-                    fontWeight: 700,
-                    color: isA ? tlActiveTxt : tlGhostTxt,
-                    whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
-                    maxWidth: "100%",
-                  }}>{seg.label}</span>
-                  {isA && (
-                    <span style={{
-                      fontFamily: "'Raleway', sans-serif",
-                      fontSize: "0.52rem", fontWeight: 600,
-                      color: isDark ? "rgba(0,0,0,0.45)" : "rgba(255,255,255,0.55)",
-                    }}>{seg.from} – {seg.to}</span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-          {/* Year markers */}
-          <div style={{ display: "flex" }}>
-            {TIMELINE.map((seg, i) => (
-              <div key={seg.id} style={{
-                flex: seg.flex,
-                display: "flex",
-                justifyContent: i === TIMELINE.length - 1 ? "space-between" : "flex-start",
-              }}>
-                <span style={{
-                  fontFamily: "'Raleway', sans-serif",
-                  fontSize: "0.5rem", fontWeight: 700,
-                  letterSpacing: "0.06em", color: tlMark,
-                }}>{seg.from}</span>
-                {i === TIMELINE.length - 1 && (
-                  <span style={{
-                    fontFamily: "'Raleway', sans-serif",
-                    fontSize: "0.5rem", fontWeight: 700,
-                    letterSpacing: "0.06em", color: tlMark,
-                  }}>{seg.to}</span>
-                )}
-              </div>
-            ))}
-          </div>
         </div>
 
         {/* ── Two-column: Dot Timeline + Open Content ── */}
