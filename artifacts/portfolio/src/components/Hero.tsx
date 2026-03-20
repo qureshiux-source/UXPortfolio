@@ -68,8 +68,8 @@ export function Hero() {
     <section
       className="relative overflow-hidden flex items-center transition-colors duration-500"
       style={{
-        marginTop: 64,
-        minHeight: "calc(100vh - 64px)",
+        height: "100vh",
+        paddingTop: 64,
         perspective: "1200px",
         background: bg,
       }}

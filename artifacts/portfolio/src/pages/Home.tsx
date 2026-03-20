@@ -4,21 +4,40 @@ import { WorkExperience } from "@/components/WorkExperience";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-background text-foreground selection:bg-foreground/10">
+    <>
       <Navbar />
-      <Hero />
-      <WorkExperience />
-
-      {/* Footer */}
-      <footer
-        className="border-t py-8"
+      {/* Scroll-snap container — each section = one full viewport */}
+      <div
         style={{
-          borderColor: "rgba(0,0,0,0.07)",
-          background: "#F5F5F5",
+          height: "100vh",
+          overflowY: "scroll",
+          scrollSnapType: "y mandatory",
+          scrollBehavior: "smooth",
         }}
       >
-        <div
-          className="max-w-6xl mx-auto px-6 md:px-10 flex flex-col md:flex-row items-center justify-between gap-3"
+        {/* Section 1: Hero */}
+        <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
+          <Hero />
+        </section>
+
+        {/* Section 2: Work Experience */}
+        <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
+          <WorkExperience />
+        </section>
+
+        {/* Section 3: Footer snap target */}
+        <section
+          style={{
+            scrollSnapAlign: "start",
+            scrollSnapStop: "always",
+            height: "100vh",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            background: "#F5F5F5",
+            gap: 8,
+          }}
         >
           <span
             style={{
@@ -33,15 +52,15 @@ export default function Home() {
             style={{
               fontFamily: "'Raleway', sans-serif",
               fontSize: "0.579rem",
-              color: "#BBBBBB",
+              color: "#CCCCCC",
               textTransform: "uppercase",
               letterSpacing: "0.15em",
             }}
           >
             UX Designer · Product Thinker
           </span>
-        </div>
-      </footer>
-    </div>
+        </section>
+      </div>
+    </>
   );
 }
