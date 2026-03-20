@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
-import { MoveRight, MessageCircle } from "lucide-react";
+import { MoveRight, MessageCircle, Play } from "lucide-react";
+import { motion } from "framer-motion";
 
 const NOISE_SVG = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`;
 
-export function Hero() {
+interface HeroProps {
+  onStartTour?: () => void;
+}
+
+export function Hero({ onStartTour }: HeroProps) {
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   useEffect(() => { setMounted(true); }, []);
@@ -171,6 +176,40 @@ export function Hero() {
             >
               <MessageCircle size={14} /> Let's Talk
             </a>
+          </div>
+
+          {/* Quick Tour trigger */}
+          <div style={{ position: "relative", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+            {/* Pulse ring */}
+            <motion.div
+              animate={{ scale: [1, 1.55, 1], opacity: [0.35, 0, 0.35] }}
+              transition={{ duration: 2.4, repeat: Infinity, ease: "easeOut" }}
+              style={{
+                position: "absolute",
+                width: "100%", height: "100%",
+                borderRadius: 100,
+                border: `1.5px solid ${ghostBdr}`,
+                pointerEvents: "none",
+              }}
+            />
+            <motion.button
+              onClick={onStartTour}
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.97 }}
+              style={{
+                fontFamily: "'Raleway', sans-serif",
+                fontSize: "0.75rem", fontWeight: 700,
+                letterSpacing: "0.06em",
+                padding: "9px 22px",
+                borderRadius: 100,
+                border: `1.5px solid ${ghostBdr}`,
+                color: ghostClr, background: "transparent",
+                cursor: "pointer", display: "flex", alignItems: "center", gap: 7,
+              }}
+            >
+              <Play size={11} style={{ fill: ghostClr }} />
+              Quick Tour
+            </motion.button>
           </div>
         </div>
       </div>
