@@ -9,30 +9,30 @@ export function Hero() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => { setMounted(true); }, []);
 
-  /* Hero is intentionally INVERTED: dark theme → light hero, light theme → dark hero */
-  const systemDark = typeof document !== "undefined"
-    ? document.documentElement.classList.contains("dark")
-    : false;
-  const isDark = mounted ? resolvedTheme === "dark" : systemDark;
-  /* heroDark = true means hero bg is dark (happens in light mode) */
-  const heroDark = !isDark;
+  const system = typeof document !== "undefined"
+    ? document.documentElement.classList.contains("dark") : false;
+  const isDark = mounted ? resolvedTheme === "dark" : system;
 
-  const bg          = heroDark
+  /* Hero follows the theme — dark mode = dark bg, light mode = light bg */
+  const bg         = isDark
     ? "linear-gradient(145deg, #0A0A0A 0%, #050505 55%, #020202 100%)"
     : "linear-gradient(145deg, #FFFFFF 0%, #FDFDFD 60%, #FAFAFA 100%)";
-  const headingClr  = heroDark ? "#F5F5F5" : "#080808";
-  const subClr      = heroDark ? "#888888" : "#505050";
-  const eyebrowClr  = heroDark ? "#888888" : "#505050";
-  const dotClr      = heroDark ? "#555555" : "#AAAAAA";
-  const dividerClr  = heroDark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.1)";
-  const metricVal   = heroDark ? "#F5F5F5" : "#080808";
-  const metricLbl   = heroDark ? "#707070" : "#606060";
-  const metricBg    = heroDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.03)";
-  const metricBdr   = heroDark ? "rgba(255,255,255,0.1)"  : "rgba(0,0,0,0.08)";
-  const scrollClr   = heroDark ? "#555555" : "#AAAAAA";
-  const scrollLine  = heroDark
+  const headingClr = isDark ? "#F5F5F5" : "#080808";
+  const subClr     = isDark ? "#888888" : "#505050";
+  const eyebrowClr = isDark ? "#888888" : "#505050";
+  const dotClr     = isDark ? "#555555" : "#AAAAAA";
+  const dividerClr = isDark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.1)";
+  const metricVal  = isDark ? "#F5F5F5" : "#080808";
+  const metricLbl  = isDark ? "#707070" : "#606060";
+  const metricBg   = isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.03)";
+  const metricBdr  = isDark ? "rgba(255,255,255,0.1)"  : "rgba(0,0,0,0.08)";
+  const scrollClr  = isDark ? "#555555" : "#AAAAAA";
+  const scrollLine = isDark
     ? "linear-gradient(to bottom, rgba(255,255,255,0.18), transparent)"
     : "linear-gradient(to bottom, rgba(0,0,0,0.15), transparent)";
+  const primaryBtn = { bg: isDark ? "#F5F5F5" : "#0A0A0A", fg: isDark ? "#0A0A0A" : "#F5F5F5" };
+  const ghostBdr   = isDark ? "rgba(255,255,255,0.2)"  : "rgba(0,0,0,0.18)";
+  const ghostClr   = isDark ? "#C8C8C8" : "#1A1A1A";
 
   const METRICS = [
     { value: "4+",          label: "Years Experience" },
@@ -53,7 +53,7 @@ export function Hero() {
       {/* Radial focal glow */}
       <div style={{
         position: "absolute", inset: 0, pointerEvents: "none",
-        background: heroDark
+        background: isDark
           ? "radial-gradient(ellipse 60% 55% at 50% 45%, rgba(255,255,255,0.025) 0%, transparent 70%)"
           : "radial-gradient(ellipse 60% 55% at 50% 45%, rgba(0,0,0,0.02) 0%, transparent 70%)",
       }} />
@@ -62,14 +62,14 @@ export function Hero() {
       <div style={{
         position: "absolute", inset: 0, pointerEvents: "none",
         backgroundImage: NOISE_SVG, backgroundSize: "160px 160px",
-        opacity: heroDark ? 0.055 : 0.025,
+        opacity: isDark ? 0.055 : 0.025,
         mixBlendMode: "overlay" as const,
       }} />
 
       {/* Edge vignette */}
       <div style={{
         position: "absolute", inset: 0, pointerEvents: "none",
-        background: heroDark
+        background: isDark
           ? "radial-gradient(ellipse 100% 100% at 50% 50%, transparent 60%, rgba(0,0,0,0.5) 100%)"
           : "radial-gradient(ellipse 100% 100% at 50% 50%, transparent 60%, rgba(0,0,0,0.04) 100%)",
       }} />
@@ -146,17 +146,14 @@ export function Hero() {
 
           {/* CTAs */}
           <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
-            <button
-              style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontSize: "0.82rem", fontWeight: 700,
-                letterSpacing: "0.03em", padding: "12px 28px",
-                borderRadius: 100, border: "none", cursor: "pointer",
-                background: heroDark ? "#F5F5F5" : "#0A0A0A",
-                color: heroDark ? "#0A0A0A" : "#F5F5F5",
-                display: "flex", alignItems: "center", gap: 8,
-              }}
-            >
+            <button style={{
+              fontFamily: "'Poppins', sans-serif",
+              fontSize: "0.82rem", fontWeight: 700,
+              letterSpacing: "0.03em", padding: "12px 28px",
+              borderRadius: 100, border: "none", cursor: "pointer",
+              background: primaryBtn.bg, color: primaryBtn.fg,
+              display: "flex", alignItems: "center", gap: 8,
+            }}>
               View My Work <MoveRight size={14} />
             </button>
             <a
@@ -166,9 +163,8 @@ export function Hero() {
                 fontSize: "0.82rem", fontWeight: 600,
                 letterSpacing: "0.02em", padding: "11px 28px",
                 borderRadius: 100, cursor: "pointer",
-                border: heroDark ? "1.5px solid rgba(255,255,255,0.2)" : "1.5px solid rgba(0,0,0,0.18)",
-                color: heroDark ? "#C8C8C8" : "#1A1A1A",
-                background: "transparent",
+                border: `1.5px solid ${ghostBdr}`,
+                color: ghostClr, background: "transparent",
                 textDecoration: "none",
                 display: "flex", alignItems: "center", gap: 8,
               }}

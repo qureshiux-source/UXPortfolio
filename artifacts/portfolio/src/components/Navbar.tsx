@@ -12,14 +12,16 @@ export function Navbar() {
     ? document.documentElement.classList.contains("dark") : false;
   const isDark = mounted ? resolvedTheme === "dark" : system;
 
-  const navBg  = isDark ? "rgba(3,3,3,0.88)"    : "rgba(255,255,255,0.88)";
-  const border = isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)";
-  const txt    = isDark ? "#E8E8E8" : "#101010";
-  const sep    = isDark ? "rgba(255,255,255,0.1)"  : "rgba(0,0,0,0.1)";
-  const dot    = isDark ? "rgba(255,255,255,0.45)" : "rgba(0,0,0,0.3)";
-  const btnBdr = isDark ? "rgba(255,255,255,0.18)" : "rgba(0,0,0,0.16)";
-  const btnHvBg = isDark ? "#F5F5F5" : "#0A0A0A";
-  const btnHvFg = isDark ? "#0A0A0A" : "#F5F5F5";
+  /* Navbar is INVERTED relative to the page theme */
+  /* Dark mode page → light/white navbar; Light mode page → dark/black navbar */
+  const navBg  = isDark ? "rgba(248,248,248,0.94)"  : "rgba(8,8,8,0.92)";
+  const border = isDark ? "rgba(0,0,0,0.08)"         : "rgba(255,255,255,0.08)";
+  const txt    = isDark ? "#0A0A0A"                  : "#F0F0F0";
+  const sep    = isDark ? "rgba(0,0,0,0.15)"         : "rgba(255,255,255,0.15)";
+  const dot    = isDark ? "rgba(0,0,0,0.35)"         : "rgba(255,255,255,0.35)";
+  const btnBdr = isDark ? "rgba(0,0,0,0.2)"          : "rgba(255,255,255,0.2)";
+  const btnHvBg = isDark ? "#0A0A0A"                 : "#F5F5F5";
+  const btnHvFg = isDark ? "#F5F5F5"                 : "#0A0A0A";
 
   return (
     <header style={{ position: "fixed", top: 0, left: 0, right: 0, height: 64, zIndex: 50 }}>
@@ -60,7 +62,12 @@ export function Navbar() {
               { href: "https://instagram.com", icon: <Instagram size={14} />, label: "Instagram" },
             ].map((link, i) => (
               <span key={link.label} style={{ display: "flex", alignItems: "center", gap: 0 }}>
-                {i > 0 && <span style={{ width: 1, height: 14, background: sep, display: "inline-block", marginRight: 20 }} />}
+                {i > 0 && (
+                  <span style={{
+                    width: 1, height: 14, background: sep,
+                    display: "inline-block", marginRight: 20,
+                  }} />
+                )}
                 <a
                   href={link.href}
                   target="_blank"
@@ -69,12 +76,12 @@ export function Navbar() {
                     fontFamily: "'Raleway', sans-serif",
                     fontSize: "0.833rem", fontWeight: 500,
                     color: txt, textDecoration: "none",
-                    opacity: 0.55,
+                    opacity: 0.6,
                     display: "flex", alignItems: "center", gap: 6,
                     transition: "opacity 0.2s",
                   }}
                   onMouseEnter={e => { (e.currentTarget as HTMLElement).style.opacity = "1"; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.opacity = "0.55"; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.opacity = "0.6"; }}
                 >
                   {link.icon}<span>{link.label}</span>
                 </a>
