@@ -1,7 +1,7 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ExternalLink, Award } from "lucide-react";
+import { X, ExternalLink, Award, ArrowUpRight } from "lucide-react";
 
 const NOISE_SVG = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`;
 
@@ -55,166 +55,176 @@ export function Credentials() {
   const isDark = mounted && resolvedTheme === "dark";
 
   const [selected, setSelected] = useState<typeof CERTS[0] | null>(null);
+  const [hoveredId, setHoveredId] = useState<number | null>(null);
 
-  const bg        = isDark
-    ? "linear-gradient(150deg, #101010 0%, #0A0A0A 55%, #0D0D0D 100%)"
-    : "linear-gradient(150deg, #F5F5F5 0%, #FAFAFA 55%, #F0F0F0 100%)";
-  const eyebrow   = isDark ? "#848484" : "#595959";
-  const titleClr  = isDark ? "#FAFAFA" : "#0A0A0A";
-  const cardBg    = isDark ? "rgba(255,255,255,0.04)" : "rgba(255,255,255,0.8)";
-  const cardBdr   = isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.08)";
-  const cardTitle = isDark ? "#EFEFEF" : "#0A0A0A";
-  const cardSub   = isDark ? "#9A9A9A" : "#4D4D4D";
-  const cardDate  = isDark ? "#6E6E6E" : "#737373";
-  const iconBg    = isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)";
-  const iconClr   = isDark ? "#9A9A9A" : "#595959";
-  const noiseOp   = isDark ? 0.06 : 0.028;
+  const bg        = isDark ? "#0D0D0D" : "#F6F6F6";
+  const eyebrow   = isDark ? "#6A6A6A" : "#606060";
+  const titleClr  = isDark ? "#F0F0F0" : "#0A0A0A";
+  const rowTitle  = isDark ? "#E8E8E8" : "#0A0A0A";
+  const rowSub    = isDark ? "#5A5A5A" : "#9A9A9A";
+  const rowDate   = isDark ? "#4A4A4A" : "#BBBBBB";
+  const divider   = isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)";
+  const tagBg     = isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.055)";
+  const tagTxt    = isDark ? "#7A7A7A" : "#606060";
+  const hoverBg   = isDark ? "rgba(255,255,255,0.025)" : "rgba(0,0,0,0.025)";
   const overlayBg = isDark ? "rgba(0,0,0,0.85)" : "rgba(0,0,0,0.6)";
   const modalBg   = isDark ? "#111111" : "#FFFFFF";
-  const modalBdr  = isDark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.1)";
+  const modalBdr  = isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.08)";
   const bodyTxt   = isDark ? "#9A9A9A" : "#4D4D4D";
   const ctaBg     = isDark ? "#FAFAFA" : "#0A0A0A";
   const ctaFg     = isDark ? "#0A0A0A" : "#FAFAFA";
   const closeBg   = isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.07)";
+  const iconClr   = isDark ? "#6A6A6A" : "#8A8A8A";
 
   return (
-    <div
-      className="transition-colors duration-500"
-      style={{
-        height: "100vh",
-        background: bg,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        overflow: "hidden",
-        position: "relative",
-      }}
-    >
+    <div style={{
+      height: "100vh", background: bg,
+      display: "flex", flexDirection: "column",
+      justifyContent: "center", overflow: "hidden",
+      position: "relative", transition: "background 0.4s",
+    }}>
       {/* Noise */}
-      <div className="absolute inset-0 pointer-events-none" style={{
-        backgroundImage: NOISE_SVG,
-        backgroundSize: "160px 160px",
-        opacity: noiseOp,
-        mixBlendMode: "overlay",
-      }} />
-      <div className="absolute inset-0 pointer-events-none" style={{
-        background: isDark
-          ? "radial-gradient(ellipse 100% 80% at 50% 50%, transparent 40%, rgba(0,0,0,0.35) 100%)"
-          : "radial-gradient(ellipse 100% 80% at 50% 50%, transparent 40%, rgba(0,0,0,0.03) 100%)",
+      <div style={{
+        position: "absolute", inset: 0, pointerEvents: "none",
+        backgroundImage: NOISE_SVG, backgroundSize: "180px 180px",
+        opacity: isDark ? 0.05 : 0.022,
+        mixBlendMode: "overlay" as const,
       }} />
 
       <div style={{
-        maxWidth: 880,
-        width: "100%",
+        maxWidth: 880, width: "100%",
         margin: "0 auto",
         padding: "0 clamp(24px, 5vw, 72px)",
-        position: "relative",
-        zIndex: 1,
-        display: "flex",
-        flexDirection: "column",
-        gap: "clamp(22px, 3.5vh, 40px)",
+        position: "relative", zIndex: 1,
+        display: "flex", flexDirection: "column",
+        gap: "clamp(24px, 3.5vh, 40px)",
       }}>
         {/* Header */}
-        <div>
-          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-            <div style={{ width: 28, height: 1, background: eyebrow }} />
-            <span style={{
-              fontFamily: "'Raleway', sans-serif",
-              fontSize: "0.62rem", fontWeight: 700,
-              letterSpacing: "0.2em", textTransform: "uppercase",
-              color: eyebrow,
-            }}>
-              Credentials
-            </span>
-          </div>
-          <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
+        <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 16 }}>
+          <div>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+              <div style={{ width: 22, height: 1, background: eyebrow }} />
+              <span style={{
+                fontFamily: "'Raleway', sans-serif",
+                fontSize: "0.59rem", fontWeight: 700,
+                letterSpacing: "0.2em", textTransform: "uppercase",
+                color: eyebrow,
+              }}>Credentials</span>
+            </div>
             <h2 style={{
               fontFamily: "'Poppins', sans-serif",
-              fontSize: "clamp(1.7rem, 3.2vw, 2.5rem)",
+              fontSize: "clamp(1.6rem, 3vw, 2.4rem)",
               fontWeight: 800, lineHeight: 1.1,
               letterSpacing: "-0.025em",
               color: titleClr, margin: 0,
-            }}>
-              10+ Certifications
-            </h2>
-            <span style={{
-              fontFamily: "'Raleway', sans-serif",
-              fontSize: "0.72rem", fontWeight: 600,
-              color: cardSub, letterSpacing: "0.02em",
-            }}>
-              Click any card to verify
-            </span>
+            }}>10+ Certifications</h2>
           </div>
+          <span style={{
+            fontFamily: "'Raleway', sans-serif",
+            fontSize: "0.68rem", fontWeight: 600,
+            color: rowSub, letterSpacing: "0.01em",
+            flexShrink: 0, paddingBottom: 4,
+          }}>Click any row to verify</span>
         </div>
 
-        {/* Certificate Grid */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: "clamp(10px, 1.5vw, 16px)",
-        }}>
-          {CERTS.slice(0, 3).map((cert, i) => (
-            <CertCard
-              key={cert.id}
-              cert={cert}
-              idx={i}
-              isDark={isDark}
-              cardBg={cardBg}
-              cardBdr={cardBdr}
-              cardTitle={cardTitle}
-              cardSub={cardSub}
-              cardDate={cardDate}
-              iconBg={iconBg}
-              iconClr={iconClr}
-              onClick={() => setSelected(cert)}
-            />
-          ))}
+        {/* Top divider */}
+        <div style={{ height: 1, background: divider }} />
+
+        {/* Flat credential list */}
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          {CERTS.map((cert, i) => {
+            const isHovered = hoveredId === cert.id;
+            return (
+              <motion.button
+                key={cert.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.24, delay: i * 0.065 }}
+                onClick={() => setSelected(cert)}
+                onMouseEnter={() => setHoveredId(cert.id)}
+                onMouseLeave={() => setHoveredId(null)}
+                style={{
+                  all: "unset",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "clamp(12px, 2vw, 20px)",
+                  padding: "clamp(12px, 1.8vh, 18px) clamp(10px, 1.2vw, 16px)",
+                  borderBottom: i < CERTS.length - 1 ? `1px solid ${divider}` : "none",
+                  background: isHovered ? hoverBg : "transparent",
+                  borderRadius: 8,
+                  transition: "background 0.18s",
+                  width: "100%",
+                }}
+              >
+                {/* Award icon */}
+                <div style={{
+                  width: 28, height: 28, borderRadius: 8, flexShrink: 0,
+                  background: isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.05)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                }}>
+                  <Award size={13} style={{ color: iconClr }} />
+                </div>
+
+                {/* Issuer tag */}
+                <span style={{
+                  fontFamily: "'Raleway', sans-serif",
+                  fontSize: "0.55rem", fontWeight: 700,
+                  letterSpacing: "0.1em", textTransform: "uppercase",
+                  padding: "3px 8px", borderRadius: 100,
+                  background: tagBg, color: tagTxt,
+                  flexShrink: 0,
+                }}>{cert.issuer}</span>
+
+                {/* Title */}
+                <span style={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontSize: "clamp(0.78rem, 1.05vw, 0.9rem)",
+                  fontWeight: 600, letterSpacing: "-0.01em",
+                  color: rowTitle, flex: 1,
+                  textAlign: "left",
+                  lineHeight: 1.3,
+                }}>{cert.title}</span>
+
+                {/* Year */}
+                <span style={{
+                  fontFamily: "'Raleway', sans-serif",
+                  fontSize: "0.65rem", fontWeight: 700,
+                  color: rowDate, flexShrink: 0,
+                }}>{cert.date}</span>
+
+                {/* Arrow */}
+                <motion.div
+                  animate={{ x: isHovered ? 2 : 0, opacity: isHovered ? 1 : 0.35 }}
+                  transition={{ duration: 0.16 }}
+                  style={{ flexShrink: 0 }}
+                >
+                  <ArrowUpRight size={14} style={{ color: eyebrow }} />
+                </motion.div>
+              </motion.button>
+            );
+          })}
         </div>
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(2, 1fr)",
-          gap: "clamp(10px, 1.5vw, 16px)",
-          maxWidth: "66%",
-        }}>
-          {CERTS.slice(3).map((cert, i) => (
-            <CertCard
-              key={cert.id}
-              cert={cert}
-              idx={i + 3}
-              isDark={isDark}
-              cardBg={cardBg}
-              cardBdr={cardBdr}
-              cardTitle={cardTitle}
-              cardSub={cardSub}
-              cardDate={cardDate}
-              iconBg={iconBg}
-              iconClr={iconClr}
-              onClick={() => setSelected(cert)}
-            />
-          ))}
-        </div>
+
+        {/* Bottom divider */}
+        <div style={{ height: 1, background: divider }} />
       </div>
 
       {/* Lightbox */}
       <AnimatePresence>
         {selected && (
           <>
-            {/* Backdrop */}
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               transition={{ duration: 0.22 }}
               onClick={() => setSelected(null)}
               style={{
                 position: "fixed", inset: 0,
-                background: overlayBg,
-                zIndex: 1000,
+                background: overlayBg, zIndex: 1000,
                 backdropFilter: "blur(8px)",
                 WebkitBackdropFilter: "blur(8px)",
               }}
             />
-            {/* Modal */}
             <motion.div
               initial={{ opacity: 0, scale: 0.93, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -227,100 +237,81 @@ export function Credentials() {
                 zIndex: 1001,
                 background: modalBg,
                 border: `1px solid ${modalBdr}`,
-                borderRadius: 24,
-                padding: "clamp(28px, 4vw, 48px)",
-                width: "min(520px, 90vw)",
+                borderRadius: 20,
+                padding: "clamp(28px, 4vw, 44px)",
+                width: "min(500px, 90vw)",
                 boxShadow: isDark
                   ? "0 32px 80px rgba(0,0,0,0.8)"
-                  : "0 32px 80px rgba(0,0,0,0.2)",
+                  : "0 32px 80px rgba(0,0,0,0.18)",
               }}
             >
-              {/* Close */}
               <button
                 onClick={() => setSelected(null)}
                 style={{
-                  position: "absolute", top: 18, right: 18,
-                  width: 32, height: 32, borderRadius: "50%",
+                  position: "absolute", top: 16, right: 16,
+                  width: 30, height: 30, borderRadius: "50%",
                   background: closeBg, border: "none", cursor: "pointer",
                   display: "flex", alignItems: "center", justifyContent: "center",
                 }}
               >
-                <X size={14} style={{ color: cardSub }} />
+                <X size={13} style={{ color: rowSub }} />
               </button>
 
-              {/* Icon */}
               <div style={{
-                width: 48, height: 48, borderRadius: 14,
+                width: 44, height: 44, borderRadius: 12,
                 background: isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.05)",
                 border: `1px solid ${modalBdr}`,
                 display: "flex", alignItems: "center", justifyContent: "center",
-                marginBottom: 20,
+                marginBottom: 18,
               }}>
-                <Award size={22} style={{ color: isDark ? "#FAFAFA" : "#0A0A0A" }} />
+                <Award size={20} style={{ color: isDark ? "#FAFAFA" : "#0A0A0A" }} />
               </div>
 
-              {/* Meta */}
-              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
                 <span style={{
                   fontFamily: "'Raleway', sans-serif",
                   fontSize: "0.6rem", fontWeight: 700,
                   letterSpacing: "0.14em", textTransform: "uppercase",
-                  color: cardSub,
-                }}>
-                  {selected.issuer}
-                </span>
-                <div style={{ width: 3, height: 3, borderRadius: "50%", background: cardDate }} />
+                  color: rowSub,
+                }}>{selected.issuer}</span>
+                <div style={{ width: 3, height: 3, borderRadius: "50%", background: rowDate }} />
                 <span style={{
                   fontFamily: "'Raleway', sans-serif",
                   fontSize: "0.6rem", fontWeight: 700,
-                  letterSpacing: "0.14em",
-                  color: cardDate,
-                }}>
-                  {selected.date}
-                </span>
+                  letterSpacing: "0.08em", color: rowDate,
+                }}>{selected.date}</span>
               </div>
 
               <h3 style={{
                 fontFamily: "'Poppins', sans-serif",
-                fontSize: "clamp(1.1rem, 2vw, 1.4rem)",
+                fontSize: "clamp(1.05rem, 1.8vw, 1.3rem)",
                 fontWeight: 800, letterSpacing: "-0.02em",
                 color: titleClr, margin: "0 0 14px",
                 lineHeight: 1.2,
-              }}>
-                {selected.title}
-              </h3>
+              }}>{selected.title}</h3>
 
               <p style={{
                 fontFamily: "'Raleway', sans-serif",
                 fontSize: "0.88rem", lineHeight: 1.65,
-                color: bodyTxt, margin: "0 0 28px",
+                color: bodyTxt, margin: "0 0 26px",
                 fontWeight: 500,
-              }}>
-                {selected.description}
-              </p>
+              }}>{selected.description}</p>
 
               <a
                 href={selected.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 8,
+                  display: "inline-flex", alignItems: "center", gap: 8,
                   fontFamily: "'Poppins', sans-serif",
-                  fontSize: "0.82rem", fontWeight: 700,
+                  fontSize: "0.8rem", fontWeight: 700,
                   letterSpacing: "0.02em",
-                  padding: "12px 24px",
-                  borderRadius: 100,
-                  background: ctaBg,
-                  color: ctaFg,
+                  padding: "11px 22px", borderRadius: 100,
+                  background: ctaBg, color: ctaFg,
                   textDecoration: "none",
-                  boxShadow: isDark
-                    ? "0 4px 18px rgba(0,0,0,0.5)"
-                    : "0 4px 18px rgba(0,0,0,0.15)",
                 }}
               >
-                <ExternalLink size={14} />
+                <ExternalLink size={13} />
                 Verify Credential
               </a>
             </motion.div>
@@ -328,99 +319,5 @@ export function Credentials() {
         )}
       </AnimatePresence>
     </div>
-  );
-}
-
-function CertCard({
-  cert, idx, isDark,
-  cardBg, cardBdr, cardTitle, cardSub, cardDate, iconBg, iconClr,
-  onClick,
-}: {
-  cert: typeof CERTS[0];
-  idx: number;
-  isDark: boolean;
-  cardBg: string; cardBdr: string; cardTitle: string;
-  cardSub: string; cardDate: string; iconBg: string; iconClr: string;
-  onClick: () => void;
-}) {
-  const [hovered, setHovered] = useState(false);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.28, delay: idx * 0.06 }}
-      onClick={onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        background: cardBg,
-        border: `1px solid ${cardBdr}`,
-        borderRadius: 16,
-        padding: "clamp(14px, 2vh, 20px) clamp(14px, 1.8vw, 20px)",
-        cursor: "pointer",
-        display: "flex",
-        flexDirection: "column",
-        gap: 10,
-        position: "relative",
-        overflow: "hidden",
-        backdropFilter: isDark ? "none" : "blur(2px)",
-        boxShadow: hovered
-          ? isDark ? "0 8px 32px rgba(0,0,0,0.6)" : "0 8px 32px rgba(0,0,0,0.1)"
-          : isDark ? "0 4px 16px rgba(0,0,0,0.3)" : "0 4px 16px rgba(0,0,0,0.05)",
-        transition: "box-shadow 0.22s ease, transform 0.22s ease",
-        transform: hovered ? "translateY(-2px)" : "none",
-      }}
-    >
-      {/* Hover overlay */}
-      <motion.div
-        initial={false}
-        animate={{ opacity: hovered ? 1 : 0 }}
-        transition={{ duration: 0.18 }}
-        style={{
-          position: "absolute", inset: 0,
-          background: isDark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.025)",
-          pointerEvents: "none",
-        }}
-      />
-
-      {/* Icon + date */}
-      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
-        <div style={{
-          width: 32, height: 32, borderRadius: 10,
-          background: iconBg,
-          display: "flex", alignItems: "center", justifyContent: "center",
-        }}>
-          <Award size={15} style={{ color: iconClr }} />
-        </div>
-        <span style={{
-          fontFamily: "'Poppins', sans-serif",
-          fontSize: "0.62rem", fontWeight: 600,
-          color: cardDate,
-        }}>
-          {cert.date}
-        </span>
-      </div>
-
-      {/* Issuer */}
-      <span style={{
-        fontFamily: "'Raleway', sans-serif",
-        fontSize: "0.6rem", fontWeight: 700,
-        letterSpacing: "0.12em", textTransform: "uppercase",
-        color: cardSub,
-      }}>
-        {cert.issuer}
-      </span>
-
-      {/* Title */}
-      <h3 style={{
-        fontFamily: "'Poppins', sans-serif",
-        fontSize: "clamp(0.78rem, 1.1vw, 0.9rem)",
-        fontWeight: 700, letterSpacing: "-0.01em",
-        color: cardTitle, margin: 0, lineHeight: 1.25,
-      }}>
-        {cert.title}
-      </h3>
-    </motion.div>
   );
 }

@@ -62,11 +62,10 @@ const JOBS = [
   },
 ];
 
-/* Chronological order for the timeline bar (oldest → newest) */
 const TIMELINE = [
-  { id: "dcode-dynamics",     label: "Dcode Dynamics",     from: "2020", to: "2021",    flex: 2 },
-  { id: "exclusive-digitals", label: "Exclusive Digitals",  from: "2021", to: "2023",    flex: 4 },
-  { id: "wired-hub",          label: "Wired Hub",           from: "2023", to: "Present", flex: 4 },
+  { id: "dcode-dynamics",     label: "Dcode Dynamics",    from: "2020", to: "2021",    flex: 2 },
+  { id: "exclusive-digitals", label: "Exclusive Digitals", from: "2021", to: "2023",    flex: 4 },
+  { id: "wired-hub",          label: "Wired Hub",          from: "2023", to: "Present", flex: 4 },
 ];
 
 export function WorkExperience() {
@@ -78,41 +77,35 @@ export function WorkExperience() {
   const [active, setActive] = useState(JOBS[0].id);
   const activeJob = JOBS.find(j => j.id === active)!;
 
-  /* ── Refined palette ──────────────────────────────────────────── */
-  const bg         = isDark ? "#0D0D0D" : "#F6F6F6";
-  const eyebrow    = isDark ? "#767676" : "#5C5C5C";
-  const titleClr   = isDark ? "#F0F0F0" : "#0A0A0A";
+  /* ── Palette ────────────────────────────────────── */
+  const bg          = isDark ? "#0D0D0D" : "#F6F6F6";
+  const eyebrow     = isDark ? "#6A6A6A" : "#606060";
+  const titleClr    = isDark ? "#F0F0F0" : "#0A0A0A";
+  const divider     = isDark ? "rgba(255,255,255,0.09)" : "rgba(0,0,0,0.09)";
 
-  /* Timeline bar */
+  /* Horizontal timeline bar */
   const tlActiveBg  = isDark ? "#FFFFFF" : "#0A0A0A";
   const tlActiveTxt = isDark ? "#000000" : "#FFFFFF";
-  const tlGhostBg   = isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.06)";
-  const tlGhostTxt  = isDark ? "#666666" : "#8A8A8A";
-  const tlDot       = isDark ? "rgba(255,255,255,0.25)" : "rgba(0,0,0,0.2)";
-  const tlMark      = isDark ? "#555555" : "#BBBBBB";
+  const tlGhostBg   = isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.055)";
+  const tlGhostTxt  = isDark ? "#555555" : "#9A9A9A";
+  const tlMark      = isDark ? "#444444" : "#CCCCCC";
 
-  /* Left stepper */
-  const stepBg     = isDark ? "rgba(255,255,255,0.04)" : "rgba(255,255,255,0.6)";
-  const stepBdr    = isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.08)";
-  const activeBg   = isDark ? "#FFFFFF" : "#0A0A0A";
-  const activeTxt  = isDark ? "#000000" : "#FFFFFF";
-  const inactTxt   = isDark ? "#767676" : "#5C5C5C";
-  const connLine   = isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)";
+  /* Vertical dot-line timeline */
+  const dotActive   = isDark ? "#FFFFFF" : "#0A0A0A";
+  const dotBorder   = isDark ? "rgba(255,255,255,0.22)" : "rgba(0,0,0,0.18)";
+  const lineClr     = isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)";
+  const activeTxt   = isDark ? "#F0F0F0" : "#0A0A0A";
+  const inactTxt    = isDark ? "#5A5A5A" : "#9A9A9A";
+  const inactSub    = isDark ? "#444444" : "#BBBBBB";
+  const tagBg       = isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.055)";
+  const tagTxt      = isDark ? "#7A7A7A" : "#606060";
 
-  /* Right panel */
-  const panelBg    = isDark ? "rgba(255,255,255,0.04)" : "rgba(255,255,255,0.85)";
-  const panelBdr   = isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.09)";
-  const checkBg    = isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.035)";
-  const checkBdr   = isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.07)";
-  const checkTxt   = isDark ? "#D8D8D8" : "#1A1A1A";
-  const iconWrap   = isDark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.08)";
-  const tagBg      = isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.055)";
-  const tagTxt     = isDark ? "#8A8A8A" : "#525252";
-  const miniCardBg = isDark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.025)";
-  const miniCardBdr= isDark ? "rgba(255,255,255,0.09)" : "rgba(0,0,0,0.07)";
-  const miniTitle  = isDark ? "#ECECEC" : "#0A0A0A";
-  const divider    = isDark ? "rgba(255,255,255,0.09)" : "rgba(0,0,0,0.09)";
-  /* ────────────────────────────────────────────────────────────── */
+  /* Right content */
+  const checkTxt    = isDark ? "#C8C8C8" : "#1A1A1A";
+  const checkIcon   = isDark ? "#FFFFFF" : "#0A0A0A";
+  const projTitle   = isDark ? "#E8E8E8" : "#0A0A0A";
+  const projSep     = isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)";
+  /* ─────────────────────────────────────────────── */
 
   return (
     <div
@@ -120,11 +113,10 @@ export function WorkExperience() {
         height: "100vh", background: bg,
         display: "flex", flexDirection: "column",
         justifyContent: "center", overflow: "hidden",
-        position: "relative",
-        transition: "background 0.4s",
+        position: "relative", transition: "background 0.4s",
       }}
     >
-      {/* Noise */}
+      {/* Noise layer */}
       <div style={{
         position: "absolute", inset: 0, pointerEvents: "none",
         backgroundImage: NOISE, backgroundSize: "180px 180px",
@@ -134,113 +126,88 @@ export function WorkExperience() {
 
       <div style={{
         maxWidth: 960, width: "100%", margin: "0 auto",
-        padding: "0 clamp(20px, 4vw, 56px)",
+        padding: "0 clamp(24px, 5vw, 64px)",
         display: "flex", flexDirection: "column",
-        gap: "clamp(14px, 2vh, 22px)",
-        height: "calc(100vh - 96px)", justifyContent: "center",
+        gap: "clamp(16px, 2.5vh, 26px)",
+        height: "calc(100vh - 80px)", justifyContent: "center",
         position: "relative", zIndex: 1,
       }}>
 
-        {/* ── Header ─────────────────────────────────────────── */}
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 24, height: 1, background: eyebrow }} />
-          <span style={{
-            fontFamily: "'Raleway', sans-serif",
-            fontSize: "0.6rem", fontWeight: 700,
-            letterSpacing: "0.2em", textTransform: "uppercase",
-            color: eyebrow,
-          }}>Experience</span>
+        {/* ── Header ───────────────────────────────── */}
+        <div>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+            <div style={{ width: 22, height: 1, background: eyebrow }} />
+            <span style={{
+              fontFamily: "'Raleway', sans-serif",
+              fontSize: "0.59rem", fontWeight: 700,
+              letterSpacing: "0.2em", textTransform: "uppercase",
+              color: eyebrow,
+            }}>Experience</span>
+          </div>
+          <h2 style={{
+            fontFamily: "'Poppins', sans-serif",
+            fontSize: "clamp(1.5rem, 2.6vw, 2rem)",
+            fontWeight: 800, letterSpacing: "-0.025em",
+            color: titleClr, margin: 0, lineHeight: 1.1,
+          }}>Where I've Led</h2>
         </div>
-        <h2 style={{
-          fontFamily: "'Poppins', sans-serif",
-          fontSize: "clamp(1.5rem, 2.8vw, 2.1rem)",
-          fontWeight: 800, letterSpacing: "-0.025em",
-          color: titleClr, margin: 0, lineHeight: 1.1,
-        }}>
-          Where I've Led
-        </h2>
 
-        {/* ── Career Timeline Bar ─────────────────────────────── */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-          {/* Segments */}
-          <div style={{ display: "flex", gap: 3, height: 36, borderRadius: 10, overflow: "hidden" }}>
+        {/* ── Horizontal Career Timeline Bar ────────── */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+          <div style={{ display: "flex", gap: 3, height: 34, borderRadius: 10, overflow: "hidden" }}>
             {TIMELINE.map((seg) => {
-              const isActive = seg.id === active;
+              const isA = seg.id === active;
               return (
                 <button
                   key={seg.id}
                   onClick={() => setActive(seg.id)}
                   style={{
-                    all: "unset",
-                    flex: seg.flex,
-                    cursor: "pointer",
-                    background: isActive ? tlActiveBg : tlGhostBg,
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: 1,
-                    padding: "4px 10px",
-                    borderRadius: 8,
-                    transition: "background 0.2s",
+                    all: "unset", flex: seg.flex, cursor: "pointer",
+                    background: isA ? tlActiveBg : tlGhostBg,
+                    display: "flex", flexDirection: "column",
+                    alignItems: "center", justifyContent: "center",
+                    padding: "0 8px", borderRadius: 8,
+                    transition: "background 0.22s",
                     overflow: "hidden",
-                    position: "relative",
                   }}
                 >
-                  {/* Checkpoint dot */}
-                  <div style={{
-                    position: "absolute", top: 0, left: 0, right: 0,
-                    display: "flex", justifyContent: "space-between",
-                    padding: "0 1px",
-                  }}>
-                    <div style={{ width: 1, height: 4, background: isActive ? (isDark ? "rgba(0,0,0,0.2)" : "rgba(255,255,255,0.2)") : tlDot }} />
-                    <div style={{ width: 1, height: 4, background: isActive ? (isDark ? "rgba(0,0,0,0.2)" : "rgba(255,255,255,0.2)") : tlDot }} />
-                  </div>
                   <span style={{
                     fontFamily: "'Poppins', sans-serif",
-                    fontSize: "clamp(0.6rem, 0.85vw, 0.72rem)",
-                    fontWeight: 700, letterSpacing: "-0.01em",
-                    color: isActive ? tlActiveTxt : tlGhostTxt,
+                    fontSize: "clamp(0.58rem, 0.82vw, 0.7rem)",
+                    fontWeight: 700,
+                    color: isA ? tlActiveTxt : tlGhostTxt,
                     whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
                     maxWidth: "100%",
-                  }}>
-                    {seg.label}
-                  </span>
-                  <span style={{
-                    fontFamily: "'Raleway', sans-serif",
-                    fontSize: "0.55rem", fontWeight: 600,
-                    color: isActive ? (isDark ? "rgba(0,0,0,0.5)" : "rgba(255,255,255,0.6)") : "transparent",
-                    letterSpacing: "0.02em",
-                  }}>
-                    {seg.from} – {seg.to}
-                  </span>
+                  }}>{seg.label}</span>
+                  {isA && (
+                    <span style={{
+                      fontFamily: "'Raleway', sans-serif",
+                      fontSize: "0.52rem", fontWeight: 600,
+                      color: isDark ? "rgba(0,0,0,0.45)" : "rgba(255,255,255,0.55)",
+                    }}>{seg.from} – {seg.to}</span>
+                  )}
                 </button>
               );
             })}
           </div>
-          {/* Milestone markers */}
-          <div style={{ display: "flex", paddingLeft: 0 }}>
+          {/* Year markers */}
+          <div style={{ display: "flex" }}>
             {TIMELINE.map((seg, i) => (
               <div key={seg.id} style={{
                 flex: seg.flex,
                 display: "flex",
                 justifyContent: i === TIMELINE.length - 1 ? "space-between" : "flex-start",
-                gap: 0,
               }}>
                 <span style={{
                   fontFamily: "'Raleway', sans-serif",
-                  fontSize: "0.52rem", fontWeight: 700,
-                  letterSpacing: "0.06em",
-                  color: tlMark,
-                }}>
-                  {seg.from}
-                </span>
+                  fontSize: "0.5rem", fontWeight: 700,
+                  letterSpacing: "0.06em", color: tlMark,
+                }}>{seg.from}</span>
                 {i === TIMELINE.length - 1 && (
                   <span style={{
                     fontFamily: "'Raleway', sans-serif",
-                    fontSize: "0.52rem", fontWeight: 700,
-                    letterSpacing: "0.06em",
-                    color: tlMark,
+                    fontSize: "0.5rem", fontWeight: 700,
+                    letterSpacing: "0.06em", color: tlMark,
                   }}>{seg.to}</span>
                 )}
               </div>
@@ -248,200 +215,221 @@ export function WorkExperience() {
           </div>
         </div>
 
-        {/* ── Dashboard 2-column ──────────────────────────────── */}
+        {/* ── Two-column: Dot Timeline + Open Content ── */}
         <div style={{
           display: "grid",
-          gridTemplateColumns: "27% 1fr",
-          gap: "clamp(12px, 1.8vw, 20px)",
-          flex: 1, minHeight: 0,
+          gridTemplateColumns: "clamp(160px, 22%, 220px) 1fr",
+          gap: "clamp(24px, 4vw, 56px)",
+          flex: 1, minHeight: 0, alignItems: "start",
+          paddingTop: 8,
         }}>
-          {/* LEFT — compact stepper */}
-          <div style={{
-            background: stepBg, border: `1px solid ${stepBdr}`,
-            borderRadius: 16,
-            padding: "clamp(12px, 1.8vh, 18px) clamp(10px, 1.2vw, 16px)",
-            display: "flex", flexDirection: "column", gap: 0,
-            overflow: "hidden",
-            boxShadow: isDark ? "0 4px 20px rgba(0,0,0,0.35)" : "0 4px 20px rgba(0,0,0,0.05)",
-          }}>
+
+          {/* LEFT — Vertical dot+line timeline (no box) */}
+          <div style={{ position: "relative", paddingTop: 4 }}>
+            {/* Connecting line */}
+            <div style={{
+              position: "absolute",
+              left: 5,
+              top: 10,
+              bottom: 10,
+              width: 1,
+              background: lineClr,
+            }} />
+
             {JOBS.map((job, idx) => {
               const isActive = job.id === active;
               return (
-                <div key={job.id} style={{ display: "flex", flexDirection: "column" }}>
-                  <button
-                    onClick={() => setActive(job.id)}
-                    style={{
-                      all: "unset", cursor: "pointer",
-                      padding: "clamp(8px, 1.4vh, 13px) clamp(8px, 1vw, 12px)",
-                      borderRadius: 10,
-                      background: isActive ? activeBg : "transparent",
-                      transition: "background 0.2s",
-                      display: "flex", flexDirection: "column", gap: 3,
-                    }}
-                  >
-                    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                      {job.tag && (
-                        <span style={{
-                          fontFamily: "'Raleway', sans-serif",
-                          fontSize: "0.5rem", fontWeight: 700,
-                          letterSpacing: "0.1em", textTransform: "uppercase",
-                          padding: "2px 6px", borderRadius: 100,
-                          background: isActive ? "rgba(255,255,255,0.15)" : tagBg,
-                          color: isActive ? tlActiveTxt : tagTxt,
-                        }}>{job.tag}</span>
-                      )}
-                    </div>
+                <button
+                  key={job.id}
+                  onClick={() => setActive(job.id)}
+                  style={{
+                    all: "unset",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: 16,
+                    width: "100%",
+                    paddingBottom: idx < JOBS.length - 1 ? "clamp(22px, 3.5vh, 38px)" : 0,
+                    position: "relative",
+                  }}
+                >
+                  {/* Dot */}
+                  <div style={{
+                    width: isActive ? 12 : 8,
+                    height: isActive ? 12 : 8,
+                    borderRadius: "50%",
+                    flexShrink: 0,
+                    marginTop: isActive ? 3 : 5,
+                    marginLeft: isActive ? 0 : 2,
+                    background: isActive ? dotActive : "transparent",
+                    border: isActive ? "none" : `1.5px solid ${dotBorder}`,
+                    boxShadow: isActive
+                      ? (isDark ? "0 0 0 3px rgba(255,255,255,0.1)" : "0 0 0 3px rgba(0,0,0,0.08)")
+                      : "none",
+                    transition: "all 0.22s ease",
+                    position: "relative", zIndex: 1,
+                  }} />
+
+                  {/* Label */}
+                  <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                    {job.tag && (
+                      <span style={{
+                        fontFamily: "'Raleway', sans-serif",
+                        fontSize: "0.5rem", fontWeight: 700,
+                        letterSpacing: "0.1em", textTransform: "uppercase",
+                        color: isDark ? "#5EFF80" : "#1A7A32",
+                        marginBottom: 1,
+                      }}>{job.tag}</span>
+                    )}
                     <span style={{
                       fontFamily: "'Poppins', sans-serif",
-                      fontSize: "clamp(0.75rem, 1vw, 0.88rem)",
-                      fontWeight: 700, letterSpacing: "-0.01em",
+                      fontSize: "clamp(0.78rem, 1.05vw, 0.9rem)",
+                      fontWeight: isActive ? 700 : 500,
+                      letterSpacing: "-0.01em",
                       color: isActive ? activeTxt : inactTxt,
                       lineHeight: 1.2,
+                      transition: "color 0.2s",
                     }}>{job.company}</span>
                     <span style={{
                       fontFamily: "'Raleway', sans-serif",
-                      fontSize: "0.62rem", fontWeight: 600,
-                      color: isActive
-                        ? (isDark ? "rgba(0,0,0,0.5)" : "rgba(255,255,255,0.6)")
-                        : eyebrow,
+                      fontSize: "0.6rem", fontWeight: 600,
+                      color: isActive ? eyebrow : inactSub,
+                      transition: "color 0.2s",
                     }}>{job.period}</span>
-                  </button>
-                  {idx < JOBS.length - 1 && (
-                    <div style={{ width: 1, height: "clamp(8px, 1.2vh, 14px)", background: connLine, margin: "0 auto" }} />
-                  )}
-                </div>
+                  </div>
+                </button>
               );
             })}
           </div>
 
-          {/* RIGHT — animated content */}
+          {/* RIGHT — Open editorial content (no box) */}
           <div style={{
-            background: panelBg, border: `1px solid ${panelBdr}`,
-            borderRadius: 16,
-            padding: "clamp(14px, 2.2vh, 24px) clamp(14px, 2vw, 24px)",
-            display: "flex", flexDirection: "column",
-            gap: "clamp(12px, 1.8vh, 18px)", overflow: "hidden",
-            boxShadow: isDark ? "0 4px 28px rgba(0,0,0,0.4)" : "0 4px 28px rgba(0,0,0,0.07)",
+            borderLeft: `1px solid ${divider}`,
+            paddingLeft: "clamp(20px, 3vw, 36px)",
+            overflow: "hidden",
           }}>
             <AnimatePresence mode="wait">
               <motion.div
                 key={active}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
-                style={{ display: "flex", flexDirection: "column", gap: "clamp(12px, 1.8vh, 18px)", height: "100%" }}
+                initial={{ opacity: 0, x: 12 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -8 }}
+                transition={{ duration: 0.26, ease: [0.4, 0, 0.2, 1] }}
+                style={{ display: "flex", flexDirection: "column", gap: "clamp(14px, 2.2vh, 20px)" }}
               >
-                {/* Role header */}
+                {/* Role + meta */}
                 <div>
                   <h3 style={{
                     fontFamily: "'Poppins', sans-serif",
-                    fontSize: "clamp(1rem, 1.7vw, 1.3rem)",
-                    fontWeight: 800, letterSpacing: "-0.02em",
-                    color: titleClr, margin: "0 0 2px",
+                    fontSize: "clamp(1.1rem, 1.8vw, 1.4rem)",
+                    fontWeight: 800, letterSpacing: "-0.022em",
+                    color: titleClr, margin: "0 0 4px",
+                    lineHeight: 1.1,
                   }}>{activeJob.role}</h3>
-                  <p style={{
+                  <span style={{
                     fontFamily: "'Raleway', sans-serif",
                     fontSize: "0.72rem", fontWeight: 600,
-                    color: eyebrow, margin: 0,
-                  }}>{activeJob.company} · {activeJob.period}</p>
+                    color: eyebrow,
+                  }}>{activeJob.company} · {activeJob.period}</span>
                 </div>
 
+                {/* Separator */}
                 <div style={{ height: 1, background: divider }} />
 
-                {/* Impact Checkpoints — 2×2 */}
-                <div>
+                {/* Impact Checkpoints — flat list */}
+                <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
                   <span style={{
                     fontFamily: "'Raleway', sans-serif",
-                    fontSize: "0.56rem", fontWeight: 700,
+                    fontSize: "0.55rem", fontWeight: 700,
                     letterSpacing: "0.16em", textTransform: "uppercase",
-                    color: eyebrow, display: "block", marginBottom: 8,
+                    color: eyebrow, marginBottom: 10, display: "block",
                   }}>Impact Checkpoints</span>
-                  <div style={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr 1fr",
-                    gap: "clamp(6px, 1vw, 10px)",
-                  }}>
-                    {activeJob.checkpoints.map((cp, i) => (
-                      <motion.div
-                        key={cp}
-                        initial={{ opacity: 0, scale: 0.97 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.2, delay: i * 0.05 }}
-                        style={{
-                          background: checkBg, border: `1px solid ${checkBdr}`,
-                          borderRadius: 10,
-                          padding: "clamp(8px, 1.3vh, 12px) clamp(8px, 1vw, 12px)",
-                          display: "flex", alignItems: "flex-start", gap: 8,
-                        }}
-                      >
-                        <div style={{
-                          width: 16, height: 16, borderRadius: 5,
-                          background: iconWrap,
-                          display: "flex", alignItems: "center", justifyContent: "center",
-                          flexShrink: 0, marginTop: 1,
-                        }}>
-                          <Check size={9} style={{ color: isDark ? "#F0F0F0" : "#0A0A0A" }} strokeWidth={3} />
-                        </div>
-                        <span style={{
-                          fontFamily: "'Raleway', sans-serif",
-                          fontSize: "clamp(0.68rem, 0.95vw, 0.76rem)",
-                          fontWeight: 600, lineHeight: 1.5,
-                          color: checkTxt,
-                        }}>{cp}</span>
-                      </motion.div>
-                    ))}
-                  </div>
+                  {activeJob.checkpoints.map((cp, i) => (
+                    <motion.div
+                      key={cp}
+                      initial={{ opacity: 0, x: 8 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.2, delay: i * 0.055 }}
+                      style={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        gap: 10,
+                        padding: "clamp(6px, 1vh, 9px) 0",
+                        borderBottom: i < activeJob.checkpoints.length - 1
+                          ? `1px solid ${projSep}` : "none",
+                      }}
+                    >
+                      <div style={{
+                        width: 15, height: 15,
+                        borderRadius: "50%",
+                        background: isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.055)",
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        flexShrink: 0, marginTop: 1,
+                      }}>
+                        <Check size={8} style={{ color: checkIcon }} strokeWidth={3} />
+                      </div>
+                      <span style={{
+                        fontFamily: "'Raleway', sans-serif",
+                        fontSize: "clamp(0.72rem, 1vw, 0.8rem)",
+                        fontWeight: 600, lineHeight: 1.55,
+                        color: checkTxt,
+                      }}>{cp}</span>
+                    </motion.div>
+                  ))}
                 </div>
 
-                {/* Project Mini-Grid */}
+                {/* Separator */}
+                <div style={{ height: 1, background: divider }} />
+
+                {/* Projects — flat rows */}
                 <div>
                   <span style={{
                     fontFamily: "'Raleway', sans-serif",
-                    fontSize: "0.56rem", fontWeight: 700,
+                    fontSize: "0.55rem", fontWeight: 700,
                     letterSpacing: "0.16em", textTransform: "uppercase",
-                    color: eyebrow, display: "block", marginBottom: 8,
+                    color: eyebrow, marginBottom: 10, display: "block",
                   }}>Projects</span>
-                  <div style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(3, 1fr)",
-                    gap: "clamp(6px, 1vw, 10px)",
-                  }}>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
                     {activeJob.projects.map((proj, i) => (
                       <motion.div
                         key={proj.title}
-                        initial={{ opacity: 0, y: 6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.2, delay: 0.12 + i * 0.06 }}
+                        initial={{ opacity: 0, x: 8 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.2, delay: 0.15 + i * 0.06 }}
                         style={{
-                          background: miniCardBg, border: `1px solid ${miniCardBdr}`,
-                          borderRadius: 10,
-                          padding: "clamp(8px, 1.3vh, 12px) clamp(8px, 1vw, 12px)",
-                          display: "flex", flexDirection: "column", gap: 6,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          padding: "clamp(7px, 1.1vh, 10px) 0",
+                          borderBottom: i < activeJob.projects.length - 1
+                            ? `1px solid ${projSep}` : "none",
                           cursor: "pointer",
                         }}
                       >
-                        <span style={{
-                          fontFamily: "'Raleway', sans-serif",
-                          fontSize: "0.52rem", fontWeight: 700,
-                          letterSpacing: "0.1em", textTransform: "uppercase",
-                          padding: "2px 6px", borderRadius: 100,
-                          background: tagBg, color: tagTxt, width: "fit-content",
-                        }}>{proj.tag}</span>
-                        <span style={{
-                          fontFamily: "'Poppins', sans-serif",
-                          fontSize: "clamp(0.68rem, 0.95vw, 0.78rem)",
-                          fontWeight: 700, letterSpacing: "-0.01em",
-                          color: miniTitle, lineHeight: 1.25,
-                        }}>{proj.title}</span>
-                        <div style={{ display: "flex", alignItems: "center", gap: 3, marginTop: "auto" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                          <span style={{
+                            fontFamily: "'Raleway', sans-serif",
+                            fontSize: "0.52rem", fontWeight: 700,
+                            letterSpacing: "0.1em", textTransform: "uppercase",
+                            padding: "2px 7px", borderRadius: 100,
+                            background: tagBg, color: tagTxt,
+                            flexShrink: 0,
+                          }}>{proj.tag}</span>
+                          <span style={{
+                            fontFamily: "'Poppins', sans-serif",
+                            fontSize: "clamp(0.72rem, 1vw, 0.82rem)",
+                            fontWeight: 600, letterSpacing: "-0.01em",
+                            color: projTitle,
+                          }}>{proj.title}</span>
+                        </div>
+                        <div style={{ display: "flex", alignItems: "center", gap: 4, flexShrink: 0 }}>
                           <span style={{
                             fontFamily: "'Raleway', sans-serif",
                             fontSize: "0.55rem", fontWeight: 700,
                             letterSpacing: "0.06em", textTransform: "uppercase",
                             color: eyebrow,
-                          }}>View Case Study</span>
-                          <ArrowUpRight size={9} style={{ color: eyebrow }} />
+                          }}>Case Study</span>
+                          <ArrowUpRight size={10} style={{ color: eyebrow }} />
                         </div>
                       </motion.div>
                     ))}
