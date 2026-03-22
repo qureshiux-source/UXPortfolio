@@ -117,7 +117,8 @@ export function Skills() {
 
   return (
     <div style={{
-      height: "100vh", background: bg,
+      height: "100vh", paddingTop: 64, boxSizing: "border-box",
+      background: bg,
       display: "flex", flexDirection: "column",
       justifyContent: "center", overflow: "hidden",
       position: "relative", transition: "background 0.4s",

@@ -83,7 +83,8 @@ export function CaseStudiesSection() {
 
   return (
     <div style={{
-      height: "100vh", background: c.bg,
+      height: "100vh", paddingTop: 64, boxSizing: "border-box",
+      background: c.bg,
       display: "flex", flexDirection: "column",
       justifyContent: "center", overflow: "hidden",
       position: "relative", transition: "background 0.4s",
@@ -217,7 +218,8 @@ export function ProjectsSection() {
 
   return (
     <div style={{
-      height: "100vh", background: c.bgAlt,
+      height: "100vh", paddingTop: 64, boxSizing: "border-box",
+      background: c.bgAlt,
       display: "flex", flexDirection: "column",
       justifyContent: "center", overflow: "hidden",
       position: "relative", transition: "background 0.4s",

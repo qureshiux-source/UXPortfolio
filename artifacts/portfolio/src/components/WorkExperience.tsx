@@ -115,7 +115,8 @@ export function WorkExperience() {
 
   return (
     <div style={{
-      height: "100vh", background: bg,
+      height: "100vh", paddingTop: 64, boxSizing: "border-box",
+      background: bg,
       display: "flex", flexDirection: "column",
       justifyContent: "center", overflow: "hidden",
       position: "relative", transition: "background 0.4s",
@@ -133,10 +134,9 @@ export function WorkExperience() {
           padding: "0 clamp(24px, 5vw, 64px)",
           display: "flex", flexDirection: "column",
           gap: "clamp(16px, 2.5vh, 26px)",
-          height: "calc(100vh - 80px)", justifyContent: "center",
           position: "relative", zIndex: 1,
         }}
-        className="mt-[20px] mb-[20px]">
+      >
 
         {/* Header */}
         <div>

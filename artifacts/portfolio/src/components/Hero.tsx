@@ -48,7 +48,7 @@ export function Hero({ onStartTour }: HeroProps) {
   return (
     <section
       style={{
-        height: "100vh", paddingTop: 64,
+        height: "100vh", paddingTop: 64, boxSizing: "border-box",
         background: bg,
         display: "flex", alignItems: "center",
         position: "relative", overflow: "hidden",
