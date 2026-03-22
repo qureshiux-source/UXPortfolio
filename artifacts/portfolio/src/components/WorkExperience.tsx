@@ -127,15 +127,16 @@ export function WorkExperience() {
         opacity: isDark ? 0.055 : 0.022,
         mixBlendMode: "overlay" as const,
       }} />
-
-      <div style={{
-        maxWidth: 960, width: "100%", margin: "0 auto",
-        padding: "0 clamp(24px, 5vw, 64px)",
-        display: "flex", flexDirection: "column",
-        gap: "clamp(16px, 2.5vh, 26px)",
-        height: "calc(100vh - 80px)", justifyContent: "center",
-        position: "relative", zIndex: 1,
-      }}>
+      <div
+        style={{
+          maxWidth: 960, width: "100%", margin: "0 auto",
+          padding: "0 clamp(24px, 5vw, 64px)",
+          display: "flex", flexDirection: "column",
+          gap: "clamp(16px, 2.5vh, 26px)",
+          height: "calc(100vh - 80px)", justifyContent: "center",
+          position: "relative", zIndex: 1,
+        }}
+        className="mt-[20px] mb-[20px]">
 
         {/* Header */}
         <div>
