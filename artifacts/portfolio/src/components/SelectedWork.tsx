@@ -68,7 +68,8 @@ function palette(isDark: boolean) {
     arrow:      isDark ? "#707070" : "#606060",
     pillBg:     isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.05)",
     pillColor:  isDark ? "#808080" : "#505050",
-    noiseOp:    isDark ? 0.055 : 0.022,
+    noiseOp:    isDark ? 0.055 : 0.09,
+    noiseBlend: (isDark ? "overlay" : "multiply") as React.CSSProperties["mixBlendMode"],
   };
 }
 
@@ -92,7 +93,7 @@ export function CaseStudiesSection() {
       <div style={{
         position: "absolute", inset: 0, pointerEvents: "none",
         backgroundImage: NOISE_SVG, backgroundSize: "160px 160px",
-        opacity: c.noiseOp, mixBlendMode: "overlay" as const,
+        opacity: c.noiseOp, mixBlendMode: c.noiseBlend,
       }} />
       <div style={{
         position: "absolute", inset: 0, pointerEvents: "none",
@@ -227,7 +228,7 @@ export function ProjectsSection() {
       <div style={{
         position: "absolute", inset: 0, pointerEvents: "none",
         backgroundImage: NOISE_SVG, backgroundSize: "160px 160px",
-        opacity: c.noiseOp, mixBlendMode: "overlay" as const,
+        opacity: c.noiseOp, mixBlendMode: c.noiseBlend,
       }} />
 
       <div style={{ maxWidth: 860, width: "100%", margin: "0 auto", padding: "0 clamp(24px, 5vw, 72px)", position: "relative", zIndex: 1 }}>

@@ -67,8 +67,8 @@ export function Hero({ onStartTour }: HeroProps) {
       <div style={{
         position: "absolute", inset: 0, pointerEvents: "none",
         backgroundImage: NOISE_SVG, backgroundSize: "160px 160px",
-        opacity: isDark ? 0.055 : 0.025,
-        mixBlendMode: "overlay" as const,
+        opacity: isDark ? 0.055 : 0.09,
+        mixBlendMode: (isDark ? "overlay" : "multiply") as const,
       }} />
 
       {/* Edge vignette */}

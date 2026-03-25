@@ -36,7 +36,7 @@ function Footer({ isDark }: { isDark: boolean }) {
       <div style={{
         position: "absolute", inset: 0, pointerEvents: "none",
         backgroundImage: NOISE_SVG, backgroundSize: "180px 180px",
-        opacity: isDark ? 0.05 : 0.025, mixBlendMode: "overlay" as const,
+        opacity: isDark ? 0.05 : 0.09, mixBlendMode: (isDark ? "overlay" : "multiply") as const,
       }} />
       <div style={{
         position: "absolute", inset: 0, pointerEvents: "none",
