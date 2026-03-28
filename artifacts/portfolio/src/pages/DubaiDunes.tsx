@@ -1,7 +1,7 @@
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
-import { ArrowLeft, ArrowUpRight } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, X, ZoomIn } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 
 import imgBefore      from "@assets/Frame_1000002330_1774729080682.png";
@@ -37,18 +37,163 @@ function NoiseFx({ isDark }: { isDark: boolean }) {
   );
 }
 
+/* ─── Lightbox ───────────────────────────────────────────── */
+function Lightbox({
+  src, alt, onClose,
+}: { src: string; alt: string; onClose: () => void }) {
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) { if (e.key === "Escape") onClose(); }
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [onClose]);
+
+  return (
+    <div
+      onClick={onClose}
+      style={{
+        position: "fixed", inset: 0, zIndex: 9999,
+        background: "rgba(0,0,0,0.93)",
+        display: "flex", alignItems: "flex-start", justifyContent: "center",
+        padding: "64px 24px 24px",
+        overflowY: "auto",
+        cursor: "zoom-out",
+        backdropFilter: "blur(6px)",
+      }}
+    >
+      {/* Close button */}
+      <button
+        onClick={onClose}
+        style={{
+          position: "fixed", top: 18, right: 18, zIndex: 10000,
+          width: 36, height: 36, borderRadius: "50%",
+          background: "rgba(255,255,255,0.12)",
+          border: "1px solid rgba(255,255,255,0.2)",
+          color: "#fff", cursor: "pointer",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          transition: "background 0.18s",
+        }}
+        onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.22)")}
+        onMouseLeave={e => (e.currentTarget.style.background = "rgba(255,255,255,0.12)")}
+        aria-label="Close"
+      >
+        <X size={16} />
+      </button>
+
+      <img
+        src={src}
+        alt={alt}
+        onClick={e => e.stopPropagation()}
+        style={{
+          maxWidth: "min(92vw, 1200px)",
+          width: "100%",
+          height: "auto",
+          display: "block",
+          cursor: "default",
+          boxShadow: "0 32px 80px rgba(0,0,0,0.8)",
+        }}
+      />
+    </div>
+  );
+}
+
+/* ─── Zoomable image wrapper ─────────────────────────────── */
+function ZImg({
+  src, alt, height, fit = "cover", position = "top", border, badge, onOpen,
+}: {
+  src: string;
+  alt: string;
+  height: string;
+  fit?: "cover" | "contain";
+  position?: string;
+  border: string;
+  badge?: string;
+  onOpen: (src: string, alt: string) => void;
+}) {
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <div
+      onClick={() => onOpen(src, alt)}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        position: "relative", cursor: "zoom-in",
+        border: `1px solid ${border}`, borderRadius: 8,
+        overflow: "hidden",
+      }}
+    >
+      {badge && (
+        <div style={{
+          position: "absolute", top: 8, right: 8, zIndex: 3,
+          background: "rgba(255,255,255,0.92)",
+          color: "#0A0A0A",
+          fontFamily: "'Poppins', sans-serif",
+          fontSize: "0.5rem", fontWeight: 700,
+          letterSpacing: "0.1em", textTransform: "uppercase",
+          padding: "3px 8px",
+        }}>{badge}</div>
+      )}
+
+      <img
+        src={src}
+        alt={alt}
+        style={{
+          width: "100%", height, objectFit: fit,
+          objectPosition: position, display: "block",
+          transition: "transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94), filter 0.25s",
+          transform: hovered ? "scale(1.02)" : "scale(1)",
+          filter: hovered ? "brightness(0.72)" : "brightness(1)",
+        }}
+      />
+
+      {/* Hover overlay */}
+      <div style={{
+        position: "absolute", inset: 0, zIndex: 2,
+        display: "flex", flexDirection: "column",
+        alignItems: "center", justifyContent: "center", gap: 8,
+        opacity: hovered ? 1 : 0,
+        transition: "opacity 0.22s ease",
+        pointerEvents: "none",
+      }}>
+        <div style={{
+          width: 36, height: 36, borderRadius: "50%",
+          border: "1.5px solid rgba(255,255,255,0.85)",
+          background: "rgba(255,255,255,0.12)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+        }}>
+          <ZoomIn size={15} color="rgba(255,255,255,0.9)" />
+        </div>
+        <span style={{
+          fontFamily: "'Raleway', sans-serif",
+          fontSize: "0.62rem", fontWeight: 700,
+          letterSpacing: "0.12em", textTransform: "uppercase",
+          color: "rgba(255,255,255,0.85)",
+        }}>View Full Image</span>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Page ───────────────────────────────────────────────── */
 export default function DubaiDunes() {
   const isDark = useDark();
   const [, navigate] = useLocation();
+  const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
+
+  const openLightbox = (src: string, alt: string) => setLightbox({ src, alt });
+  const closeLightbox = () => setLightbox(null);
 
   const bg      = isDark ? "#030303" : "#FFFFFF";
   const bgAlt   = isDark ? "#060606" : "#FAFAFA";
   const head    = isDark ? "#F5F5F5" : "#080808";
   const body    = isDark ? "#808080" : "#505050";
-  const ey      = isDark ? "#505050" : "#909090";   // eyebrow
+  const ey      = isDark ? "#505050" : "#909090";
   const divider = isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.09)";
   const cardBg  = isDark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.025)";
-  const cardBdr = isDark ? "rgba(255,255,255,0.09)" : "rgba(0,0,0,0.07)";
   const imgBdr  = isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.08)";
 
   const sec: React.CSSProperties = {
@@ -86,22 +231,20 @@ export default function DubaiDunes() {
     lineHeight: 1.7, color: body, fontWeight: 500, margin: 0,
   };
 
-  const imgFrame = (extra?: React.CSSProperties): React.CSSProperties => ({
-    border: `1px solid ${imgBdr}`,
-    borderRadius: 8, overflow: "hidden",
-    background: isDark ? "#0A0A0A" : "#F5F5F5",
-    ...extra,
-  });
-
   return (
     <div style={{ background: bg }}>
       <Navbar />
+
+      {lightbox && (
+        <Lightbox src={lightbox.src} alt={lightbox.alt} onClose={closeLightbox} />
+      )}
+
       <div style={{
         height: "100vh", overflowY: "scroll", overflowX: "hidden",
         scrollSnapType: "y mandatory", scrollBehavior: "smooth",
       }}>
 
-        {/* ─── S1: HERO ─────────────────────────────────── */}
+        {/* ─── S1: HERO ──────────────────────────────────── */}
         <section style={{ ...sec, background: bg }}>
           <NoiseFx isDark={isDark} />
           <div style={{ ...inner, textAlign: "center", position: "relative", zIndex: 1 }}>
@@ -151,7 +294,7 @@ export default function DubaiDunes() {
           </div>
         </section>
 
-        {/* ─── S2: THE PROBLEM — BEFORE ─────────────────── */}
+        {/* ─── S2: THE PROBLEM — BEFORE ──────────────────── */}
         <section style={{ ...sec, background: bgAlt }}>
           <NoiseFx isDark={isDark} />
           <div style={{ ...inner, display: "grid", gridTemplateColumns: "1fr 1.1fr", gap: "clamp(28px, 4vw, 56px)", alignItems: "center" }}>
@@ -178,7 +321,8 @@ export default function DubaiDunes() {
               </div>
             </div>
 
-            <div style={{ ...imgFrame(), display: "flex", flexDirection: "column" }}>
+            {/* Image with browser chrome */}
+            <div style={{ border: `1px solid ${imgBdr}`, borderRadius: 8, overflow: "hidden" }}>
               <div style={{
                 background: isDark ? "#0F0F0F" : "#E8E8E8",
                 padding: "8px 12px",
@@ -194,55 +338,54 @@ export default function DubaiDunes() {
                   marginLeft: 6,
                 }} />
               </div>
-              <img
+              <ZImg
                 src={imgBefore}
                 alt="Original Dubai Dunes website"
-                style={{ width: "100%", height: "clamp(260px, 40vh, 360px)", objectFit: "cover", objectPosition: "top", display: "block" }}
+                height="clamp(260px, 40vh, 360px)"
+                fit="cover"
+                position="top"
+                border="transparent"
+                onOpen={openLightbox}
               />
             </div>
           </div>
         </section>
 
-        {/* ─── S3: RESEARCH — MOOD & MARKETS ───────────── */}
+        {/* ─── S3: RESEARCH ──────────────────────────────── */}
         <section style={{ ...sec, background: bg }}>
           <NoiseFx isDark={isDark} />
           <div style={{ ...inner }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
-              <span style={eyeSt}>02 — Research</span>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "clamp(16px, 2.5vh, 26px)", flexWrap: "wrap", gap: 12 }}>
-              <h2 style={{ ...h2St, margin: 0 }}>Mood Boards & Competitor Analysis</h2>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "clamp(16px, 2.5vh, 22px)", flexWrap: "wrap", gap: 12 }}>
+              <div>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+                  <span style={eyeSt}>02 — Research</span>
+                </div>
+                <h2 style={{ ...h2St, margin: 0 }}>Mood Boards & Competitor Analysis</h2>
+              </div>
               <span style={{ ...eyeSt, fontSize: "0.6rem" }}>12+ sites · Dubai · London · Monaco</span>
             </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                <div style={{ ...imgFrame() }}>
-                  <img
-                    src={imgMoodboard}
-                    alt="Design moodboard and research board"
-                    style={{ width: "100%", height: "clamp(200px, 34vh, 300px)", objectFit: "cover", objectPosition: "top left", display: "block" }}
+              {[
+                { img: imgMoodboard, label: "Moodboard", sub: "Dark palettes · Gold accents · Luxury cues" },
+                { img: imgCompetitor, label: "Competitor Analysis", sub: "SG Capital · AW · EMAAR · Nakheel" },
+              ].map((item) => (
+                <div key={item.label} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  <ZImg
+                    src={item.img}
+                    alt={item.label}
+                    height="clamp(200px, 34vh, 300px)"
+                    fit="cover"
+                    position="top left"
+                    border={imgBdr}
+                    onOpen={openLightbox}
                   />
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <span style={{ fontFamily: "'Poppins', sans-serif", fontSize: "0.72rem", fontWeight: 700, color: head }}>{item.label}</span>
+                    <span style={{ ...eyeSt, fontSize: "0.54rem" }}>{item.sub}</span>
+                  </div>
                 </div>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ fontFamily: "'Poppins', sans-serif", fontSize: "0.72rem", fontWeight: 700, color: head }}>Moodboard</span>
-                  <span style={{ ...eyeSt, fontSize: "0.54rem" }}>Dark palettes · Gold accents · Luxury cues</span>
-                </div>
-              </div>
-
-              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                <div style={{ ...imgFrame() }}>
-                  <img
-                    src={imgCompetitor}
-                    alt="Competitor analysis: SG Capital, AW, EMAAR, Nakheel"
-                    style={{ width: "100%", height: "clamp(200px, 34vh, 300px)", objectFit: "cover", objectPosition: "top left", display: "block" }}
-                  />
-                </div>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ fontFamily: "'Poppins', sans-serif", fontSize: "0.72rem", fontWeight: 700, color: head }}>Competitor Analysis</span>
-                  <span style={{ ...eyeSt, fontSize: "0.54rem" }}>SG Capital · AW · EMAAR · Nakheel</span>
-                </div>
-              </div>
+              ))}
             </div>
 
             <div style={{
@@ -258,19 +401,19 @@ export default function DubaiDunes() {
           </div>
         </section>
 
-        {/* ─── S4: WIREFRAMES ───────────────────────────── */}
+        {/* ─── S4: WIREFRAMES ────────────────────────────── */}
         <section style={{ ...sec, background: bgAlt }}>
           <NoiseFx isDark={isDark} />
           <div style={{ ...inner }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "clamp(16px, 2.5vh, 26px)", flexWrap: "wrap", gap: 10 }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "clamp(16px, 2.5vh, 22px)", flexWrap: "wrap", gap: 10 }}>
               <div>
                 <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
                   <span style={eyeSt}>03 — Wireframes</span>
                 </div>
                 <h2 style={{ ...h2St, margin: 0 }}>Low-Fidelity Foundation</h2>
               </div>
-              <p style={{ ...bodySt, fontSize: "0.78rem", maxWidth: 320, textAlign: "right" }}>
-                Layout structure locked in before any colour or styling decisions were made.
+              <p style={{ ...bodySt, fontSize: "0.78rem", maxWidth: 300, textAlign: "right" }}>
+                Layout structure locked before any colour or styling decisions.
               </p>
             </div>
 
@@ -280,13 +423,15 @@ export default function DubaiDunes() {
                 { img: imgWire2, label: "Wireframe 02", sub: "Hero · Who are we · Why choose us" },
               ].map((w) => (
                 <div key={w.label} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                  <div style={{ ...imgFrame(), background: isDark ? "#0D0D0D" : "#EFEFEF" }}>
-                    <img
-                      src={w.img}
-                      alt={w.label}
-                      style={{ width: "100%", height: "clamp(220px, 38vh, 330px)", objectFit: "contain", display: "block" }}
-                    />
-                  </div>
+                  <ZImg
+                    src={w.img}
+                    alt={w.label}
+                    height="clamp(220px, 38vh, 330px)"
+                    fit="contain"
+                    position="top"
+                    border={imgBdr}
+                    onOpen={openLightbox}
+                  />
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <span style={{ fontFamily: "'Poppins', sans-serif", fontSize: "0.72rem", fontWeight: 700, color: head }}>{w.label}</span>
                     <span style={{ ...eyeSt, fontSize: "0.52rem" }}>{w.sub}</span>
@@ -297,19 +442,19 @@ export default function DubaiDunes() {
           </div>
         </section>
 
-        {/* ─── S5: DESIGN ITERATIONS ────────────────────── */}
+        {/* ─── S5: ITERATIONS ────────────────────────────── */}
         <section style={{ ...sec, background: bg }}>
           <NoiseFx isDark={isDark} />
           <div style={{ ...inner }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "clamp(14px, 2vh, 22px)", flexWrap: "wrap", gap: 10 }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "clamp(14px, 2vh, 20px)", flexWrap: "wrap", gap: 10 }}>
               <div>
                 <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
                   <span style={eyeSt}>04 — Iterations</span>
                 </div>
                 <h2 style={{ ...h2St, margin: 0 }}>The Design Journey</h2>
               </div>
-              <p style={{ ...bodySt, fontSize: "0.78rem", maxWidth: 300, textAlign: "right" }}>
-                Three rounds of refinement — each iteration sharpening the luxury language.
+              <p style={{ ...bodySt, fontSize: "0.78rem", maxWidth: 280, textAlign: "right" }}>
+                Three rounds of refinement — each sharpening the luxury language.
               </p>
             </div>
 
@@ -317,30 +462,19 @@ export default function DubaiDunes() {
               {[
                 { img: imgIter1, label: "1st Iteration", sub: "Dark theme · Initial layout · Gold CTA" },
                 { img: imgIter2, label: "2nd Iteration", sub: "Refined hierarchy · Better imagery" },
-                { img: imgFinal, label: "Final Design",  sub: "Polished · Luxury-grade · Pixel-perfect" },
-              ].map((it, i) => (
+                { img: imgFinal, label: "Final Design",  sub: "Polished · Luxury-grade · Pixel-perfect", badge: "Final" },
+              ].map((it) => (
                 <div key={it.label} style={{ display: "flex", flexDirection: "column", gap: 7 }}>
-                  <div style={{
-                    ...imgFrame(),
-                    position: "relative",
-                  }}>
-                    {i === 2 && (
-                      <div style={{
-                        position: "absolute", top: 8, right: 8, zIndex: 2,
-                        background: isDark ? "rgba(255,255,255,0.9)" : "rgba(0,0,0,0.85)",
-                        color: isDark ? "#0A0A0A" : "#F5F5F5",
-                        fontFamily: "'Poppins', sans-serif",
-                        fontSize: "0.5rem", fontWeight: 700,
-                        letterSpacing: "0.1em", textTransform: "uppercase",
-                        padding: "3px 8px", borderRadius: 0,
-                      }}>Final</div>
-                    )}
-                    <img
-                      src={it.img}
-                      alt={it.label}
-                      style={{ width: "100%", height: "clamp(200px, 35vh, 310px)", objectFit: "cover", objectPosition: "top", display: "block" }}
-                    />
-                  </div>
+                  <ZImg
+                    src={it.img}
+                    alt={it.label}
+                    height="clamp(200px, 35vh, 310px)"
+                    fit="cover"
+                    position="top"
+                    border={imgBdr}
+                    badge={it.badge}
+                    onOpen={openLightbox}
+                  />
                   <div>
                     <div style={{ fontFamily: "'Poppins', sans-serif", fontSize: "0.72rem", fontWeight: 700, color: head, marginBottom: 2 }}>{it.label}</div>
                     <div style={{ ...eyeSt, fontSize: "0.52rem" }}>{it.sub}</div>
@@ -351,7 +485,7 @@ export default function DubaiDunes() {
           </div>
         </section>
 
-        {/* ─── S6: FINAL DESIGN — THE TRANSFORMATION ───── */}
+        {/* ─── S6: FINAL DESIGN ──────────────────────────── */}
         <section style={{ ...sec, background: bgAlt }}>
           <NoiseFx isDark={isDark} />
           <div style={{ ...inner }}>
@@ -362,37 +496,37 @@ export default function DubaiDunes() {
                 </div>
                 <h2 style={{ ...h2St, margin: 0 }}>The Transformation</h2>
               </div>
-              <p style={{ ...bodySt, fontSize: "0.78rem", maxWidth: 320, textAlign: "right" }}>
+              <p style={{ ...bodySt, fontSize: "0.78rem", maxWidth: 300, textAlign: "right" }}>
                 Dark-first, high-authority interface — repositioning Dubai Dunes as a premium brand.
               </p>
             </div>
 
-            <div style={{ ...imgFrame(), position: "relative" }}>
-              <img
+            <div style={{ position: "relative" }}>
+              <ZImg
                 src={imgFinalMulti}
                 alt="Dubai Dunes final redesign — multi-screen view"
-                style={{ width: "100%", height: "clamp(260px, 44vh, 390px)", objectFit: "cover", objectPosition: "top", display: "block" }}
+                height="clamp(260px, 44vh, 390px)"
+                fit="cover"
+                position="top"
+                border={imgBdr}
+                onOpen={openLightbox}
               />
+              {/* Caption bar below image */}
               <div style={{
-                position: "absolute", bottom: 0, left: 0, right: 0,
-                background: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%)",
-                padding: "24px 20px 14px",
-                display: "flex", justifyContent: "space-between", alignItems: "flex-end",
+                marginTop: 10, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8,
               }}>
                 <div>
-                  <div style={{ fontFamily: "'Poppins', sans-serif", fontSize: "0.9rem", fontWeight: 700, color: "#F5F5F5" }}>Dubai Dunes Properties</div>
-                  <div style={{ fontFamily: "'Raleway', sans-serif", fontSize: "0.68rem", color: "rgba(245,245,245,0.6)", fontWeight: 500 }}>Complete website redesign · Figma · 2026</div>
+                  <div style={{ fontFamily: "'Poppins', sans-serif", fontSize: "0.8rem", fontWeight: 700, color: head }}>Dubai Dunes Properties</div>
+                  <div style={{ ...eyeSt, fontSize: "0.58rem" }}>Complete website redesign · Figma · 2026</div>
                 </div>
-                <div style={{
-                  display: "flex", gap: 6,
-                }}>
+                <div style={{ display: "flex", gap: 6 }}>
                   {["Dark/Gold", "Sharp Corners", "Founder-First"].map((tag) => (
                     <span key={tag} style={{
                       fontFamily: "'Raleway', sans-serif", fontSize: "0.5rem", fontWeight: 700,
                       letterSpacing: "0.08em", textTransform: "uppercase",
-                      padding: "3px 8px", borderRadius: 0,
-                      background: "rgba(255,255,255,0.12)", color: "rgba(255,255,255,0.8)",
-                      border: "1px solid rgba(255,255,255,0.15)",
+                      padding: "3px 8px",
+                      background: cardBg, color: body,
+                      border: `1px solid ${divider}`,
                     }}>{tag}</span>
                   ))}
                 </div>
@@ -401,26 +535,73 @@ export default function DubaiDunes() {
           </div>
         </section>
 
-        {/* ─── S7: CLOSING — OUTCOME ────────────────────── */}
+        {/* ─── S7: CLOSING ───────────────────────────────── */}
         <section style={{ ...sec, background: bg, justifyContent: "flex-start", paddingTop: 64 }}>
           <NoiseFx isDark={isDark} />
 
-          {/* Full-width thumbnail strip */}
-          <div style={{ width: "100%", position: "relative", zIndex: 1, overflow: "hidden", height: "clamp(140px, 22vh, 200px)", flexShrink: 0 }}>
+          <div
+            onClick={() => openLightbox(imgThumb, "Dubai Dunes — final design presentation")}
+            style={{
+              width: "100%", position: "relative", zIndex: 1,
+              overflow: "hidden", height: "clamp(140px, 22vh, 200px)", flexShrink: 0,
+              cursor: "zoom-in",
+            }}
+            onMouseEnter={e => {
+              const ov = e.currentTarget.querySelector<HTMLElement>(".thumb-ov");
+              if (ov) ov.style.opacity = "1";
+              const img = e.currentTarget.querySelector<HTMLElement>("img");
+              if (img) { img.style.transform = "scale(1.02)"; img.style.filter = "brightness(0.7)"; }
+            }}
+            onMouseLeave={e => {
+              const ov = e.currentTarget.querySelector<HTMLElement>(".thumb-ov");
+              if (ov) ov.style.opacity = "0";
+              const img = e.currentTarget.querySelector<HTMLElement>("img");
+              if (img) { img.style.transform = "scale(1)"; img.style.filter = "brightness(1)"; }
+            }}
+          >
             <img
               src={imgThumb}
-              alt="Dubai Dunes — final design presentation"
-              style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }}
+              alt="Dubai Dunes final design presentation"
+              style={{
+                width: "100%", height: "100%", objectFit: "cover",
+                objectPosition: "center", display: "block",
+                transition: "transform 0.35s, filter 0.25s",
+              }}
             />
+            {/* Hover overlay */}
+            <div className="thumb-ov" style={{
+              position: "absolute", inset: 0,
+              background: "rgba(0,0,0,0.45)",
+              display: "flex", flexDirection: "column",
+              alignItems: "center", justifyContent: "center", gap: 8,
+              opacity: 0, transition: "opacity 0.22s",
+            }}>
+              <div style={{
+                width: 36, height: 36, borderRadius: "50%",
+                border: "1.5px solid rgba(255,255,255,0.85)",
+                background: "rgba(255,255,255,0.1)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+              }}>
+                <ZoomIn size={15} color="rgba(255,255,255,0.9)" />
+              </div>
+              <span style={{
+                fontFamily: "'Raleway', sans-serif",
+                fontSize: "0.62rem", fontWeight: 700,
+                letterSpacing: "0.12em", textTransform: "uppercase",
+                color: "rgba(255,255,255,0.85)",
+              }}>View Full Image</span>
+            </div>
+
             <div style={{
               position: "absolute", inset: 0,
               background: isDark
-                ? "linear-gradient(to bottom, rgba(3,3,3,0) 0%, rgba(3,3,3,0.85) 100%)"
-                : "linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.9) 100%)",
+                ? "linear-gradient(to bottom, rgba(3,3,3,0) 30%, rgba(3,3,3,0.8) 100%)"
+                : "linear-gradient(to bottom, rgba(255,255,255,0) 30%, rgba(255,255,255,0.85) 100%)",
+              pointerEvents: "none",
             }} />
           </div>
 
-          {/* Outcome content */}
+          {/* Outcome */}
           <div style={{ ...inner, flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", zIndex: 1, paddingTop: "clamp(16px, 2.5vh, 28px)", paddingBottom: "clamp(16px, 2.5vh, 28px)" }}>
             <div style={{ textAlign: "center" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 16 }}>
@@ -463,7 +644,7 @@ export default function DubaiDunes() {
                     padding: "10px 24px", borderRadius: 0,
                     background: head, color: isDark ? "#0A0A0A" : "#F5F5F5",
                     border: `1px solid ${head}`, cursor: "pointer",
-                    display: "flex", alignItems: "center", gap: 7, transition: "opacity 0.2s",
+                    display: "flex", alignItems: "center", gap: 7,
                   }}
                 >
                   View More Work <ArrowUpRight size={13} />
