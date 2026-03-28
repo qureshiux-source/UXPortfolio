@@ -4,6 +4,17 @@ import { useLocation } from "wouter";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 
+import imgBefore      from "@assets/Frame_1000002330_1774729080682.png";
+import imgFinalMulti  from "@assets/Frame_1000002327_1774729151461.png";
+import imgMoodboard   from "@assets/image_1_(2)_1774729177151.png";
+import imgCompetitor  from "@assets/image_2_1774729201693.png";
+import imgWire1       from "@assets/MacBook_Pro_16__-_1_1_1774729238420.png";
+import imgWire2       from "@assets/MacBook_Pro_16__-_1_2_1774729243352.png";
+import imgIter1       from "@assets/Landing_Page_(4)_1_1774729268639.png";
+import imgIter2       from "@assets/Landing_Page_(3)_1_1774729283065.png";
+import imgFinal       from "@assets/Dubai_Dunes_landing_Page_(1)_5_1774729296266.png";
+import imgThumb       from "@assets/Thumbnail2_1_1774729315703.png";
+
 const NOISE = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`;
 
 function useDark() {
@@ -15,7 +26,7 @@ function useDark() {
   return mounted ? resolvedTheme === "dark" : system;
 }
 
-function NoiseLayer({ isDark }: { isDark: boolean }) {
+function NoiseFx({ isDark }: { isDark: boolean }) {
   return (
     <div style={{
       position: "absolute", inset: 0, pointerEvents: "none",
@@ -30,16 +41,17 @@ export default function DubaiDunes() {
   const isDark = useDark();
   const [, navigate] = useLocation();
 
-  const bg     = isDark ? "#030303" : "#FFFFFF";
-  const bgAlt  = isDark ? "#060606" : "#FAFAFA";
-  const head   = isDark ? "#F5F5F5" : "#080808";
-  const body   = isDark ? "#808080" : "#505050";
-  const eyebrow = isDark ? "#505050" : "#909090";
+  const bg      = isDark ? "#030303" : "#FFFFFF";
+  const bgAlt   = isDark ? "#060606" : "#FAFAFA";
+  const head    = isDark ? "#F5F5F5" : "#080808";
+  const body    = isDark ? "#808080" : "#505050";
+  const ey      = isDark ? "#505050" : "#909090";   // eyebrow
   const divider = isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.09)";
   const cardBg  = isDark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.025)";
   const cardBdr = isDark ? "rgba(255,255,255,0.09)" : "rgba(0,0,0,0.07)";
+  const imgBdr  = isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.08)";
 
-  const secBase: React.CSSProperties = {
+  const sec: React.CSSProperties = {
     scrollSnapAlign: "start", scrollSnapStop: "always",
     height: "100vh", paddingTop: 64, boxSizing: "border-box",
     display: "flex", flexDirection: "column",
@@ -49,16 +61,36 @@ export default function DubaiDunes() {
   };
 
   const inner: React.CSSProperties = {
-    maxWidth: 900, width: "100%",
+    maxWidth: 920, width: "100%",
     padding: "0 clamp(24px, 5vw, 64px)",
     position: "relative", zIndex: 1,
   };
 
-  const label = (n: string): React.CSSProperties => ({
+  const eyeSt: React.CSSProperties = {
     fontFamily: "'Raleway', sans-serif",
     fontSize: "0.58rem", fontWeight: 700,
     letterSpacing: "0.2em", textTransform: "uppercase",
-    color: eyebrow,
+    color: ey,
+  };
+
+  const h2St: React.CSSProperties = {
+    fontFamily: "'Poppins', sans-serif",
+    fontSize: "clamp(1.5rem, 2.8vw, 2.1rem)",
+    fontWeight: 800, letterSpacing: "-0.025em",
+    color: head, margin: "0 0 12px",
+  };
+
+  const bodySt: React.CSSProperties = {
+    fontFamily: "'Raleway', sans-serif",
+    fontSize: "clamp(0.78rem, 1.05vw, 0.88rem)",
+    lineHeight: 1.7, color: body, fontWeight: 500, margin: 0,
+  };
+
+  const imgFrame = (extra?: React.CSSProperties): React.CSSProperties => ({
+    border: `1px solid ${imgBdr}`,
+    borderRadius: 8, overflow: "hidden",
+    background: isDark ? "#0A0A0A" : "#F5F5F5",
+    ...extra,
   });
 
   return (
@@ -69,52 +101,41 @@ export default function DubaiDunes() {
         scrollSnapType: "y mandatory", scrollBehavior: "smooth",
       }}>
 
-        {/* ── S1: HERO ──────────────────────────────────── */}
-        <section style={{ ...secBase, background: bg }}>
-          <NoiseLayer isDark={isDark} />
+        {/* ─── S1: HERO ─────────────────────────────────── */}
+        <section style={{ ...sec, background: bg }}>
+          <NoiseFx isDark={isDark} />
           <div style={{ ...inner, textAlign: "center", position: "relative", zIndex: 1 }}>
 
-            <button
-              onClick={() => navigate("/")}
-              style={{
-                position: "absolute", top: -36,
-                left: "clamp(24px, 5vw, 64px)",
-                fontFamily: "'Raleway', sans-serif",
-                fontSize: "0.7rem", fontWeight: 600,
-                letterSpacing: "0.08em", textTransform: "uppercase",
-                color: eyebrow, background: "none", border: "none",
-                cursor: "pointer", display: "flex", alignItems: "center", gap: 6,
-                padding: 0,
-              }}
-            >
+            <button onClick={() => navigate("/")} style={{
+              position: "absolute", top: -36, left: "clamp(24px, 5vw, 64px)",
+              fontFamily: "'Raleway', sans-serif", fontSize: "0.7rem", fontWeight: 600,
+              letterSpacing: "0.08em", textTransform: "uppercase",
+              color: ey, background: "none", border: "none",
+              cursor: "pointer", display: "flex", alignItems: "center", gap: 6, padding: 0,
+            }}>
               <ArrowLeft size={12} /><span>Back to Work</span>
             </button>
 
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 28 }}>
-              <div style={{ width: 28, height: 1, background: eyebrow }} />
-              <span style={{ ...label(""), marginBottom: 0 }}>Case Study · Real Estate UX · 2026</span>
-              <div style={{ width: 28, height: 1, background: eyebrow }} />
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 26 }}>
+              <div style={{ width: 28, height: 1, background: ey }} />
+              <span style={eyeSt}>Case Study · Real Estate UX · 2026</span>
+              <div style={{ width: 28, height: 1, background: ey }} />
             </div>
 
             <h1 style={{
               fontFamily: "'Poppins', sans-serif",
               fontSize: "clamp(2.2rem, 5vw, 4rem)",
               fontWeight: 800, letterSpacing: "-0.03em",
-              lineHeight: 1.05, color: head, margin: "0 0 20px",
+              lineHeight: 1.05, color: head, margin: "0 0 18px",
             }}>
               Dubai Dunes:<br />Engineering Trust
             </h1>
 
-            <p style={{
-              fontFamily: "'Raleway', sans-serif",
-              fontSize: "clamp(0.85rem, 1.2vw, 1rem)",
-              lineHeight: 1.7, color: body, fontWeight: 500,
-              maxWidth: 520, margin: "0 auto 36px",
-            }}>
+            <p style={{ ...bodySt, maxWidth: 520, margin: "0 auto 34px" }}>
               Transforming a visually underperforming real estate platform into a high-authority luxury interface — built to convert high-net-worth clients from the very first impression.
             </p>
 
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "clamp(20px, 4vw, 48px)", flexWrap: "wrap" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "clamp(20px, 4vw, 52px)", flexWrap: "wrap" }}>
               {[
                 { label: "Role", value: "Lead UX Designer" },
                 { label: "Year", value: "2026" },
@@ -122,497 +143,344 @@ export default function DubaiDunes() {
                 { label: "Tool", value: "Figma" },
               ].map((m) => (
                 <div key={m.label} style={{ textAlign: "center" }}>
-                  <div style={{
-                    fontFamily: "'Raleway', sans-serif", fontSize: "0.56rem",
-                    fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase",
-                    color: eyebrow, marginBottom: 5,
-                  }}>{m.label}</div>
-                  <div style={{
-                    fontFamily: "'Poppins', sans-serif",
-                    fontSize: "0.82rem", fontWeight: 600, color: head,
-                  }}>{m.value}</div>
+                  <div style={{ ...eyeSt, fontSize: "0.54rem", marginBottom: 5 }}>{m.label}</div>
+                  <div style={{ fontFamily: "'Poppins', sans-serif", fontSize: "0.82rem", fontWeight: 600, color: head }}>{m.value}</div>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ── S2: THE FRICTION ──────────────────────────── */}
-        <section style={{ ...secBase, background: bgAlt }}>
-          <NoiseLayer isDark={isDark} />
-          <div style={{ ...inner }}>
-            <div style={{ marginBottom: "clamp(22px, 3.5vh, 38px)" }}>
+        {/* ─── S2: THE PROBLEM — BEFORE ─────────────────── */}
+        <section style={{ ...sec, background: bgAlt }}>
+          <NoiseFx isDark={isDark} />
+          <div style={{ ...inner, display: "grid", gridTemplateColumns: "1fr 1.1fr", gap: "clamp(28px, 4vw, 56px)", alignItems: "center" }}>
+            <div>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
-                <span style={label("")}>01 — The Friction</span>
+                <span style={eyeSt}>01 — The Problem</span>
               </div>
-              <h2 style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontSize: "clamp(1.6rem, 3vw, 2.4rem)",
-                fontWeight: 800, letterSpacing: "-0.025em",
-                color: head, margin: "0 0 10px",
-              }}>The Original Disconnect</h2>
-              <p style={{
-                fontFamily: "'Raleway', sans-serif",
-                fontSize: "clamp(0.8rem, 1.1vw, 0.9rem)",
-                lineHeight: 1.65, color: body, fontWeight: 500,
-                maxWidth: 580, margin: 0,
-              }}>
-                A luxury brand selling multi-million-dirham properties — presented through a website that communicated neither luxury nor trust.
+              <h2 style={h2St}>Their Existing Site</h2>
+              <p style={{ ...bodySt, marginBottom: 20 }}>
+                The original Dubai Dunes website failed to reflect the exclusivity and trust required in luxury real estate — dull colours, weak hierarchy, and no visual storytelling.
               </p>
-            </div>
-
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
-              {[
-                { n: "01", title: "Weak Visual Hierarchy", desc: "No clear reading flow. Every element competed for attention, leaving visitors with no visual anchor." },
-                { n: "02", title: "Generic Layouts", desc: "Template-style designs that failed to differentiate Dubai Dunes from budget property portals." },
-                { n: "03", title: "Trust Deficit", desc: "The founder's credibility — a critical conversion factor in HNI real estate — was completely invisible." },
-                { n: "04", title: "No Visual Storytelling", desc: "Properties weren't presented aspirationally. Buyers couldn't visualise a lifestyle being sold." },
-                { n: "05", title: "Absent CTAs", desc: "No clear next action. High-intent visitors had nowhere to convert or make contact easily." },
-                { n: "06", title: "Zero Prestige Signal", desc: "Flat colours and dull imagery communicated the opposite of the exclusivity the brand commands." },
-              ].map((item) => (
-                <div key={item.n} style={{
-                  background: cardBg, border: `1px solid ${cardBdr}`,
-                  borderRadius: 10, padding: "clamp(14px, 1.8vh, 20px) clamp(14px, 1.8vw, 20px)",
-                }}>
-                  <div style={{
-                    fontFamily: "'Poppins', sans-serif", fontSize: "0.58rem",
-                    fontWeight: 700, letterSpacing: "0.1em", color: eyebrow, marginBottom: 7,
-                  }}>{item.n}</div>
-                  <div style={{
-                    fontFamily: "'Poppins', sans-serif",
-                    fontSize: "clamp(0.75rem, 1vw, 0.85rem)",
-                    fontWeight: 700, letterSpacing: "-0.01em",
-                    color: head, marginBottom: 5,
-                  }}>{item.title}</div>
-                  <div style={{
-                    fontFamily: "'Raleway', sans-serif",
-                    fontSize: "0.73rem", lineHeight: 1.6,
-                    color: body, fontWeight: 500,
-                  }}>{item.desc}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ── S3: THE SIGNAL ────────────────────────────── */}
-        <section style={{ ...secBase, background: bg }}>
-          <NoiseLayer isDark={isDark} />
-          <div style={{ ...inner }}>
-            <div style={{
-              display: "grid", gridTemplateColumns: "1fr 1.15fr",
-              gap: "clamp(32px, 5vw, 72px)", alignItems: "center",
-            }}>
-              <div>
-                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
-                  <span style={label("")}>02 — The Signal</span>
-                </div>
-                <h2 style={{
-                  fontFamily: "'Poppins', sans-serif",
-                  fontSize: "clamp(1.5rem, 2.8vw, 2.1rem)",
-                  fontWeight: 800, letterSpacing: "-0.025em",
-                  color: head, margin: "0 0 14px",
-                }}>Global Luxury Benchmarking</h2>
-                <p style={{
-                  fontFamily: "'Raleway', sans-serif",
-                  fontSize: "clamp(0.78rem, 1.05vw, 0.88rem)",
-                  lineHeight: 1.72, color: body, fontWeight: 500,
-                  margin: "0 0 22px",
-                }}>
-                  I analysed luxury real estate brands across Dubai and international markets — studying how established names convert high-net-worth clients through design alone, using mood boards and direct competitor teardowns.
-                </p>
-                <div style={{
-                  padding: "16px 20px",
-                  borderLeft: `2px solid ${divider}`,
-                  background: cardBg,
-                }}>
-                  <p style={{
-                    fontFamily: "'Raleway', sans-serif",
-                    fontSize: "0.84rem", lineHeight: 1.65,
-                    color: body, fontWeight: 500, margin: 0,
-                    fontStyle: "italic",
-                  }}>
-                    "Luxury doesn't succeed through visual noise. It wins through{" "}
-                    <strong style={{ color: head, fontWeight: 700, fontStyle: "normal" }}>
-                      restraint and clarity
-                    </strong>{" "}
-                    — making the user feel the brand before they read a single word."
-                  </p>
-                </div>
-              </div>
-
-              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                 {[
-                  { label: "Competitor Sites Analyzed", value: "12+" },
-                  { label: "Core Insight", value: "Restraint = Prestige" },
-                  { label: "Target Audience", value: "HNI Buyers & Investors" },
-                  { label: "Markets Studied", value: "Dubai · London · Monaco" },
-                  { label: "Pain Points Mapped", value: "4 Critical Gaps" },
-                ].map((s) => (
-                  <div key={s.label} style={{
-                    display: "flex", justifyContent: "space-between", alignItems: "center",
-                    padding: "13px 18px",
-                    background: cardBg, border: `1px solid ${cardBdr}`, borderRadius: 10,
-                  }}>
-                    <span style={{
-                      fontFamily: "'Raleway', sans-serif",
-                      fontSize: "0.76rem", fontWeight: 600, color: body,
-                    }}>{s.label}</span>
-                    <span style={{
-                      fontFamily: "'Poppins', sans-serif",
-                      fontSize: "0.78rem", fontWeight: 700, color: head,
-                    }}>{s.value}</span>
+                  "Flat, generic layout with no luxury signal",
+                  "Founder credibility buried and invisible",
+                  "No aspirational property presentation",
+                  "Absent CTAs — high-intent visitors had nowhere to go",
+                ].map((t) => (
+                  <div key={t} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+                    <div style={{ width: 4, height: 4, borderRadius: "50%", background: ey, marginTop: 7, flexShrink: 0 }} />
+                    <span style={{ ...bodySt, fontSize: "0.78rem" }}>{t}</span>
                   </div>
                 ))}
               </div>
             </div>
-          </div>
-        </section>
 
-        {/* ── S4: THE BLUEPRINT ─────────────────────────── */}
-        <section style={{ ...secBase, background: bgAlt }}>
-          <NoiseLayer isDark={isDark} />
-          <div style={{ ...inner }}>
-            <div style={{ marginBottom: "clamp(18px, 2.5vh, 28px)" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
-                <span style={label("")}>03 — The Blueprint</span>
-              </div>
-              <h2 style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontSize: "clamp(1.5rem, 2.8vw, 2.2rem)",
-                fontWeight: 800, letterSpacing: "-0.025em",
-                color: head, margin: 0,
-              }}>High-Contrast Property UI</h2>
-            </div>
-
-            <div style={{
-              display: "grid", gridTemplateColumns: "1.6fr 1fr",
-              gap: 12, height: "clamp(220px, 30vh, 300px)",
-            }}>
-              {/* Hero listing card */}
+            <div style={{ ...imgFrame(), display: "flex", flexDirection: "column" }}>
               <div style={{
-                background: "#080808",
-                border: "1px solid rgba(245,245,245,0.1)",
-                borderRadius: 10,
-                padding: "clamp(18px, 2.5vh, 26px)",
-                display: "flex", flexDirection: "column", justifyContent: "space-between",
-                position: "relative", overflow: "hidden",
+                background: isDark ? "#0F0F0F" : "#E8E8E8",
+                padding: "8px 12px",
+                display: "flex", alignItems: "center", gap: 6,
+                borderBottom: `1px solid ${imgBdr}`,
               }}>
+                {["#FF5F57", "#FFBD2E", "#28CA41"].map((c) => (
+                  <div key={c} style={{ width: 9, height: 9, borderRadius: "50%", background: c }} />
+                ))}
                 <div style={{
-                  position: "absolute", inset: 0, opacity: 0.04,
-                  backgroundImage: "repeating-linear-gradient(45deg, #F5F5F5 0px, transparent 1px, transparent 22px, #F5F5F5 23px)",
+                  flex: 1, height: 18, borderRadius: 4,
+                  background: isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.08)",
+                  marginLeft: 6,
                 }} />
-                <div style={{ position: "relative", zIndex: 1 }}>
-                  <div style={{
-                    fontFamily: "'Raleway', sans-serif", fontSize: "0.55rem",
-                    fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase",
-                    color: "rgba(245,245,245,0.4)", marginBottom: 10,
-                  }}>FEATURED VILLA · DUBAI HILLS</div>
-                  <div style={{
-                    fontFamily: "'Poppins', sans-serif",
-                    fontSize: "clamp(1rem, 2vw, 1.5rem)",
-                    fontWeight: 800, letterSpacing: "-0.025em",
-                    color: "#F5F5F5", lineHeight: 1.15,
-                  }}>Skyline Estate<br />5BR · Private Pool</div>
-                </div>
-                <div style={{ position: "relative", zIndex: 1, display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
-                  <div>
-                    <div style={{
-                      fontFamily: "'Raleway', sans-serif", fontSize: "0.54rem",
-                      fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase",
-                      color: "rgba(245,245,245,0.35)", marginBottom: 4,
-                    }}>ASKING PRICE</div>
-                    <div style={{
-                      fontFamily: "'Poppins', sans-serif",
-                      fontSize: "clamp(1.1rem, 2.2vw, 1.7rem)",
-                      fontWeight: 800, color: "#F5F5F5",
-                    }}>AED 12.5M</div>
-                  </div>
-                  <div style={{
-                    width: 34, height: 34, borderRadius: 0,
-                    border: "1px solid rgba(245,245,245,0.18)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                  }}>
-                    <ArrowUpRight size={13} color="#F5F5F5" />
-                  </div>
-                </div>
               </div>
-
-              {/* Two mini cards */}
-              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                {[
-                  { type: "PREMIUM APT", name: "Palm Residences", spec: "3BR · Sea View", price: "AED 4.2M" },
-                  { type: "PENTHOUSE", name: "Downtown Crown", spec: "4BR · Full Burj View", price: "AED 8.9M" },
-                ].map((card) => (
-                  <div key={card.name} style={{
-                    flex: 1,
-                    background: "#080808",
-                    border: "1px solid rgba(245,245,245,0.09)",
-                    borderRadius: 10,
-                    padding: "clamp(12px, 1.8vh, 18px) clamp(14px, 1.6vw, 18px)",
-                    display: "flex", justifyContent: "space-between", alignItems: "center",
-                  }}>
-                    <div>
-                      <div style={{
-                        fontFamily: "'Raleway', sans-serif", fontSize: "0.5rem",
-                        fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase",
-                        color: "rgba(245,245,245,0.35)", marginBottom: 4,
-                      }}>{card.type}</div>
-                      <div style={{
-                        fontFamily: "'Poppins', sans-serif",
-                        fontSize: "0.78rem", fontWeight: 700,
-                        color: "#F5F5F5", marginBottom: 2,
-                      }}>{card.name}</div>
-                      <div style={{
-                        fontFamily: "'Raleway', sans-serif",
-                        fontSize: "0.63rem", color: "rgba(245,245,245,0.4)", fontWeight: 500,
-                      }}>{card.spec}</div>
-                    </div>
-                    <div style={{
-                      fontFamily: "'Poppins', sans-serif",
-                      fontSize: "0.8rem", fontWeight: 700, color: "#F5F5F5",
-                    }}>{card.price}</div>
-                  </div>
-                ))}
-              </div>
+              <img
+                src={imgBefore}
+                alt="Original Dubai Dunes website"
+                style={{ width: "100%", height: "clamp(260px, 40vh, 360px)", objectFit: "cover", objectPosition: "top", display: "block" }}
+              />
             </div>
-
-            <p style={{
-              fontFamily: "'Raleway', sans-serif",
-              fontSize: "0.72rem", color: eyebrow, fontWeight: 500,
-              marginTop: 14, textAlign: "center", letterSpacing: "0.02em",
-            }}>
-              Dark-first, high-contrast property UI — sharp corners, minimal distractions, maximum prestige
-            </p>
           </div>
         </section>
 
-        {/* ── S5: THE STRATEGY ──────────────────────────── */}
-        <section style={{ ...secBase, background: bg }}>
-          <NoiseLayer isDark={isDark} />
-          <div style={{ ...inner, position: "relative", zIndex: 1 }}>
-            <div style={{ textAlign: "center", marginBottom: "clamp(24px, 3.5vh, 40px)" }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 10 }}>
-                <span style={label("")}>04 — The Strategy</span>
+        {/* ─── S3: RESEARCH — MOOD & MARKETS ───────────── */}
+        <section style={{ ...sec, background: bg }}>
+          <NoiseFx isDark={isDark} />
+          <div style={{ ...inner }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+              <span style={eyeSt}>02 — Research</span>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "clamp(16px, 2.5vh, 26px)", flexWrap: "wrap", gap: 12 }}>
+              <h2 style={{ ...h2St, margin: 0 }}>Mood Boards & Competitor Analysis</h2>
+              <span style={{ ...eyeSt, fontSize: "0.6rem" }}>12+ sites · Dubai · London · Monaco</span>
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                <div style={{ ...imgFrame() }}>
+                  <img
+                    src={imgMoodboard}
+                    alt="Design moodboard and research board"
+                    style={{ width: "100%", height: "clamp(200px, 34vh, 300px)", objectFit: "cover", objectPosition: "top left", display: "block" }}
+                  />
+                </div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <span style={{ fontFamily: "'Poppins', sans-serif", fontSize: "0.72rem", fontWeight: 700, color: head }}>Moodboard</span>
+                  <span style={{ ...eyeSt, fontSize: "0.54rem" }}>Dark palettes · Gold accents · Luxury cues</span>
+                </div>
               </div>
-              <h2 style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontSize: "clamp(1.6rem, 3vw, 2.4rem)",
-                fontWeight: 800, letterSpacing: "-0.025em",
-                color: head, margin: "0 0 12px",
-              }}>Positioning Authority</h2>
-              <p style={{
-                fontFamily: "'Raleway', sans-serif",
-                fontSize: "clamp(0.8rem, 1.1vw, 0.9rem)",
-                lineHeight: 1.7, color: body, fontWeight: 500,
-                maxWidth: 500, margin: "0 auto",
-              }}>
-                In luxury real estate, the founder <em>is</em> the product. Buyers aren't just purchasing property — they're buying into expertise, authority, and trust.
+
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                <div style={{ ...imgFrame() }}>
+                  <img
+                    src={imgCompetitor}
+                    alt="Competitor analysis: SG Capital, AW, EMAAR, Nakheel"
+                    style={{ width: "100%", height: "clamp(200px, 34vh, 300px)", objectFit: "cover", objectPosition: "top left", display: "block" }}
+                  />
+                </div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <span style={{ fontFamily: "'Poppins', sans-serif", fontSize: "0.72rem", fontWeight: 700, color: head }}>Competitor Analysis</span>
+                  <span style={{ ...eyeSt, fontSize: "0.54rem" }}>SG Capital · AW · EMAAR · Nakheel</span>
+                </div>
+              </div>
+            </div>
+
+            <div style={{
+              marginTop: 14, padding: "12px 18px",
+              borderLeft: `2px solid ${divider}`, background: cardBg,
+            }}>
+              <p style={{ ...bodySt, fontSize: "0.82rem", fontStyle: "italic", margin: 0 }}>
+                Key insight: "Luxury succeeds through{" "}
+                <strong style={{ color: head, fontWeight: 700, fontStyle: "normal" }}>restraint and clarity</strong>{" "}
+                — not visual noise."
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* ─── S4: WIREFRAMES ───────────────────────────── */}
+        <section style={{ ...sec, background: bgAlt }}>
+          <NoiseFx isDark={isDark} />
+          <div style={{ ...inner }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "clamp(16px, 2.5vh, 26px)", flexWrap: "wrap", gap: 10 }}>
+              <div>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+                  <span style={eyeSt}>03 — Wireframes</span>
+                </div>
+                <h2 style={{ ...h2St, margin: 0 }}>Low-Fidelity Foundation</h2>
+              </div>
+              <p style={{ ...bodySt, fontSize: "0.78rem", maxWidth: 320, textAlign: "right" }}>
+                Layout structure locked in before any colour or styling decisions were made.
               </p>
             </div>
 
-            <div style={{
-              display: "grid", gridTemplateColumns: "1fr auto 1fr",
-              gap: 16, alignItems: "center", maxWidth: 680, margin: "0 auto",
-            }}>
-              <div style={{
-                background: cardBg, border: `1px solid ${cardBdr}`,
-                borderRadius: 10, padding: "18px 22px",
-              }}>
-                <div style={{
-                  fontFamily: "'Raleway', sans-serif", fontSize: "0.56rem",
-                  fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase",
-                  color: eyebrow, marginBottom: 12,
-                }}>Before</div>
-                {["Founder buried in footer", "No credibility signals", "Disconnected brand voice", "Anonymous experience"].map((t) => (
-                  <div key={t} style={{
-                    display: "flex", alignItems: "center", gap: 7,
-                    fontFamily: "'Raleway', sans-serif",
-                    fontSize: "0.75rem", color: body, fontWeight: 500, marginBottom: 7,
-                  }}>
-                    <span style={{ width: 4, height: 4, borderRadius: "50%", background: eyebrow, display: "inline-block", flexShrink: 0 }} />
-                    {t}
-                  </div>
-                ))}
-              </div>
-
-              <div style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontSize: "1.3rem", fontWeight: 800, color: eyebrow,
-              }}>→</div>
-
-              <div style={{
-                background: isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.04)",
-                border: `1px solid ${isDark ? "rgba(255,255,255,0.14)" : "rgba(0,0,0,0.1)"}`,
-                borderRadius: 10, padding: "18px 22px",
-              }}>
-                <div style={{
-                  fontFamily: "'Raleway', sans-serif", fontSize: "0.56rem",
-                  fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase",
-                  color: isDark ? "#A0A0A0" : "#404040", marginBottom: 12,
-                }}>After</div>
-                {["Dedicated founder spotlight", "Experience & deals foregrounded", "Brand-led narrative", "Trust-first visual hierarchy"].map((t) => (
-                  <div key={t} style={{
-                    display: "flex", alignItems: "center", gap: 7,
-                    fontFamily: "'Raleway', sans-serif",
-                    fontSize: "0.75rem",
-                    color: isDark ? "#C8C8C8" : "#282828",
-                    fontWeight: 600, marginBottom: 7,
-                  }}>
-                    <span style={{ width: 4, height: 4, borderRadius: "50%", background: head, display: "inline-block", flexShrink: 0 }} />
-                    {t}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── S6: THE ARCHITECTURE ──────────────────────── */}
-        <section style={{ ...secBase, background: bgAlt }}>
-          <NoiseLayer isDark={isDark} />
-          <div style={{ ...inner }}>
-            <div style={{
-              display: "grid", gridTemplateColumns: "1fr 1fr",
-              gap: "clamp(32px, 5vw, 72px)", alignItems: "center",
-            }}>
-              <div>
-                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
-                  <span style={label("")}>05 — The Architecture</span>
-                </div>
-                <h2 style={{
-                  fontFamily: "'Poppins', sans-serif",
-                  fontSize: "clamp(1.5rem, 2.8vw, 2.1rem)",
-                  fontWeight: 800, letterSpacing: "-0.025em",
-                  color: head, margin: "0 0 14px",
-                }}>Quality Over Quantity</h2>
-                <p style={{
-                  fontFamily: "'Raleway', sans-serif",
-                  fontSize: "clamp(0.78rem, 1.05vw, 0.88rem)",
-                  lineHeight: 1.72, color: body, fontWeight: 500, margin: 0,
-                }}>
-                  Luxury buyers don't want to scroll through 300 listings. They want to be shown the right three. Each property card was engineered to communicate everything needed for a decision — in a single glance.
-                </p>
-              </div>
-
-              <div>
-                <div style={{
-                  fontFamily: "'Raleway', sans-serif", fontSize: "0.58rem",
-                  fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase",
-                  color: eyebrow, marginBottom: 12,
-                }}>High-Signal Data Points Per Card</div>
-                {[
-                  ["Property Type", "Villa · Penthouse · Apartment"],
-                  ["Location", "Community + district prominence"],
-                  ["Price", "Always above-the-fold"],
-                  ["Key Feature", "Defining amenity (pool, view, floors)"],
-                  ["Bedroom Count", "Primary filter for HNI buyers"],
-                  ["Status", "Off-plan · Ready · Negotiable"],
-                ].map(([lbl, val]) => (
-                  <div key={lbl} style={{
-                    display: "flex", justifyContent: "space-between", alignItems: "center",
-                    paddingBottom: 10, marginBottom: 10,
-                    borderBottom: `1px solid ${divider}`,
-                  }}>
-                    <span style={{
-                      fontFamily: "'Raleway', sans-serif",
-                      fontSize: "0.75rem", color: body, fontWeight: 500,
-                    }}>{lbl}</span>
-                    <span style={{
-                      fontFamily: "'Poppins', sans-serif",
-                      fontSize: "0.7rem", fontWeight: 600, color: head,
-                      textAlign: "right", maxWidth: 200,
-                    }}>{val}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── S7: THE CLOSING ───────────────────────────── */}
-        <section style={{ ...secBase, background: bg }}>
-          <NoiseLayer isDark={isDark} />
-          <div style={{ ...inner, textAlign: "center", position: "relative", zIndex: 1 }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 24 }}>
-              <div style={{ width: 28, height: 1, background: eyebrow }} />
-              <span style={label("")}>Project Outcome</span>
-              <div style={{ width: 28, height: 1, background: eyebrow }} />
-            </div>
-
-            <h2 style={{
-              fontFamily: "'Poppins', sans-serif",
-              fontSize: "clamp(1.8rem, 4vw, 3.2rem)",
-              fontWeight: 800, letterSpacing: "-0.03em",
-              color: head, margin: "0 0 16px",
-            }}>
-              100% Alignment with<br />Premium Positioning
-            </h2>
-
-            <p style={{
-              fontFamily: "'Raleway', sans-serif",
-              fontSize: "clamp(0.82rem, 1.1vw, 0.92rem)",
-              lineHeight: 1.7, color: body, fontWeight: 500,
-              maxWidth: 480, margin: "0 auto 44px",
-            }}>
-              The redesigned Dubai Dunes platform communicates luxury from the first pixel — a brand-led experience that earns trust before a single word is read.
-            </p>
-
-            <div style={{
-              display: "flex", justifyContent: "center",
-              gap: "clamp(24px, 5vw, 64px)", marginBottom: 52, flexWrap: "wrap",
-            }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
               {[
-                { value: "100%", label: "Premium Alignment" },
-                { value: "Solo", label: "End-to-end Ownership" },
-                { value: "3 Weeks", label: "Research to Delivery" },
-              ].map((s) => (
-                <div key={s.label} style={{ textAlign: "center" }}>
-                  <div style={{
-                    fontFamily: "'Poppins', sans-serif",
-                    fontSize: "clamp(1.6rem, 3.2vw, 2.6rem)",
-                    fontWeight: 800, letterSpacing: "-0.03em",
-                    color: head, lineHeight: 1,
-                  }}>{s.value}</div>
-                  <div style={{
-                    fontFamily: "'Raleway', sans-serif",
-                    fontSize: "0.62rem", fontWeight: 700,
-                    letterSpacing: "0.14em", textTransform: "uppercase",
-                    color: eyebrow, marginTop: 7,
-                  }}>{s.label}</div>
+                { img: imgWire1, label: "Wireframe 01", sub: "Property listings · Search · CTA flow" },
+                { img: imgWire2, label: "Wireframe 02", sub: "Hero · Who are we · Why choose us" },
+              ].map((w) => (
+                <div key={w.label} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  <div style={{ ...imgFrame(), background: isDark ? "#0D0D0D" : "#EFEFEF" }}>
+                    <img
+                      src={w.img}
+                      alt={w.label}
+                      style={{ width: "100%", height: "clamp(220px, 38vh, 330px)", objectFit: "contain", display: "block" }}
+                    />
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <span style={{ fontFamily: "'Poppins', sans-serif", fontSize: "0.72rem", fontWeight: 700, color: head }}>{w.label}</span>
+                    <span style={{ ...eyeSt, fontSize: "0.52rem" }}>{w.sub}</span>
+                  </div>
                 </div>
               ))}
             </div>
+          </div>
+        </section>
 
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, flexWrap: "wrap" }}>
-              <button
-                onClick={() => navigate("/")}
-                style={{
-                  fontFamily: "'Poppins', sans-serif",
-                  fontSize: "0.8rem", fontWeight: 700, letterSpacing: "0.01em",
-                  padding: "11px 26px", borderRadius: 0,
-                  background: head, color: isDark ? "#0A0A0A" : "#F5F5F5",
-                  border: `1px solid ${head}`, cursor: "pointer",
-                  display: "flex", alignItems: "center", gap: 7,
-                  transition: "opacity 0.2s",
-                }}
-              >
-                View More Work <ArrowUpRight size={13} />
-              </button>
-              <a
-                href="mailto:qureshi.ux@gmail.com"
-                style={{
-                  fontFamily: "'Poppins', sans-serif",
-                  fontSize: "0.8rem", fontWeight: 600, letterSpacing: "0.01em",
-                  padding: "11px 26px", borderRadius: 0,
-                  background: "transparent", color: head,
-                  border: `1px solid ${divider}`,
-                  textDecoration: "none",
-                  display: "flex", alignItems: "center", gap: 7,
-                }}
-              >
-                Get in Touch
-              </a>
+        {/* ─── S5: DESIGN ITERATIONS ────────────────────── */}
+        <section style={{ ...sec, background: bg }}>
+          <NoiseFx isDark={isDark} />
+          <div style={{ ...inner }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "clamp(14px, 2vh, 22px)", flexWrap: "wrap", gap: 10 }}>
+              <div>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+                  <span style={eyeSt}>04 — Iterations</span>
+                </div>
+                <h2 style={{ ...h2St, margin: 0 }}>The Design Journey</h2>
+              </div>
+              <p style={{ ...bodySt, fontSize: "0.78rem", maxWidth: 300, textAlign: "right" }}>
+                Three rounds of refinement — each iteration sharpening the luxury language.
+              </p>
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
+              {[
+                { img: imgIter1, label: "1st Iteration", sub: "Dark theme · Initial layout · Gold CTA" },
+                { img: imgIter2, label: "2nd Iteration", sub: "Refined hierarchy · Better imagery" },
+                { img: imgFinal, label: "Final Design",  sub: "Polished · Luxury-grade · Pixel-perfect" },
+              ].map((it, i) => (
+                <div key={it.label} style={{ display: "flex", flexDirection: "column", gap: 7 }}>
+                  <div style={{
+                    ...imgFrame(),
+                    position: "relative",
+                  }}>
+                    {i === 2 && (
+                      <div style={{
+                        position: "absolute", top: 8, right: 8, zIndex: 2,
+                        background: isDark ? "rgba(255,255,255,0.9)" : "rgba(0,0,0,0.85)",
+                        color: isDark ? "#0A0A0A" : "#F5F5F5",
+                        fontFamily: "'Poppins', sans-serif",
+                        fontSize: "0.5rem", fontWeight: 700,
+                        letterSpacing: "0.1em", textTransform: "uppercase",
+                        padding: "3px 8px", borderRadius: 0,
+                      }}>Final</div>
+                    )}
+                    <img
+                      src={it.img}
+                      alt={it.label}
+                      style={{ width: "100%", height: "clamp(200px, 35vh, 310px)", objectFit: "cover", objectPosition: "top", display: "block" }}
+                    />
+                  </div>
+                  <div>
+                    <div style={{ fontFamily: "'Poppins', sans-serif", fontSize: "0.72rem", fontWeight: 700, color: head, marginBottom: 2 }}>{it.label}</div>
+                    <div style={{ ...eyeSt, fontSize: "0.52rem" }}>{it.sub}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ─── S6: FINAL DESIGN — THE TRANSFORMATION ───── */}
+        <section style={{ ...sec, background: bgAlt }}>
+          <NoiseFx isDark={isDark} />
+          <div style={{ ...inner }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "clamp(14px, 2vh, 22px)", flexWrap: "wrap", gap: 10 }}>
+              <div>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+                  <span style={eyeSt}>05 — Final Design</span>
+                </div>
+                <h2 style={{ ...h2St, margin: 0 }}>The Transformation</h2>
+              </div>
+              <p style={{ ...bodySt, fontSize: "0.78rem", maxWidth: 320, textAlign: "right" }}>
+                Dark-first, high-authority interface — repositioning Dubai Dunes as a premium brand.
+              </p>
+            </div>
+
+            <div style={{ ...imgFrame(), position: "relative" }}>
+              <img
+                src={imgFinalMulti}
+                alt="Dubai Dunes final redesign — multi-screen view"
+                style={{ width: "100%", height: "clamp(260px, 44vh, 390px)", objectFit: "cover", objectPosition: "top", display: "block" }}
+              />
+              <div style={{
+                position: "absolute", bottom: 0, left: 0, right: 0,
+                background: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%)",
+                padding: "24px 20px 14px",
+                display: "flex", justifyContent: "space-between", alignItems: "flex-end",
+              }}>
+                <div>
+                  <div style={{ fontFamily: "'Poppins', sans-serif", fontSize: "0.9rem", fontWeight: 700, color: "#F5F5F5" }}>Dubai Dunes Properties</div>
+                  <div style={{ fontFamily: "'Raleway', sans-serif", fontSize: "0.68rem", color: "rgba(245,245,245,0.6)", fontWeight: 500 }}>Complete website redesign · Figma · 2026</div>
+                </div>
+                <div style={{
+                  display: "flex", gap: 6,
+                }}>
+                  {["Dark/Gold", "Sharp Corners", "Founder-First"].map((tag) => (
+                    <span key={tag} style={{
+                      fontFamily: "'Raleway', sans-serif", fontSize: "0.5rem", fontWeight: 700,
+                      letterSpacing: "0.08em", textTransform: "uppercase",
+                      padding: "3px 8px", borderRadius: 0,
+                      background: "rgba(255,255,255,0.12)", color: "rgba(255,255,255,0.8)",
+                      border: "1px solid rgba(255,255,255,0.15)",
+                    }}>{tag}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ─── S7: CLOSING — OUTCOME ────────────────────── */}
+        <section style={{ ...sec, background: bg, justifyContent: "flex-start", paddingTop: 64 }}>
+          <NoiseFx isDark={isDark} />
+
+          {/* Full-width thumbnail strip */}
+          <div style={{ width: "100%", position: "relative", zIndex: 1, overflow: "hidden", height: "clamp(140px, 22vh, 200px)", flexShrink: 0 }}>
+            <img
+              src={imgThumb}
+              alt="Dubai Dunes — final design presentation"
+              style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }}
+            />
+            <div style={{
+              position: "absolute", inset: 0,
+              background: isDark
+                ? "linear-gradient(to bottom, rgba(3,3,3,0) 0%, rgba(3,3,3,0.85) 100%)"
+                : "linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.9) 100%)",
+            }} />
+          </div>
+
+          {/* Outcome content */}
+          <div style={{ ...inner, flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", zIndex: 1, paddingTop: "clamp(16px, 2.5vh, 28px)", paddingBottom: "clamp(16px, 2.5vh, 28px)" }}>
+            <div style={{ textAlign: "center" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 16 }}>
+                <div style={{ width: 28, height: 1, background: ey }} />
+                <span style={eyeSt}>Project Outcome</span>
+                <div style={{ width: 28, height: 1, background: ey }} />
+              </div>
+
+              <h2 style={{
+                fontFamily: "'Poppins', sans-serif",
+                fontSize: "clamp(1.7rem, 3.5vw, 2.8rem)",
+                fontWeight: 800, letterSpacing: "-0.03em",
+                color: head, margin: "0 0 12px",
+              }}>
+                100% Alignment with<br />Premium Positioning
+              </h2>
+
+              <p style={{ ...bodySt, maxWidth: 460, margin: "0 auto 28px" }}>
+                A brand-led luxury experience that earns trust before a single word is read — from flat and generic to confident and premium.
+              </p>
+
+              <div style={{ display: "flex", justifyContent: "center", gap: "clamp(24px, 5vw, 60px)", marginBottom: 30, flexWrap: "wrap" }}>
+                {[
+                  { value: "100%", label: "Premium Alignment" },
+                  { value: "Solo", label: "End-to-end Ownership" },
+                  { value: "3 Wks", label: "Research to Delivery" },
+                ].map((s) => (
+                  <div key={s.label} style={{ textAlign: "center" }}>
+                    <div style={{ fontFamily: "'Poppins', sans-serif", fontSize: "clamp(1.4rem, 2.8vw, 2.2rem)", fontWeight: 800, letterSpacing: "-0.03em", color: head, lineHeight: 1 }}>{s.value}</div>
+                    <div style={{ ...eyeSt, fontSize: "0.6rem", marginTop: 5 }}>{s.label}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, flexWrap: "wrap" }}>
+                <button
+                  onClick={() => navigate("/")}
+                  style={{
+                    fontFamily: "'Poppins', sans-serif", fontSize: "0.8rem", fontWeight: 700, letterSpacing: "0.01em",
+                    padding: "10px 24px", borderRadius: 0,
+                    background: head, color: isDark ? "#0A0A0A" : "#F5F5F5",
+                    border: `1px solid ${head}`, cursor: "pointer",
+                    display: "flex", alignItems: "center", gap: 7, transition: "opacity 0.2s",
+                  }}
+                >
+                  View More Work <ArrowUpRight size={13} />
+                </button>
+                <a
+                  href="mailto:qureshi.ux@gmail.com"
+                  style={{
+                    fontFamily: "'Poppins', sans-serif", fontSize: "0.8rem", fontWeight: 600, letterSpacing: "0.01em",
+                    padding: "10px 24px", borderRadius: 0,
+                    background: "transparent", color: head,
+                    border: `1px solid ${divider}`,
+                    textDecoration: "none", display: "flex", alignItems: "center", gap: 7,
+                  }}
+                >
+                  Get in Touch
+                </a>
+              </div>
             </div>
           </div>
         </section>
