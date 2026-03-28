@@ -1,0 +1,41 @@
+Act as a Senior UI/UX Engineer. Build a high-precision Case Study page for "Dubai Dunes" that strictly follows my "Pure Matte Black/White" design system.
+
+### 1. LAYOUT & SYSTEM CONSTRAINTS
+- Theme: Pure #030303 background with #F5F5F5 (off-white) text. No other colors except for the "CURRENT" green dot (#5EFF80) if applicable.
+- Typography: Use Poppins (Bold) for all 100vh section headings. Use Raleway (Light/Regular) for all body descriptions.
+- Texture: Apply a 100vw/100vh fractal noise grain overlay (blend-mode: overlay, low opacity).
+- Structure: Implement 100vh scroll-snap sections. Content must be perfectly centered below the fixed 64px navbar.
+
+### 2. SECTION-BY-SECTION CONTENT
+Translate the "Dubai Dunes" PDF data into these specific vertical sections:
+
+- SECTION 1: THE HOOK (HERO)
+  - Heading: "Dubai Dunes: Engineering Trust"
+  - Sub-heading: "Lead UX Designer | 2026"
+  - Content: A brief 2-sentence summary of the goal: Redesigning a 'spartanic' real estate platform into a high-authority luxury interface.
+
+- SECTION 2: THE FRICTION (PROBLEM)
+  - Layout: Split-screen or Centered Bento.
+  - Content: "The Original Disconnect." List the core failures: Weak visual hierarchy, generic layouts, and a failure to communicate prestige to high-net-worth individuals.
+
+- SECTION 3: THE SIGNAL (RESEARCH)
+  - Content: "Global Luxury Benchmarking." Detail the analysis of international markets. Focus on the insight that luxury succeeds through 'restraint and clarity' rather than 'visual noise.'
+
+- SECTION 4: THE BLUEPRINT (SOLUTION - VISUAL)
+  - Visual: Large-scale mockup of the property listings. 
+  - Requirement: Ensure all mockup images are grayscale or high-contrast to match the site's matte black palette. Use sharp corner styling for all UI elements.
+
+- SECTION 5: THE STRATEGY (FOUNDER MODULE)
+  - Heading: "Positioning Authority"
+  - Content: Explain how the redesign strategically positioned the founder to build immediate trust—moving from a 'disconnected' site to a 'brand-led' experience.
+
+- SECTION 6: THE ARCHITECTURE (LISTING LOGIC)
+  - Content: Detail the "Quality over Quantity" listing approach. Show the high-signal data points used for the villas and premium apartments.
+
+- SECTION 7: THE CLOSING (CTA)
+  - Content: "Project Outcome: 100% Alignment with Premium Positioning."
+  - Action: Link back to the main 'Work' section or contact links.
+
+### 3. INTERACTIVE ELEMENTS
+- Ensure the 'Theme Toggle' in the navbar flips the case study to the White/Near-Black theme (Multiply blend grain) instantly.
+- All CTA buttons must follow the geometric Poppins style with a matte border-glow.

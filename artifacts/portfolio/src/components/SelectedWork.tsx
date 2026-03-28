@@ -1,6 +1,7 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
+import { useLocation } from "wouter";
 import { useTourHighlight } from "@/contexts/TourContext";
 
 const NOISE_SVG = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`;
@@ -8,12 +9,13 @@ const NOISE_SVG = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='h
 const CASE_STUDIES = [
   {
     id: 1,
-    tag: "End-to-end UX",
-    title: "Redesigning the Onboarding Experience",
+    tag: "Real Estate UX",
+    title: "Dubai Dunes: Engineering Trust",
     description:
-      "Reduced drop-off by 42% by rethinking the first-run flow for a fintech product — from blank-slate anxiety to guided confidence.",
-    year: "2023",
-    skills: ["Research", "Wireframing", "Prototyping", "Usability Testing"],
+      "Redesigned a 'spartanic' real estate platform into a high-authority luxury interface — repositioning the founder as the central trust signal for high-net-worth buyers.",
+    year: "2026",
+    skills: ["Research", "Visual Direction", "Design System", "High-Fidelity Mockups"],
+    link: "/case-study/dubai-dunes",
   },
   {
     id: 2,
@@ -23,6 +25,7 @@ const CASE_STUDIES = [
       "Led the creation of a shared design system used across 4 product teams, cutting design-to-dev handoff time by half.",
     year: "2022",
     skills: ["Figma", "Tokens", "Documentation", "Accessibility"],
+    link: null,
   },
 ];
 
@@ -77,6 +80,7 @@ export function CaseStudiesSection() {
   const isDark = useDark();
   const c = { isDark, ...palette(isDark) };
   const [hovered, setHovered] = useState<number | null>(null);
+  const [, navigate] = useLocation();
 
   const highlight = useTourHighlight();
   const tourCase  = !!(highlight?.startsWith("case-"));
@@ -136,12 +140,13 @@ export function CaseStudiesSection() {
               key={cs.id}
               onMouseEnter={() => setHovered(cs.id)}
               onMouseLeave={() => setHovered(null)}
+              onClick={() => cs.link && navigate(cs.link)}
               style={{
                 background: hovered === cs.id ? c.cardHover : c.cardBg,
                 border: isTourHl ? `1.5px solid ${ringColor}` : `1px solid ${c.cardBorder}`,
                 borderRadius: 14,
                 padding: "clamp(20px, 2.5vh, 28px) clamp(20px, 2.5vw, 32px)",
-                cursor: "pointer",
+                cursor: cs.link ? "pointer" : "default",
                 transition: "all 0.28s ease",
                 display: "grid", gridTemplateColumns: "1fr auto",
                 gap: 16, alignItems: "start",
