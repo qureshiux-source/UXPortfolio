@@ -155,10 +155,10 @@ export function Credentials() {
 
   return (
     <div style={{
-      height: "100vh", paddingTop: 64, boxSizing: "border-box",
+      minHeight: "100vh", paddingTop: 64, paddingBottom: 64, boxSizing: "border-box",
       background: bg,
       display: "flex", flexDirection: "column",
-      justifyContent: "center", overflow: "hidden",
+      justifyContent: "center",
       position: "relative", transition: "background 0.4s",
     }}>
       <div style={{
@@ -201,7 +201,7 @@ export function Credentials() {
 
         <div style={{ height: 1, background: divider }} />
 
-        <div style={{ display: "flex", flexDirection: "column", overflow: "auto", maxHeight: "calc(100vh - 260px)" }}>
+        <div style={{ display: "flex", flexDirection: "column" }}>
           {CERTS.map((cert, i) => {
             const isHovered   = hoveredId === cert.id;
             const isTourHl    = highlight === `cred-${cert.id}`;

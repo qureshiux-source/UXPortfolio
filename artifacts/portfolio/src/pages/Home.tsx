@@ -273,7 +273,7 @@ export default function Home() {
           <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
             <Skills />
           </section>
-          <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
+          <section style={{ scrollSnapAlign: "start" }}>
             <Credentials />
           </section>
           <Footer isDark={isDark} />
