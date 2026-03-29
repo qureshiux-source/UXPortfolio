@@ -139,7 +139,7 @@ function ToolChip({
         display: "inline-flex", alignItems: "center", gap: 6,
         padding: "6px 11px",
         borderRadius: 8,
-        background: hov ? s.hoverBg : (isDark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.028)"),
+        background: hov ? s.hoverBg : (isDark ? "rgba(255,255,255,0.04)" : "#FFFFFF"),
         border: `1px solid ${bdr}`,
         cursor: "default",
         transition: "background 0.18s",
@@ -183,13 +183,13 @@ export function Skills() {
   const tourSkill      = !!(highlight && CAT_HIGHLIGHT[highlight] !== undefined);
   const highlightedCat = highlight ? (CAT_HIGHLIGHT[highlight] ?? -1) : -1;
 
-  const bg      = isDark ? "#060606" : "#FAFAFA";
-  const eyebrow = isDark ? "#606060" : "#707070";
+  const bg      = isDark ? "#060606" : "#FFFFFF";
+  const eyebrow = isDark ? "#606060" : "#8A8A8A";
   const titleClr = isDark ? "#F5F5F5" : "#080808";
   const catTitle = isDark ? "#C8C8C8" : "#181818";
-  const tagBg   = isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.05)";
-  const tagTxt  = isDark ? "#787878" : "#505050";
-  const divider = isDark ? "rgba(255,255,255,0.09)" : "rgba(0,0,0,0.08)";
+  const tagBg   = isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)";
+  const tagTxt  = isDark ? "#787878" : "#525252";
+  const divider = isDark ? "rgba(255,255,255,0.09)" : "rgba(0,0,0,0.1)";
 
   return (
     <div style={{
@@ -269,11 +269,11 @@ export function Skills() {
 export function ToolsSection() {
   const isDark = useDark();
 
-  const bg      = isDark ? "#030303" : "#FFFFFF";
-  const eyebrow = isDark ? "#606060" : "#707070";
+  const bg      = isDark ? "#030303" : "#F5F4F2";
+  const eyebrow = isDark ? "#606060" : "#8A8A8A";
   const titleClr = isDark ? "#F5F5F5" : "#080808";
-  const divider = isDark ? "rgba(255,255,255,0.09)" : "rgba(0,0,0,0.08)";
-  const grpLbl  = isDark ? "#3A3A3A" : "#C4C4C4";
+  const divider = isDark ? "rgba(255,255,255,0.09)" : "rgba(0,0,0,0.1)";
+  const grpLbl  = isDark ? "#3A3A3A" : "#AAAAAA";
 
   return (
     <div style={{

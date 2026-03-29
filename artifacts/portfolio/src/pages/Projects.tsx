@@ -122,25 +122,25 @@ export default function Projects() {
   const [filter, setFilter] = useState<FilterKey>("all");
   const [, navigate] = useLocation();
 
-  const bg      = isDark ? "#030303" : "#FAFAFA";
+  const bg      = isDark ? "#030303" : "#F5F4F2";
   const bgCard  = isDark ? "#060606" : "#FFFFFF";
   const heading = isDark ? "#F0F0F0" : "#080808";
-  const body    = isDark ? "#555555" : "#707070";
-  const muted   = isDark ? "#404040" : "#999999";
-  const eyebrow = isDark ? "#484848" : "#888888";
+  const body    = isDark ? "#555555" : "#525252";
+  const muted   = isDark ? "#404040" : "#7A7A7A";
+  const eyebrow = isDark ? "#484848" : "#8A8A8A";
   const green   = isDark ? "#5EFF80" : "#1A7A32";
   const greenBg = isDark ? "rgba(94,255,128,0.07)"  : "rgba(26,122,50,0.06)";
   const greenBdr= isDark ? "rgba(94,255,128,0.2)"   : "rgba(26,122,50,0.18)";
-  const divider = isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)";
+  const divider = isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.1)";
 
-  const cardBgRest = isDark ? "rgba(255,255,255,0.022)" : "rgba(0,0,0,0.018)";
-  const cardBgHov  = isDark ? "rgba(255,255,255,0.048)" : "rgba(0,0,0,0.034)";
-  const cardBdrRst = isDark ? "rgba(255,255,255,0.07)"  : "rgba(0,0,0,0.065)";
-  const cardBdrHov = isDark ? "rgba(255,255,255,0.14)"  : "rgba(0,0,0,0.11)";
+  const cardBgRest = isDark ? "rgba(255,255,255,0.022)" : "#FFFFFF";
+  const cardBgHov  = isDark ? "rgba(255,255,255,0.048)" : "#FAFAFA";
+  const cardBdrRst = isDark ? "rgba(255,255,255,0.07)"  : "rgba(0,0,0,0.1)";
+  const cardBdrHov = isDark ? "rgba(255,255,255,0.14)"  : "rgba(0,0,0,0.18)";
 
-  const chipBg  = isDark ? "rgba(255,255,255,0.055)" : "rgba(0,0,0,0.042)";
-  const chipTxt = isDark ? "#555555" : "#888888";
-  const linkRst = isDark ? "#383838" : "#B8B8B8";
+  const chipBg  = isDark ? "rgba(255,255,255,0.055)" : "rgba(0,0,0,0.07)";
+  const chipTxt = isDark ? "#555555" : "#6A6A6A";
+  const linkRst = isDark ? "#383838" : "#AAAAAA";
 
   const goldBg  = isDark ? "rgba(255,213,79,0.09)"  : "rgba(180,130,0,0.08)";
   const goldBdr = isDark ? "rgba(255,213,79,0.22)"  : "rgba(180,130,0,0.2)";

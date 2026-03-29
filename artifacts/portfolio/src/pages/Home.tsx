@@ -16,19 +16,19 @@ const NOISE_SVG = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='h
 function Footer({ isDark }: { isDark: boolean }) {
   const [hovEmail, setHovEmail] = useState(false);
 
-  const bg      = isDark ? "#020202" : "#FAFAFA";
+  const bg      = isDark ? "#020202" : "#F5F4F2";
   const green   = isDark ? "#5EFF80" : "#1A7A32";
-  const greenBg = isDark ? "rgba(94,255,128,0.06)"  : "rgba(26,122,50,0.05)";
-  const greenBdr= isDark ? "rgba(94,255,128,0.18)"  : "rgba(26,122,50,0.18)";
+  const greenBg = isDark ? "rgba(94,255,128,0.06)"  : "rgba(26,122,50,0.06)";
+  const greenBdr= isDark ? "rgba(94,255,128,0.18)"  : "rgba(26,122,50,0.2)";
   const title   = isDark ? "#F0F0F0" : "#080808";
-  const muted   = isDark ? "#7A7A7A" : "#5A5A5A";
-  const dim     = isDark ? "#3A3A3A" : "#C4C4C4";
-  const divider = isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)";
+  const muted   = isDark ? "#7A7A7A" : "#525252";
+  const dim     = isDark ? "#3A3A3A" : "#AAAAAA";
+  const divider = isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.1)";
   const ctaBg   = isDark ? "#ECECEC" : "#0A0A0A";
   const ctaFg   = isDark ? "#0A0A0A" : "#F0F0F0";
   const ctaHBg  = isDark ? "#FFFFFF" : "#222222";
-  const linkRst = isDark ? "#3C3C3C" : "#B8B8B8";
-  const linkHov = isDark ? "#909090" : "#404040";
+  const linkRst = isDark ? "#3C3C3C" : "#9A9A9A";
+  const linkHov = isDark ? "#909090" : "#282828";
 
   const footerLink = (
     href: string,

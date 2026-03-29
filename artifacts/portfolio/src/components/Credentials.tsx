@@ -125,24 +125,24 @@ export function Credentials() {
   const highlight = useTourHighlight();
   const tourCred  = !!(highlight?.startsWith("cred-"));
 
-  const bg        = isDark ? "#030303" : "#FFFFFF";
-  const eyebrow   = isDark ? "#606060" : "#707070";
+  const bg        = isDark ? "#030303" : "#F5F4F2";
+  const eyebrow   = isDark ? "#606060" : "#8A8A8A";
   const titleClr  = isDark ? "#F5F5F5" : "#080808";
   const rowTitle  = isDark ? "#E0E0E0" : "#101010";
-  const rowSub    = isDark ? "#505050" : "#909090";
-  const rowDate   = isDark ? "#404040" : "#B0B0B0";
-  const divider   = isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.07)";
-  const hoverBg   = isDark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.02)";
+  const rowSub    = isDark ? "#505050" : "#6A6A6A";
+  const rowDate   = isDark ? "#404040" : "#9A9A9A";
+  const divider   = isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.1)";
+  const hoverBg   = isDark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.04)";
   const ringColor = isDark ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.4)";
   const overlayBg = isDark ? "rgba(0,0,0,0.88)" : "rgba(0,0,0,0.6)";
   const modalBg   = isDark ? "#0A0A0A" : "#FFFFFF";
-  const modalBdr  = isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.08)";
-  const bodyTxt   = isDark ? "#7A7A7A" : "#545454";
+  const modalBdr  = isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)";
+  const bodyTxt   = isDark ? "#7A7A7A" : "#525252";
   const ctaBg     = isDark ? "#F5F5F5" : "#0A0A0A";
   const ctaFg     = isDark ? "#0A0A0A" : "#F5F5F5";
-  const closeBg   = isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.06)";
-  const subBg     = isDark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.015)";
-  const subBdr    = isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)";
+  const closeBg   = isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)";
+  const subBg     = isDark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.04)";
+  const subBdr    = isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.09)";
 
   return (
     <div style={{

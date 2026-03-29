@@ -101,26 +101,26 @@ export function WorkExperience() {
   }, [highlight]);
 
   /* ── Tokens ── */
-  const bg         = isDark ? "#030303" : "#F7F7F7";
-  const eyebrow    = isDark ? "#444444" : "#909090";
+  const bg         = isDark ? "#030303" : "#F5F4F2";
+  const eyebrow    = isDark ? "#444444" : "#8A8A8A";
   const titleClr   = isDark ? "#F0F0F0" : "#080808";
   const green      = isDark ? "#5EFF80" : "#1A7A32";
-  const divider    = isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.07)";
+  const divider    = isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.1)";
 
   /* Timeline */
-  const timelineClr = isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.07)";
-  const inactDotBdr = isDark ? "rgba(255,255,255,0.22)" : "rgba(0,0,0,0.2)";
+  const timelineClr = isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.12)";
+  const inactDotBdr = isDark ? "rgba(255,255,255,0.22)" : "rgba(0,0,0,0.28)";
   const activeNameClr   = isDark ? "#E8E8E8" : "#0A0A0A";
-  const inactNameClr    = isDark ? "#2C2C2C" : "#C8C8C8";
-  const inactPeriodClr  = isDark ? "#1E1E1E" : "#D8D8D8";
-  const activePeriodClr = isDark ? "#383838" : "#909090";
+  const inactNameClr    = isDark ? "#2C2C2C" : "#8A8A8A";
+  const inactPeriodClr  = isDark ? "#1E1E1E" : "#B0B0B0";
+  const activePeriodClr = isDark ? "#383838" : "#6A6A6A";
 
   /* Right panel */
   const checkTxt   = isDark ? "#B0B0B0" : "#282828";
   const projTitle  = isDark ? "#E0E0E0" : "#0A0A0A";
-  const projSep    = isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)";
-  const tagTxt     = isDark ? "#484848" : "#888888";
-  const tagBdr     = isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)";
+  const projSep    = isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.09)";
+  const tagTxt     = isDark ? "#484848" : "#6A6A6A";
+  const tagBdr     = isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.1)";
 
   /* Row spacing between jobs in left nav */
   const ROW_GAP = "clamp(26px, 4.2vh, 44px)";

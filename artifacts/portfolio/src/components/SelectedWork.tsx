@@ -24,30 +24,30 @@ function tok(isDark: boolean) {
   return {
     /* Section bgs */
     bg:         isDark ? "#030303" : "#FFFFFF",
-    bgAlt:      isDark ? "#060606" : "#F8F8F8",
+    bgAlt:      isDark ? "#060606" : "#F5F4F2",
     /* Typography */
-    eyebrow:    isDark ? "#484848" : "#888888",
+    eyebrow:    isDark ? "#484848" : "#8A8A8A",
     heading:    isDark ? "#F0F0F0" : "#080808",
-    cardTitle:  isDark ? "#D8D8D8" : "#101010",
-    cardBody:   isDark ? "#545454" : "#747474",
-    yearClr:    isDark ? "#303030" : "#C4C4C4",
+    cardTitle:  isDark ? "#D8D8D8" : "#0E0E0E",
+    cardBody:   isDark ? "#545454" : "#525252",
+    yearClr:    isDark ? "#303030" : "#B8B8B8",
     /* Unified card tokens */
-    cardBgRest: isDark ? "rgba(255,255,255,0.022)" : "rgba(0,0,0,0.015)",
-    cardBgHov:  isDark ? "rgba(255,255,255,0.046)" : "rgba(0,0,0,0.030)",
-    cardBdrRst: isDark ? "rgba(255,255,255,0.07)"  : "rgba(0,0,0,0.065)",
-    cardBdrHov: isDark ? "rgba(255,255,255,0.13)"  : "rgba(0,0,0,0.105)",
+    cardBgRest: isDark ? "rgba(255,255,255,0.022)" : "rgba(0,0,0,0.03)",
+    cardBgHov:  isDark ? "rgba(255,255,255,0.046)" : "rgba(0,0,0,0.055)",
+    cardBdrRst: isDark ? "rgba(255,255,255,0.07)"  : "rgba(0,0,0,0.1)",
+    cardBdrHov: isDark ? "rgba(255,255,255,0.13)"  : "rgba(0,0,0,0.18)",
     /* Tag/chip */
-    chipBgRst:  isDark ? "rgba(255,255,255,0.055)" : "rgba(0,0,0,0.042)",
-    chipBgHov:  isDark ? "rgba(255,255,255,0.085)" : "rgba(0,0,0,0.065)",
-    chipTxtRst: isDark ? "#4A4A4A" : "#888888",
-    chipTxtHov: isDark ? "#888888" : "#505050",
+    chipBgRst:  isDark ? "rgba(255,255,255,0.055)" : "rgba(0,0,0,0.07)",
+    chipBgHov:  isDark ? "rgba(255,255,255,0.085)" : "rgba(0,0,0,0.11)",
+    chipTxtRst: isDark ? "#4A4A4A" : "#6A6A6A",
+    chipTxtHov: isDark ? "#888888" : "#2A2A2A",
     /* Action link (accent — only interactive element gets green) */
-    linkRst:    isDark ? "#3A3A3A" : "#B0B0B0",
+    linkRst:    isDark ? "#3A3A3A" : "#AAAAAA",
     linkHov:    isDark ? "#5EFF80" : "#1A7A32",
     /* Divider */
-    divider:    isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)",
+    divider:    isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.09)",
     /* Noise */
-    noiseOp:    isDark ? 0.06  : 0.09,
+    noiseOp:    isDark ? 0.06  : 0.08,
     noiseBlend: (isDark ? "overlay" : "multiply") as React.CSSProperties["mixBlendMode"],
     /* Tour ring */
     tourRing:   isDark ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.4)",

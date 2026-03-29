@@ -20,13 +20,13 @@ export function Hero({ onStartTour }: HeroProps) {
   const isDark = mounted ? resolvedTheme === "dark" : system;
 
   /* ── Tokens ── */
-  const bg        = isDark ? "#030303" : "#F7F7F7";
-  const headClr   = isDark ? "#EFEFEF" : "#0A0A0A";
-  const subClr    = isDark ? "#3C3C3C" : "#ABABAB";
-  const statNumClr= isDark ? "#D8D8D8" : "#1A1A1A";
-  const statLblClr= isDark ? "#303030" : "#BBBBBB";
+  const bg        = isDark ? "#030303" : "#FFFFFF";
+  const headClr   = isDark ? "#EFEFEF" : "#060606";
+  const subClr    = isDark ? "#3C3C3C" : "#5E5E5E";
+  const statNumClr= isDark ? "#D8D8D8" : "#0A0A0A";
+  const statLblClr= isDark ? "#303030" : "#909090";
   /* Line: 0.5px, opacity-20 white */
-  const lineClr   = isDark ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.15)";
+  const lineClr   = isDark ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.2)";
   const pillBdr   = isDark ? "rgba(255,255,255,0.1)"  : "rgba(0,0,0,0.1)";
   const pillBg    = isDark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.03)";
   const green     = "#5EFF80";
