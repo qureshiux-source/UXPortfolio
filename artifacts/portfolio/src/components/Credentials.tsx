@@ -386,14 +386,16 @@ export function Credentials() {
                 top: "50%", left: "50%",
                 transform: "translate(-50%, -50%)",
                 zIndex: 20001,
-                width: "min(480px, 92vw)",
+                width: "min(400px, calc(100vw - 32px))",
+                maxHeight: "calc(100vh - 48px)",
+                overflowY: "auto",
                 background: modalBg,
                 border: `1px solid ${modalBdr}`,
-                borderRadius: 20,
-                padding: "32px",
+                borderRadius: 16,
+                padding: "22px",
                 boxShadow: isDark
-                  ? "0 40px 100px rgba(0,0,0,0.95), 0 0 0 1px rgba(255,255,255,0.04)"
-                  : "0 40px 100px rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.04)",
+                  ? "0 24px 64px rgba(0,0,0,0.95), 0 0 0 1px rgba(255,255,255,0.04)"
+                  : "0 24px 64px rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.04)",
               }}
             >
               {/* Close */}
@@ -421,8 +423,8 @@ export function Credentials() {
 
               {/* Icon badge */}
               <div style={{
-                width: 48, height: 48, borderRadius: 14,
-                marginBottom: 20,
+                width: 38, height: 38, borderRadius: 10,
+                marginBottom: 14,
                 background: isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.04)",
                 border: `1px solid ${modalBdr}`,
                 display: "flex", alignItems: "center", justifyContent: "center",
@@ -435,19 +437,19 @@ export function Credentials() {
 
               {/* Meta row */}
               <div style={{
-                display: "flex", alignItems: "center", gap: 8,
-                marginBottom: 10,
+                display: "flex", alignItems: "center", gap: 7,
+                marginBottom: 8,
               }}>
                 <span style={{
                   fontFamily: "'Raleway', sans-serif",
-                  fontSize: "0.6rem", fontWeight: 700,
+                  fontSize: "0.58rem", fontWeight: 700,
                   letterSpacing: "0.12em", textTransform: "uppercase",
                   color: rowSub,
                 }}>{selected.issuer}</span>
                 <span style={{ width: 3, height: 3, borderRadius: "50%", background: rowDate, flexShrink: 0 }} />
                 <span style={{
                   fontFamily: "'Raleway', sans-serif",
-                  fontSize: "0.6rem", fontWeight: 700,
+                  fontSize: "0.58rem", fontWeight: 700,
                   letterSpacing: "0.08em",
                   color: rowDate,
                 }}>{selected.date}</span>
@@ -456,10 +458,10 @@ export function Credentials() {
               {/* Title */}
               <h3 style={{
                 fontFamily: "'Poppins', sans-serif",
-                fontSize: "clamp(1rem, 1.8vw, 1.25rem)",
-                fontWeight: 800, letterSpacing: "-0.025em",
-                lineHeight: 1.2,
-                color: titleClr, margin: "0 0 14px",
+                fontSize: "clamp(0.92rem, 1.6vw, 1.08rem)",
+                fontWeight: 800, letterSpacing: "-0.022em",
+                lineHeight: 1.22,
+                color: titleClr, margin: "0 0 10px",
               }}>
                 {selected.title}
               </h3>
@@ -467,14 +469,14 @@ export function Credentials() {
               {/* Description */}
               <p style={{
                 fontFamily: "'Raleway', sans-serif",
-                fontSize: "0.86rem", lineHeight: 1.68, fontWeight: 500,
-                color: bodyTxt, margin: "0 0 28px",
+                fontSize: "0.8rem", lineHeight: 1.65, fontWeight: 500,
+                color: bodyTxt, margin: "0 0 18px",
               }}>
                 {selected.description}
               </p>
 
               {/* Divider */}
-              <div style={{ height: 1, background: isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)", marginBottom: 20 }} />
+              <div style={{ height: 1, background: isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)", marginBottom: 14 }} />
 
               {/* CTA */}
               {selected.url && selected.url !== "#" ? (
@@ -483,27 +485,27 @@ export function Credentials() {
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{
-                    display: "inline-flex", alignItems: "center", gap: 8,
+                    display: "inline-flex", alignItems: "center", gap: 6,
                     fontFamily: "'Poppins', sans-serif",
-                    fontSize: "0.78rem", fontWeight: 700,
+                    fontSize: "0.72rem", fontWeight: 700,
                     letterSpacing: "0.02em",
-                    padding: "11px 24px", borderRadius: 100,
+                    padding: "9px 18px", borderRadius: 100,
                     background: ctaBg, color: ctaFg,
                     textDecoration: "none",
                     transition: "opacity 0.18s",
                   }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.opacity = "0.85"; }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.opacity = "0.82"; }}
                   onMouseLeave={e => { (e.currentTarget as HTMLElement).style.opacity = "1"; }}
                 >
-                  <ExternalLink size={12} /> Verify Credential
+                  <ExternalLink size={11} /> Verify Credential
                 </a>
               ) : (
                 <span style={{
-                  display: "inline-flex", alignItems: "center", gap: 8,
+                  display: "inline-flex", alignItems: "center", gap: 6,
                   fontFamily: "'Poppins', sans-serif",
-                  fontSize: "0.78rem", fontWeight: 700,
+                  fontSize: "0.72rem", fontWeight: 700,
                   letterSpacing: "0.02em",
-                  padding: "11px 24px", borderRadius: 100,
+                  padding: "9px 18px", borderRadius: 100,
                   background: isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.05)",
                   color: rowDate,
                 }}>
