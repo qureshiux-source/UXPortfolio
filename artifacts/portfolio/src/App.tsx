@@ -7,6 +7,7 @@ import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 import DubaiDunes from "@/pages/DubaiDunes";
 import Process from "@/pages/Process";
+import Projects from "@/pages/Projects";
 
 const queryClient = new QueryClient();
 
@@ -15,6 +16,7 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/process" component={Process} />
+      <Route path="/projects" component={Projects} />
       <Route path="/case-study/dubai-dunes" component={DubaiDunes} />
       <Route component={NotFound} />
     </Switch>

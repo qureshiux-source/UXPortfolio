@@ -87,7 +87,7 @@ export function Navbar() {
           <nav style={{ display: "flex", alignItems: "center", gap: 18 }}>
             {navLink("Process", () => navigate("/process"))}
             {divider}
-            {navLink("Projects", () => scrollTo("projects"))}
+            {navLink("Projects", () => navigate("/projects"))}
           </nav>
 
           {/* ── Right: theme toggle + LinkedIn CTA ── */}
