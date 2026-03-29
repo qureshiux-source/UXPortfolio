@@ -90,6 +90,7 @@ function useDark() {
 export function WorkExperience() {
   const isDark = useDark();
   const [active, setActive] = useState(JOBS[0].id);
+  const [hoveredJob, setHoveredJob] = useState<string | null>(null);
   const [, navigate] = useLocation();
   const activeJob = JOBS.find(j => j.id === active)!;
 
@@ -107,9 +108,8 @@ export function WorkExperience() {
   const divider    = isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.07)";
 
   /* Timeline */
-  const timelineClr = isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)";
-  const activeMarkerClr = isDark ? "rgba(255,255,255,0.65)" : "rgba(0,0,0,0.65)";
-  const inactMarkerClr  = isDark ? "rgba(255,255,255,0.18)" : "rgba(0,0,0,0.15)";
+  const timelineClr = isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.07)";
+  const inactDotBdr = isDark ? "rgba(255,255,255,0.22)" : "rgba(0,0,0,0.2)";
   const activeNameClr   = isDark ? "#E8E8E8" : "#0A0A0A";
   const inactNameClr    = isDark ? "#2C2C2C" : "#C8C8C8";
   const inactPeriodClr  = isDark ? "#1E1E1E" : "#D8D8D8";
@@ -121,9 +121,6 @@ export function WorkExperience() {
   const projSep    = isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)";
   const tagTxt     = isDark ? "#484848" : "#888888";
   const tagBdr     = isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)";
-
-  /* Connecting line color (timeline → name) */
-  const connLineClr = isDark ? "rgba(255,255,255,0.18)" : "rgba(0,0,0,0.12)";
 
   /* Row spacing between jobs in left nav */
   const ROW_GAP = "clamp(26px, 4.2vh, 44px)";
@@ -196,76 +193,38 @@ export function WorkExperience() {
               const isActive = job.id === active;
               const isTourDim = tourWork && !isActive;
 
+              const isHovJob = hoveredJob === job.id;
               return (
                 <button
                   key={job.id}
                   onClick={() => setActive(job.id)}
+                  onMouseEnter={() => setHoveredJob(job.id)}
+                  onMouseLeave={() => setHoveredJob(null)}
                   style={{
                     all: "unset", cursor: "pointer",
                     display: "block",
                     width: "100%",
-                    paddingLeft: 20,   /* gap between timeline and text */
+                    paddingLeft: 20,
                     paddingBottom: idx < JOBS.length - 1 ? ROW_GAP : 0,
                     position: "relative",
                     opacity: isTourDim ? 0.2 : 1,
                     transition: "opacity 0.3s",
                   }}
                 >
-                  {/* ── Marker: + crosshair (active) or – tick (inactive) ── */}
+                  {/* ── Marker: 12px solid green circle (active) / 8px hollow outline (inactive) ── */}
                   <div style={{
                     position: "absolute",
                     left: 0,
-                    top: isActive ? 7 : 8,
+                    top: isActive ? 6 : 7,
                     transform: "translateX(-50%)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    width: isActive ? 10 : 8,
-                    height: isActive ? 10 : 2,
+                    width: isActive ? 12 : 8,
+                    height: isActive ? 12 : 8,
+                    borderRadius: "50%",
+                    background: isActive ? green : "transparent",
+                    border: isActive ? "none" : `1.5px solid ${inactDotBdr}`,
+                    transition: "all 0.3s ease",
                     pointerEvents: "none",
-                  }}>
-                    {isActive ? (
-                      /* Crosshair arms: two divs forming + */
-                      <>
-                        {/* Horizontal arm */}
-                        <div style={{
-                          position: "absolute",
-                          width: 10, height: "0.5px",
-                          background: activeMarkerClr,
-                        }} />
-                        {/* Vertical arm */}
-                        <div style={{
-                          position: "absolute",
-                          width: "0.5px", height: 10,
-                          background: activeMarkerClr,
-                        }} />
-                      </>
-                    ) : (
-                      /* Tick mark */
-                      <div style={{ width: 8, height: "0.5px", background: inactMarkerClr }} />
-                    )}
-                  </div>
-
-                  {/* ── Connecting line: draws from timeline → company name ── */}
-                  <AnimatePresence>
-                    {isActive && (
-                      <motion.div
-                        key={`conn-${job.id}`}
-                        initial={{ scaleX: 0 }}
-                        animate={{ scaleX: 1 }}
-                        exit={{ scaleX: 0, opacity: 0 }}
-                        transition={{ duration: 0.55, ease: EASE }}
-                        style={{
-                          position: "absolute",
-                          left: 0,          /* start at timeline */
-                          right: 4,         /* end just before text */
-                          top: 11,
-                          height: "0.5px",
-                          background: connLineClr,
-                          transformOrigin: "left",
-                          pointerEvents: "none",
-                        }}
-                      />
-                    )}
-                  </AnimatePresence>
+                  }} />
 
                   {/* Company data */}
                   <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
@@ -282,15 +241,15 @@ export function WorkExperience() {
                       fontSize: "clamp(0.76rem, 1vw, 0.86rem)",
                       fontWeight: isActive ? 700 : 400,
                       letterSpacing: "-0.01em",
-                      color: isActive ? activeNameClr : inactNameClr,
+                      color: (isActive || isHovJob) ? green : inactNameClr,
                       lineHeight: 1.2,
-                      transition: "color 0.22s",
+                      transition: "color 0.3s ease",
                     }}>{job.company}</span>
                     <span style={{
                       fontFamily: "'Raleway', sans-serif",
                       fontSize: "0.54rem", fontWeight: 600,
                       color: isActive ? activePeriodClr : inactPeriodClr,
-                      transition: "color 0.22s",
+                      transition: "color 0.3s ease",
                     }}>{job.period}</span>
                   </div>
                 </button>
@@ -307,10 +266,10 @@ export function WorkExperience() {
             <AnimatePresence mode="wait">
               <motion.div
                 key={active}
-                initial={{ opacity: 0, x: 14 }}
+                initial={{ opacity: 0, x: 15 }}
                 animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -10 }}
-                transition={{ duration: 0.24, ease: [0.4, 0, 0.2, 1] }}
+                exit={{ opacity: 0, x: -8 }}
+                transition={{ duration: 0.6, ease: EASE }}
                 style={{ display: "flex", flexDirection: "column", gap: "clamp(12px, 2vh, 20px)" }}
               >
                 {/* Role + Meta — floating, no card */}

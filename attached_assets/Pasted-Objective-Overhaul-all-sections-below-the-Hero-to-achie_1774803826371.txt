@@ -1,0 +1,47 @@
+Objective: Overhaul all sections below the Hero to achieve a "Premium Matte" aesthetic. Maintain the strict #030303 background and green (#5EFF80) accent rules. All animations must feel weighted, smooth, and deliberate using ease: [0.16, 1, 0.3, 1].
+
+Step 1: Work Experience (The Smooth Timeline)
+The Look: A two-column split with an open right panel (no card boxes). The left vertical line is very faint (border-white/5).
+
+The Interaction: * When inactive, company names are muted gray. On hover or click, they smoothly transition to green with a 0.3s ease.
+
+The active dot is a solid 12px green circle. Inactive dots are 8px hollow outlines.
+
+When switching companies, the right panel slides in from the right (x: 15 to 0) and fades in simultaneously using AnimatePresence.
+
+Step 2: Case Studies (The Full-Snap Folio)
+The Look: Keep the full 100vh snap. Two stacked cards with a subtle background tint, rounded 16px corners, and a 1px border (border-white/10).
+
+The Interaction: * The circular arrow button on the right has a continuous horizontal bounce animation (x: [0, 3, 0]) with a 1.4s loop and a 0.6s pause to feel weighted.
+
+On hover, the entire card border smoothly transitions to green, and all category/skill chips on that card flip to green text or borders.
+
+Step 3: Projects (The Clean Bento Grid)
+The Look: A strict 3-column CSS grid with 6 cards. No heavy borders; keep them at 1px and semi-transparent.
+
+The Interaction: * Use Framer Motion to make cards lift slightly on hover (y: -4).
+
+On the 5th card (Codex), style the 'Best Project' badge in gold, but keep it minimal.
+
+The 6th CTA card should have its own slow horizontal bounce on its arrow button.
+
+Step 4: Skills & Tools (The 100vh Snapping System)
+The Look: Maintain the 100vh snap for both. Skills should be a clean 3-column grid of tags with a vertical 1px divider between the columns.
+
+The Interaction: * In the Tools section, keep the chips showing only the tool name in muted text at rest.
+
+On hover, the chip slides up 1px, and a level/years badge smoothly animates in from a width of 0 to auto. Pro tools should fully invert (black chip, white text).
+
+Step 5: Credentials (The Free-Scroll Clean List)
+The Look: A clean, flat vertical list with no background blocks or boxes. Maintain pure, large typography.
+
+The Interaction:
+
+Ensure the 'Microsoft UX Specialization' expands smoothly using Framer Motion's height: auto transition.
+
+Clicking any credential opens a centered modal with a strong backdrop blur (backdrop-blur-xl) and a pure black modal box with high-contrast white text.
+
+Step 6: Global Motion Rules
+Apply the SVG fractalNoise texture over everything at 7% opacity.
+
+All click and scroll transitions across the entire site must use a standardized duration of 0.6s with a cubic-bezier curve of [0.16, 1, 0.3, 1] to eliminate any bouncy or "cheap" feelings.

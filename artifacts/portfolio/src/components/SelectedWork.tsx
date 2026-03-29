@@ -275,13 +275,9 @@ export function ProjectsSection() {
   const bodyTxt   = isDark ? "#545454" : "#787878";
   const yearTxt   = isDark ? "#303030" : "#C0C0C0";
   const titleTxt  = isDark ? "#E0E0E0" : "#080808";
-  const ruleTxt   = isDark ? "#282828" : "#CACACA";
   const linkTxt   = isDark ? "#484848" : "#ABABAB";
   const linkHov   = isDark ? green : greenLt;
   const divThin   = isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)";
-  /* Top rule for Codex card (the line the label bridges) */
-  const topRule   = isDark ? "rgba(255,255,255,0.14)" : "rgba(0,0,0,0.1)";
-
   /* Eyebrow label style (shared) */
   const eyebrowLabel = (txt: string) => (
     <span style={{
@@ -342,53 +338,48 @@ export function ProjectsSection() {
             const isAward = !!proj.award;
 
             return (
-              <div
+              <motion.div
                 key={proj.id}
                 onMouseEnter={() => setHovered(proj.id)}
                 onMouseLeave={() => setHovered(null)}
                 onClick={() => hasLink && navigate(proj.link!)}
+                animate={{ y: isHov ? -4 : 0 }}
+                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                 style={{
                   gridColumn: proj.colSpan ? `span ${proj.colSpan}` : "span 1",
                   position: "relative",
-                  /* bg-white/2 — barely visible at rest */
                   background: isHov ? cardHov : cardRest,
-                  /* NO border — corners do the job */
-                  border: "none",
-                  borderRadius: 0,  /* blueprint = no radius */
+                  border: `1px solid ${isHov
+                    ? (isDark ? "rgba(94,255,128,0.25)" : "rgba(26,122,50,0.22)")
+                    : (isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)")}`,
+                  borderRadius: 0,
                   padding: "clamp(18px, 2.5vh, 26px) clamp(16px, 2vw, 24px)",
                   cursor: hasLink ? "pointer" : "default",
                   display: "flex", flexDirection: "column", gap: 10,
                   overflow: "visible",
-                  transition: "background 0.22s ease",
+                  transition: "background 0.4s ease, border-color 0.4s ease",
                 }}
               >
                 {/* ── Corner cross-lines — the blueprint touch ── */}
                 <CardCorners isHov={isHov} isDark={isDark} />
 
-                {/* ── Codex: top rule + bridging award label ── */}
+                {/* ── Codex: minimal gold badge (top-right corner) ── */}
                 {isAward && (
-                  <>
-                    {/* Full-width top line that the label bridges */}
-                    <div style={{
-                      position: "absolute", top: 0, left: 0, right: 0,
-                      height: "0.5px",
-                      background: isHov ? (isDark ? "rgba(94,255,128,0.5)" : "rgba(26,122,50,0.4)") : topRule,
-                      transition: "background 0.22s",
-                    }} />
-                    {/* Pure white label physically bridging the line */}
-                    <div style={{
-                      position: "absolute",
-                      top: -9, left: 16,
-                      background: "#FFFFFF",
-                      color: "#000000",
-                      padding: "2px 8px",
-                      fontFamily: "'Raleway', sans-serif",
-                      fontSize: "0.42rem", fontWeight: 800,
-                      letterSpacing: "0.14em", textTransform: "uppercase",
-                      whiteSpace: "nowrap",
-                      zIndex: 4,
-                    }}>{proj.award}</div>
-                  </>
+                  <div style={{
+                    position: "absolute",
+                    top: -1, right: 14,
+                    background: isDark ? "rgba(255,213,79,0.12)" : "rgba(176,128,0,0.1)",
+                    border: `1px solid ${isDark ? "rgba(255,213,79,0.3)" : "rgba(176,128,0,0.28)"}`,
+                    color: isDark ? "#FFD54F" : "#9A6E00",
+                    padding: "2px 8px",
+                    fontFamily: "'Raleway', sans-serif",
+                    fontSize: "0.42rem", fontWeight: 800,
+                    letterSpacing: "0.16em", textTransform: "uppercase",
+                    whiteSpace: "nowrap",
+                    zIndex: 4,
+                    transition: "opacity 0.3s",
+                    opacity: isHov ? 1 : 0.75,
+                  }}>{proj.award}</div>
                 )}
 
                 {/* Tag + Year */}
@@ -457,19 +448,24 @@ export function ProjectsSection() {
                     }}
                   />
                 </div>
-              </div>
+              </motion.div>
             );
           })}
 
           {/* ── CTA card — full width, blueprint corners ── */}
-          <div
+          <motion.div
             onMouseEnter={() => setHovered(99)}
             onMouseLeave={() => setHovered(null)}
+            animate={{ y: hovered === 99 ? -4 : 0 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             style={{
               gridColumn: "span 3",
               position: "relative",
               background: hovered === 99 ? cardHov : cardRest,
-              border: "none", borderRadius: 0,
+              border: `1px solid ${hovered === 99
+                ? (isDark ? "rgba(94,255,128,0.25)" : "rgba(26,122,50,0.22)")
+                : (isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)")}`,
+              borderRadius: 0,
               padding: "clamp(16px, 2.2vh, 22px) clamp(18px, 2.2vw, 26px)",
               cursor: "pointer",
               display: "flex", alignItems: "center",
@@ -511,7 +507,7 @@ export function ProjectsSection() {
                 }}
               />
             </motion.div>
-          </div>
+          </motion.div>
 
         </div>
       </div>

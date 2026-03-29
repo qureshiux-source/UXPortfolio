@@ -365,7 +365,7 @@ export function Credentials() {
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
               onClick={() => setSelected(null)}
-              style={{ position: "fixed", inset: 0, background: overlayBg, zIndex: 1000, backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }}
+              style={{ position: "fixed", inset: 0, background: overlayBg, zIndex: 1000, backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)" }}
             />
             <motion.div
               initial={{ opacity: 0, scale: 0.93, y: 20 }}
