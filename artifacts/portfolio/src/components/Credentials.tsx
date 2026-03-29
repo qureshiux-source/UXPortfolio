@@ -375,6 +375,18 @@ export function Credentials() {
               }}
             />
 
+            {/* Centering shell — fills viewport, flex-centers the card */}
+            <div
+              style={{
+                position: "fixed", inset: 0,
+                zIndex: 20001,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "24px 16px",
+                pointerEvents: "none",
+              }}
+            >
             {/* Card */}
             <motion.div
               initial={{ opacity: 0, scale: 0.94, y: 18 }}
@@ -382,12 +394,10 @@ export function Credentials() {
               exit={{ opacity: 0, scale: 0.94, y: 10 }}
               transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
               style={{
-                position: "fixed",
-                top: "50%", left: "50%",
-                transform: "translate(-50%, -50%)",
-                zIndex: 20001,
-                width: "min(400px, calc(100vw - 32px))",
-                maxHeight: "calc(100vh - 48px)",
+                pointerEvents: "auto",
+                width: "100%",
+                maxWidth: 400,
+                maxHeight: "100%",
                 overflowY: "auto",
                 background: modalBg,
                 border: `1px solid ${modalBdr}`,
@@ -513,6 +523,7 @@ export function Credentials() {
                 </span>
               )}
             </motion.div>
+            </div>
           </>
         )}
       </AnimatePresence>
