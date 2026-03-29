@@ -1,22 +1,113 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ExternalLink, Award, ArrowUpRight } from "lucide-react";
+import { X, ExternalLink, Award, ArrowUpRight, GraduationCap, Trophy, Gamepad2 } from "lucide-react";
 import { useTourHighlight } from "@/contexts/TourContext";
 
 const NOISE_SVG = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`;
 
-const CERTS = [
-  { id: 1, title: "Microsoft UX Design Specialization",                    issuer: "Microsoft",               date: "2025", description: "4-course specialization covering UX fundamentals, design for user experience, prototyping, and accessibility-first practice.", url: "#" },
-  { id: 2, title: "Fundamentals of UI/UX Design",                          issuer: "Microsoft",               date: "2025", description: "Core principles of user-centered design, visual design language, and UX research fundamentals aligned with industry standards.", url: "#" },
-  { id: 3, title: "UX Design in Practice: Accessibility & Collaboration",  issuer: "Microsoft",               date: "2025", description: "Real-world WCAG implementation, inclusive design practices, and cross-functional UX collaboration at scale.", url: "#" },
-  { id: 4, title: "User Interface Design & Prototyping",                   issuer: "Microsoft",               date: "2025", description: "High-fidelity prototyping, interactive design systems, and producing pixel-accurate, developer-ready UI specifications.", url: "#" },
-  { id: 5, title: "Accessibility-First Design",                            issuer: "LinkedIn Learning",       date: "2024", description: "Building accessible digital experiences with full WCAG 2.1 AA compliance across responsive web and mobile platforms.", url: "#" },
-  { id: 6, title: "Design Psychology (UX)",                                issuer: "LinkedIn Learning",       date: "2024", description: "Cognitive load theory, Gestalt principles, and persuasive design patterns for enhanced user engagement and retention.", url: "#" },
-  { id: 7, title: "Design Thinking: Customer Experience",                  issuer: "LinkedIn Learning",       date: "2024", description: "Applying design thinking methodologies to map, analyse, and optimise end-to-end customer journeys.", url: "#" },
-  { id: 8, title: "Performing UX Audits",                                  issuer: "LinkedIn Learning",       date: "2024", description: "Systematic UX audits, heuristic evaluations, and translating findings into prioritised, actionable design recommendations.", url: "#" },
-  { id: 9, title: "BSc Computer Science — HCI & Front-End Specialization", issuer: "Sukkur IBA University",  date: "2025", description: "4-year degree specialising in Human-Computer Interaction and Front-End Development. Graduating Spring 2025.", url: "#" },
+type CredType = "degree" | "cert" | "award" | "participation";
+
+const CERTS: {
+  id: number; title: string; issuer: string; date: string;
+  description: string; url: string; type: CredType;
+}[] = [
+  {
+    id:  0, type: "degree",
+    title: "Bachelor of Computer Science — HCI & Front-End Specialization",
+    issuer: "Sukkur IBA University",
+    date: "2021 – 2025",
+    description: "4-year Bachelor's degree with specialisation in Human-Computer Interaction and Front-End Development. Graduated Spring 2025. Core focus on usability-first design, interface engineering, and accessible product development.",
+    url: "https://sibau.edu.pk",
+  },
+  {
+    id:  1, type: "cert",
+    title: "Microsoft UX Design Specialization",
+    issuer: "Microsoft",
+    date: "2025",
+    description: "4-course specialization covering UX fundamentals, design for user experience, prototyping, and accessibility-first practice.",
+    url: "https://www.coursera.org/specializations/microsoft-ux-design",
+  },
+  {
+    id:  2, type: "cert",
+    title: "Fundamentals of UI/UX Design",
+    issuer: "Microsoft",
+    date: "2025",
+    description: "Core principles of user-centered design, visual design language, and UX research fundamentals aligned with industry standards.",
+    url: "https://www.coursera.org/learn/fundamentals-of-ux-design",
+  },
+  {
+    id:  3, type: "cert",
+    title: "UX Design in Practice: Accessibility & Collaboration",
+    issuer: "Microsoft",
+    date: "2025",
+    description: "Real-world WCAG implementation, inclusive design practices, and cross-functional UX collaboration at scale.",
+    url: "https://www.coursera.org/learn/ux-design-accessibility-collaboration",
+  },
+  {
+    id:  4, type: "cert",
+    title: "User Interface Design & Prototyping",
+    issuer: "Microsoft",
+    date: "2025",
+    description: "High-fidelity prototyping, interactive design systems, and producing pixel-accurate, developer-ready UI specifications.",
+    url: "https://www.coursera.org/learn/ui-ux-design-prototyping",
+  },
+  {
+    id:  5, type: "cert",
+    title: "Accessibility-First Design",
+    issuer: "LinkedIn Learning",
+    date: "2025",
+    description: "Building accessible digital experiences with full WCAG 2.1 AA compliance across responsive web and mobile platforms.",
+    url: "https://www.linkedin.com/learning/accessibility-first-design",
+  },
+  {
+    id:  6, type: "cert",
+    title: "Design Psychology: Master the Art and Science of UX Design",
+    issuer: "LinkedIn Learning",
+    date: "2025",
+    description: "Cognitive load theory, Gestalt principles, and persuasive design patterns for enhanced user engagement and retention.",
+    url: "https://www.linkedin.com/learning/design-psychology-master-the-art-and-science-of-ux-design",
+  },
+  {
+    id:  7, type: "cert",
+    title: "Design Thinking: Customer Experience",
+    issuer: "LinkedIn Learning",
+    date: "2025",
+    description: "Applying design thinking methodologies to map, analyse, and optimise end-to-end customer journeys.",
+    url: "https://www.linkedin.com/learning/design-thinking-customer-experience",
+  },
+  {
+    id:  8, type: "cert",
+    title: "Performing User Experience Audits",
+    issuer: "LinkedIn Learning",
+    date: "2025",
+    description: "Systematic UX audits, heuristic evaluations, and translating findings into prioritised, actionable design recommendations.",
+    url: "https://www.linkedin.com/learning/performing-user-experience-audits",
+  },
+  {
+    id:  9, type: "participation",
+    title: "Winter Game Jam 2023 — Participation",
+    issuer: "Winter Game Jam",
+    date: "2023",
+    description: "Participated in Winter Game Jam 2023, designing and co-developing a complete game from concept to launch. Responsible for the full UI/UX, concept design, game features, and overall design direction for Codex, built alongside a colleague.",
+    url: "#",
+  },
+  {
+    id: 10, type: "award",
+    title: "Best Project — Software Category",
+    issuer: "Sukkur IBA University",
+    date: "2023",
+    description: "Awarded Best Project in the Software Category at Sukkur IBA University for the game Codex, designed and delivered as the lead designer in collaboration with a colleague during Winter Game Jam 2023.",
+    url: "#",
+  },
 ];
+
+const TYPE_ICON: Record<CredType, React.ReactNode> = {
+  degree:        <GraduationCap size={13} />,
+  cert:          <Award size={13} />,
+  award:         <Trophy size={13} />,
+  participation: <Gamepad2 size={13} />,
+};
 
 function useDark() {
   const { resolvedTheme } = useTheme();
@@ -55,6 +146,13 @@ export function Credentials() {
   const closeBg   = isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.06)";
   const iconClr   = isDark ? "#555555" : "#AAAAAA";
 
+  const typeAccent: Record<CredType, string> = {
+    degree:        isDark ? "#6E8EFF" : "#2040CC",
+    cert:          iconClr,
+    award:         isDark ? "#FFD166" : "#B08000",
+    participation: isDark ? "#5EFF80" : "#1A7A32",
+  };
+
   return (
     <div style={{
       height: "100vh", paddingTop: 64, boxSizing: "border-box",
@@ -74,7 +172,7 @@ export function Credentials() {
         padding: "0 clamp(24px, 5vw, 72px)",
         position: "relative", zIndex: 1,
         display: "flex", flexDirection: "column",
-        gap: "clamp(24px, 3.5vh, 40px)",
+        gap: "clamp(16px, 2.5vh, 28px)",
       }}>
         <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 16 }}>
           <div>
@@ -88,40 +186,42 @@ export function Credentials() {
             </div>
             <h2 style={{
               fontFamily: "'Poppins', sans-serif",
-              fontSize: "clamp(1.6rem, 3vw, 2.4rem)",
+              fontSize: "clamp(1.4rem, 2.6vw, 2.1rem)",
               fontWeight: 800, lineHeight: 1.1,
               letterSpacing: "-0.025em", color: titleClr, margin: 0,
-            }}>10+ Certifications</h2>
+            }}>Qualifications &amp; Certifications</h2>
           </div>
           <span style={{
             fontFamily: "'Raleway', sans-serif",
             fontSize: "0.68rem", fontWeight: 600,
             color: rowSub, letterSpacing: "0.01em",
             flexShrink: 0, paddingBottom: 4,
-          }}>Click any row to verify</span>
+          }}>Hover to verify · Click for details</span>
         </div>
 
         <div style={{ height: 1, background: divider }} />
 
-        <div style={{ display: "flex", flexDirection: "column" }}>
+        <div style={{ display: "flex", flexDirection: "column", overflow: "auto", maxHeight: "calc(100vh - 260px)" }}>
           {CERTS.map((cert, i) => {
             const isHovered   = hoveredId === cert.id;
             const isTourHl    = highlight === `cred-${cert.id}`;
             const isDimmed    = tourCred && !isTourHl;
+            const accent      = typeAccent[cert.type];
+            const hasLink     = cert.url && cert.url !== "#";
             return (
               <motion.button
                 key={cert.id}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: isDimmed ? 0.25 : 1, y: 0 }}
-                transition={{ duration: 0.24, delay: i * 0.065 }}
+                transition={{ duration: 0.24, delay: i * 0.045 }}
                 onClick={() => setSelected(cert)}
                 onMouseEnter={() => setHoveredId(cert.id)}
                 onMouseLeave={() => setHoveredId(null)}
                 style={{
                   all: "unset", cursor: "pointer",
                   display: "flex", alignItems: "center",
-                  gap: "clamp(12px, 2vw, 20px)",
-                  padding: "clamp(12px, 1.8vh, 18px) clamp(10px, 1.2vw, 16px)",
+                  gap: "clamp(10px, 1.6vw, 18px)",
+                  padding: "clamp(10px, 1.4vh, 15px) clamp(10px, 1.2vw, 16px)",
                   borderBottom: i < CERTS.length - 1 ? `1px solid ${divider}` : "none",
                   background: isTourHl
                     ? (isDark ? "rgba(255,255,255,0.045)" : "rgba(0,0,0,0.035)")
@@ -131,41 +231,83 @@ export function Credentials() {
                   transition: "background 0.22s, opacity 0.28s, outline 0.22s", width: "100%",
                 }}
               >
+                {/* Icon */}
                 <div style={{
                   width: 28, height: 28, borderRadius: 8, flexShrink: 0,
                   background: isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.04)",
                   display: "flex", alignItems: "center", justifyContent: "center",
+                  color: accent,
                 }}>
-                  <Award size={13} style={{ color: iconClr }} />
+                  {TYPE_ICON[cert.type]}
                 </div>
 
+                {/* Title */}
                 <span style={{
                   fontFamily: "'Poppins', sans-serif",
-                  fontSize: "clamp(0.78rem, 1.05vw, 0.9rem)",
-                  fontWeight: 600, letterSpacing: "-0.01em",
-                  color: rowTitle, flex: 1, textAlign: "left", lineHeight: 1.3,
+                  fontSize: "clamp(0.74rem, 1vw, 0.88rem)",
+                  fontWeight: cert.type === "degree" || cert.type === "award" ? 700 : 600,
+                  letterSpacing: "-0.01em",
+                  color: cert.type === "award" ? typeAccent.award : rowTitle,
+                  flex: 1, textAlign: "left", lineHeight: 1.3,
                 }}>{cert.title}</span>
 
+                {/* Issuer tag */}
                 <span style={{
                   fontFamily: "'Raleway', sans-serif",
                   fontSize: "0.55rem", fontWeight: 700,
                   letterSpacing: "0.1em", textTransform: "uppercase",
                   padding: "3px 8px", borderRadius: 100,
                   background: tagBg, color: tagTxt, flexShrink: 0,
+                  whiteSpace: "nowrap",
                 }}>{cert.issuer}</span>
 
+                {/* Date */}
                 <span style={{
                   fontFamily: "'Raleway', sans-serif",
                   fontSize: "0.65rem", fontWeight: 700,
-                  color: rowDate, flexShrink: 0,
+                  color: rowDate, flexShrink: 0, whiteSpace: "nowrap",
                 }}>{cert.date}</span>
 
+                {/* Hover CTA — slides in */}
                 <motion.div
-                  animate={{ x: isHovered ? 2 : 0, opacity: isHovered ? 1 : 0.3 }}
+                  animate={{ opacity: isHovered ? 1 : 0, x: isHovered ? 0 : 6 }}
                   transition={{ duration: 0.16 }}
-                  style={{ flexShrink: 0 }}
+                  style={{
+                    flexShrink: 0, display: "flex", alignItems: "center", gap: 4,
+                    pointerEvents: isHovered ? "auto" : "none",
+                  }}
                 >
-                  <ArrowUpRight size={14} style={{ color: eyebrow }} />
+                  {hasLink ? (
+                    <a
+                      href={cert.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      style={{
+                        display: "inline-flex", alignItems: "center", gap: 5,
+                        fontFamily: "'Raleway', sans-serif",
+                        fontSize: "0.6rem", fontWeight: 700,
+                        letterSpacing: "0.08em", textTransform: "uppercase",
+                        padding: "4px 10px", borderRadius: 100,
+                        background: ctaBg, color: ctaFg,
+                        textDecoration: "none", whiteSpace: "nowrap",
+                      }}
+                    >
+                      Verify <ExternalLink size={10} />
+                    </a>
+                  ) : (
+                    <span style={{
+                      display: "inline-flex", alignItems: "center", gap: 5,
+                      fontFamily: "'Raleway', sans-serif",
+                      fontSize: "0.6rem", fontWeight: 700,
+                      letterSpacing: "0.08em", textTransform: "uppercase",
+                      padding: "4px 10px", borderRadius: 100,
+                      background: tagBg, color: tagTxt,
+                      whiteSpace: "nowrap",
+                    }}>
+                      Details <ArrowUpRight size={10} />
+                    </span>
+                  )}
                 </motion.div>
               </motion.button>
             );
@@ -175,7 +317,7 @@ export function Credentials() {
         <div style={{ height: 1, background: divider }} />
       </div>
 
-      {/* Lightbox */}
+      {/* Detail modal */}
       <AnimatePresence>
         {selected && (
           <>
@@ -220,8 +362,9 @@ export function Credentials() {
                 border: `1px solid ${modalBdr}`,
                 display: "flex", alignItems: "center", justifyContent: "center",
                 marginBottom: 18,
+                color: typeAccent[selected.type],
               }}>
-                <Award size={20} style={{ color: isDark ? "#F5F5F5" : "#0A0A0A" }} />
+                {TYPE_ICON[selected.type]}
               </div>
 
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
@@ -251,16 +394,29 @@ export function Credentials() {
                 color: bodyTxt, margin: "0 0 26px", fontWeight: 500,
               }}>{selected.description}</p>
 
-              <a href={selected.url} target="_blank" rel="noopener noreferrer" style={{
-                display: "inline-flex", alignItems: "center", gap: 8,
-                fontFamily: "'Poppins', sans-serif",
-                fontSize: "0.8rem", fontWeight: 700,
-                letterSpacing: "0.02em",
-                padding: "11px 22px", borderRadius: 100,
-                background: ctaBg, color: ctaFg, textDecoration: "none",
-              }}>
-                <ExternalLink size={13} /> Verify Credential
-              </a>
+              {selected.url && selected.url !== "#" ? (
+                <a href={selected.url} target="_blank" rel="noopener noreferrer" style={{
+                  display: "inline-flex", alignItems: "center", gap: 8,
+                  fontFamily: "'Poppins', sans-serif",
+                  fontSize: "0.8rem", fontWeight: 700,
+                  letterSpacing: "0.02em",
+                  padding: "11px 22px", borderRadius: 100,
+                  background: ctaBg, color: ctaFg, textDecoration: "none",
+                }}>
+                  <ExternalLink size={13} /> Verify Credential
+                </a>
+              ) : (
+                <span style={{
+                  display: "inline-flex", alignItems: "center", gap: 8,
+                  fontFamily: "'Poppins', sans-serif",
+                  fontSize: "0.8rem", fontWeight: 700,
+                  letterSpacing: "0.02em",
+                  padding: "11px 22px", borderRadius: 100,
+                  background: tagBg, color: tagTxt,
+                }}>
+                  Physical Credential
+                </span>
+              )}
             </motion.div>
           </>
         )}

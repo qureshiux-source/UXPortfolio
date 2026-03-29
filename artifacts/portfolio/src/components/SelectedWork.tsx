@@ -42,6 +42,10 @@ const PROJECTS = [
     id: 3, tag: "Landing Page", title: "UBIOX Brand & Design", year: "2024",
     description: "Designed a complete landing page integrating UBIOX's mission, services, and brand narrative into a unified, high-converting experience.",
   },
+  {
+    id: 4, tag: "Game Design", title: "Codex — Winter Game Jam", year: "2023",
+    description: "Designed and co-developed Codex from concept to launch at Winter Game Jam 2023. Led the full UI/UX, concept, game features, and design direction. Won Best Project in Software Category at SIBAU.",
+  },
 ];
 
 function useDark() {
@@ -261,7 +265,7 @@ export function ProjectsSection() {
           </div>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "clamp(12px, 1.5vw, 18px)" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "clamp(12px, 1.5vw, 18px)" }}>
           {PROJECTS.map((proj) => {
             const isTourHl = highlight === `proj-${proj.id}`;
             const isDimmed = tourProj && !isTourHl;
