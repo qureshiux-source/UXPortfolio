@@ -7,7 +7,7 @@ import { useTourHighlight } from "@/contexts/TourContext";
 const NOISE_SVG = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`;
 
 const CERTS = [
-  { id: 1, title: "Microsoft UX Design Specialization",                    issuer: "Microsoft / Coursera",    date: "2025", description: "4-course specialization covering UX fundamentals, design for user experience, prototyping, and accessibility-first practice.", url: "#" },
+  { id: 1, title: "Microsoft UX Design Specialization",                    issuer: "Microsoft",               date: "2025", description: "4-course specialization covering UX fundamentals, design for user experience, prototyping, and accessibility-first practice.", url: "#" },
   { id: 2, title: "Fundamentals of UI/UX Design",                          issuer: "Microsoft",               date: "2025", description: "Core principles of user-centered design, visual design language, and UX research fundamentals aligned with industry standards.", url: "#" },
   { id: 3, title: "UX Design in Practice: Accessibility & Collaboration",  issuer: "Microsoft",               date: "2025", description: "Real-world WCAG implementation, inclusive design practices, and cross-functional UX collaboration at scale.", url: "#" },
   { id: 4, title: "User Interface Design & Prototyping",                   issuer: "Microsoft",               date: "2025", description: "High-fidelity prototyping, interactive design systems, and producing pixel-accurate, developer-ready UI specifications.", url: "#" },
@@ -140,19 +140,19 @@ export function Credentials() {
                 </div>
 
                 <span style={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontSize: "clamp(0.78rem, 1.05vw, 0.9rem)",
+                  fontWeight: 600, letterSpacing: "-0.01em",
+                  color: rowTitle, flex: 1, textAlign: "left", lineHeight: 1.3,
+                }}>{cert.title}</span>
+
+                <span style={{
                   fontFamily: "'Raleway', sans-serif",
                   fontSize: "0.55rem", fontWeight: 700,
                   letterSpacing: "0.1em", textTransform: "uppercase",
                   padding: "3px 8px", borderRadius: 100,
                   background: tagBg, color: tagTxt, flexShrink: 0,
                 }}>{cert.issuer}</span>
-
-                <span style={{
-                  fontFamily: "'Poppins', sans-serif",
-                  fontSize: "clamp(0.78rem, 1.05vw, 0.9rem)",
-                  fontWeight: 600, letterSpacing: "-0.01em",
-                  color: rowTitle, flex: 1, textAlign: "left", lineHeight: 1.3,
-                }}>{cert.title}</span>
 
                 <span style={{
                   fontFamily: "'Raleway', sans-serif",
