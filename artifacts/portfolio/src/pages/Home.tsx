@@ -1,6 +1,6 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState, useRef, useCallback } from "react";
-import { Download, ArrowUpRight, Linkedin, Instagram } from "lucide-react";
+import { Download, ArrowUpRight, Phone } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { CaseStudiesSection, ProjectsSection } from "@/components/SelectedWork";
@@ -134,8 +134,8 @@ function Footer({ isDark }: { isDark: boolean }) {
           </p>
         </div>
 
-        {/* ── Email CTA ── */}
-        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+        {/* ── Contact row: email CTA + phone ── */}
+        <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
           <a
             href="mailto:qureshi.ux@gmail.com"
             onMouseEnter={() => setHovEmail(true)}
@@ -159,11 +159,23 @@ function Footer({ isDark }: { isDark: boolean }) {
             qureshi.ux@gmail.com
             <ArrowUpRight size={14} />
           </a>
-          <span style={{
-            fontFamily: "'Raleway', sans-serif",
-            fontSize: "0.62rem", fontWeight: 600,
-            color: dim, letterSpacing: "0.04em",
-          }}>or reach out directly</span>
+
+          <a
+            href="tel:+16470000000"
+            style={{
+              fontFamily: "'Raleway', sans-serif",
+              fontSize: "0.75rem", fontWeight: 700,
+              color: muted, textDecoration: "none",
+              display: "flex", alignItems: "center", gap: 6,
+              letterSpacing: "0.02em",
+              transition: "color 0.2s",
+            }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = title; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = muted; }}
+          >
+            <Phone size={12} />
+            +1 (647) 000-0000
+          </a>
         </div>
 
         {/* ── Bottom bar ── */}
@@ -176,16 +188,17 @@ function Footer({ isDark }: { isDark: boolean }) {
         }}>
           {/* Links */}
           <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
+            {/* LinkedIn — filled rounded-square icon */}
             {footerLink(
               "https://linkedin.com/in/haseeb-qureshi-design",
               "LinkedIn",
-              <Linkedin size={11} />,
-            )}
-            <span style={{ width: 1, height: 10, background: divider }} />
-            {footerLink(
-              "https://instagram.com",
-              "Instagram",
-              <Instagram size={11} />,
+              <svg
+                width="13" height="13" viewBox="0 0 24 24" fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+                style={{ flexShrink: 0, display: "block" }}
+              >
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>,
             )}
             <span style={{ width: 1, height: 10, background: divider }} />
             {footerLink("#", "Download CV", <Download size={11} />, false)}

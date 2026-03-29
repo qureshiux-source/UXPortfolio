@@ -1,4 +1,4 @@
-import { Linkedin, Instagram } from "lucide-react";
+import { Linkedin } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
@@ -83,29 +83,11 @@ export function Navbar() {
             <span style={{ width: 6, height: 6, borderRadius: "50%", background: dot, flexShrink: 0 }} />
           </div>
 
-          {/* ── Center: nav links + social ── */}
+          {/* ── Center: nav links ── */}
           <nav style={{ display: "flex", alignItems: "center", gap: 18 }}>
             {navLink("Process", () => navigate("/process"))}
             {divider}
             {navLink("Projects", () => scrollTo("projects"))}
-            {divider}
-            <a
-              href="https://instagram.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                fontFamily: "'Raleway', sans-serif",
-                fontSize: "0.78rem", fontWeight: 600,
-                color: txt, textDecoration: "none",
-                opacity: 0.55,
-                display: "flex", alignItems: "center", gap: 5,
-                transition: "opacity 0.2s",
-              }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.opacity = "1"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.opacity = "0.55"; }}
-            >
-              <Instagram size={13} /><span>Instagram</span>
-            </a>
           </nav>
 
           {/* ── Right: theme toggle + LinkedIn CTA ── */}

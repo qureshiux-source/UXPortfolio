@@ -18,10 +18,10 @@ export const STEPS = [
   { section: 4, highlight: "skill-ux",       label: "Skills: Core UX Skills" },
   { section: 4, highlight: "skill-frontend", label: "Skills: UI & Design Systems" },
   { section: 4, highlight: "skill-strategy", label: "Skills: Workflow & Strategy" },
-  { section: 5, highlight: "cred-1",         label: "Microsoft UX Design Specialization" },
-  { section: 5, highlight: "cred-5",         label: "Accessibility-First Design — LinkedIn Learning" },
-  { section: 5, highlight: "cred-6",         label: "Design Psychology (UX) — LinkedIn Learning" },
-  { section: 5, highlight: "cred-9",         label: "BSc Computer Science — Sukkur IBA University" },
+  { section: 6, highlight: "cred-3",         label: "Microsoft UX Design Specialization" },
+  { section: 6, highlight: "cred-4",         label: "Accessibility-First Design — LinkedIn Learning" },
+  { section: 6, highlight: "cred-5",         label: "Design Psychology (UX) — LinkedIn Learning" },
+  { section: 6, highlight: "cred-0",         label: "BSc Computer Science — Sukkur IBA University" },
   { section: 6, highlight: null,             label: "Open to Opportunities · Let's Collaborate" },
 ];
 
