@@ -485,52 +485,114 @@ export default function DubaiDunes() {
           </div>
         </section>
 
-        {/* ─── S6: FINAL DESIGN ──────────────────────────── */}
+        {/* ─── S6: BEFORE VS AFTER ───────────────────────── */}
         <section style={{ ...sec, background: bgAlt }}>
           <NoiseFx isDark={isDark} />
           <div style={{ ...inner }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "clamp(14px, 2vh, 22px)", flexWrap: "wrap", gap: 10 }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "clamp(14px, 2vh, 20px)", flexWrap: "wrap", gap: 10 }}>
               <div>
                 <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
-                  <span style={eyeSt}>05 — Final Design</span>
+                  <span style={eyeSt}>05 — Before vs After</span>
                 </div>
                 <h2 style={{ ...h2St, margin: 0 }}>The Transformation</h2>
               </div>
-              <p style={{ ...bodySt, fontSize: "0.78rem", maxWidth: 300, textAlign: "right" }}>
-                Dark-first, high-authority interface — repositioning Dubai Dunes as a premium brand.
+              <p style={{ ...bodySt, fontSize: "0.78rem", maxWidth: 280, textAlign: "right" }}>
+                Same brand. Entirely different authority signal.
               </p>
             </div>
 
-            <div style={{ position: "relative" }}>
-              <ZImg
-                src={imgFinalMulti}
-                alt="Dubai Dunes final redesign — multi-screen view"
-                height="clamp(260px, 44vh, 390px)"
-                fit="cover"
-                position="top"
-                border={imgBdr}
-                onOpen={openLightbox}
-              />
-              {/* Caption bar below image */}
-              <div style={{
-                marginTop: 10, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8,
-              }}>
-                <div>
-                  <div style={{ fontFamily: "'Poppins', sans-serif", fontSize: "0.8rem", fontWeight: 700, color: head }}>Dubai Dunes Properties</div>
-                  <div style={{ ...eyeSt, fontSize: "0.58rem" }}>Complete website redesign · Figma · 2026</div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+
+              {/* ── BEFORE ── */}
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <div style={{
+                  display: "flex", alignItems: "center", justifyContent: "space-between",
+                  padding: "7px 12px",
+                  background: isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)",
+                  border: `1px solid ${imgBdr}`, borderBottom: "none",
+                  borderRadius: "8px 8px 0 0",
+                }}>
+                  <span style={{
+                    fontFamily: "'Poppins', sans-serif", fontSize: "0.62rem", fontWeight: 800,
+                    letterSpacing: "0.12em", textTransform: "uppercase",
+                    color: isDark ? "#555" : "#AAA",
+                  }}>Before</span>
+                  <span style={{ ...eyeSt, fontSize: "0.52rem" }}>Original site · 2024</span>
                 </div>
-                <div style={{ display: "flex", gap: 6 }}>
-                  {["Dark/Gold", "Sharp Corners", "Founder-First"].map((tag) => (
-                    <span key={tag} style={{
-                      fontFamily: "'Raleway', sans-serif", fontSize: "0.5rem", fontWeight: 700,
-                      letterSpacing: "0.08em", textTransform: "uppercase",
-                      padding: "3px 8px",
-                      background: cardBg, color: body,
-                      border: `1px solid ${divider}`,
-                    }}>{tag}</span>
+
+                <div style={{ borderRadius: "0 0 8px 8px", overflow: "hidden" }}>
+                  <ZImg
+                    src={imgBefore}
+                    alt="Original Dubai Dunes website — before redesign"
+                    height="clamp(220px, 37vh, 330px)"
+                    fit="cover"
+                    position="top"
+                    border={imgBdr}
+                    onOpen={openLightbox}
+                  />
+                </div>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: 5, marginTop: 10 }}>
+                  {[
+                    "Flat brown palette — no luxury signal",
+                    "Founder credibility buried and invisible",
+                    "Weak CTAs — high-intent visitors had nowhere to go",
+                  ].map((p) => (
+                    <div key={p} style={{ display: "flex", alignItems: "flex-start", gap: 7 }}>
+                      <span style={{ color: isDark ? "#444" : "#CCC", fontSize: "0.8rem", lineHeight: 1.4, marginTop: 1 }}>—</span>
+                      <span style={{ ...bodySt, fontSize: "0.72rem" }}>{p}</span>
+                    </div>
                   ))}
                 </div>
               </div>
+
+              {/* ── AFTER ── */}
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <div style={{
+                  display: "flex", alignItems: "center", justifyContent: "space-between",
+                  padding: "7px 12px",
+                  background: head,
+                  border: `1px solid ${head}`, borderBottom: "none",
+                  borderRadius: "8px 8px 0 0",
+                }}>
+                  <span style={{
+                    fontFamily: "'Poppins', sans-serif", fontSize: "0.62rem", fontWeight: 800,
+                    letterSpacing: "0.12em", textTransform: "uppercase",
+                    color: isDark ? "#0A0A0A" : "#F5F5F5",
+                  }}>After</span>
+                  <span style={{
+                    fontFamily: "'Raleway', sans-serif", fontSize: "0.52rem", fontWeight: 700,
+                    letterSpacing: "0.12em", textTransform: "uppercase",
+                    color: isDark ? "rgba(0,0,0,0.45)" : "rgba(255,255,255,0.5)",
+                  }}>Redesign · 2026</span>
+                </div>
+
+                <div style={{ borderRadius: "0 0 8px 8px", overflow: "hidden" }}>
+                  <ZImg
+                    src={imgFinal}
+                    alt="Dubai Dunes final redesign — landing page"
+                    height="clamp(220px, 37vh, 330px)"
+                    fit="cover"
+                    position="top"
+                    border={imgBdr}
+                    onOpen={openLightbox}
+                  />
+                </div>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: 5, marginTop: 10 }}>
+                  {[
+                    "Dark/gold palette — instant luxury authority",
+                    "Founder front and centre as the trust signal",
+                    "Bold CTAs driving high-intent property action",
+                  ].map((p) => (
+                    <div key={p} style={{ display: "flex", alignItems: "flex-start", gap: 7 }}>
+                      <span style={{ color: head, fontSize: "0.8rem", fontWeight: 700, lineHeight: 1.4, marginTop: 1 }}>+</span>
+                      <span style={{ ...bodySt, fontSize: "0.72rem", color: head, fontWeight: 600 }}>{p}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
             </div>
           </div>
         </section>
