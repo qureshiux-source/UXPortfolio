@@ -1,6 +1,6 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState, useRef, useCallback } from "react";
-import { Download } from "lucide-react";
+import { Download, ArrowUpRight, Linkedin, Instagram } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { CaseStudiesSection, ProjectsSection } from "@/components/SelectedWork";
@@ -14,125 +14,193 @@ import type { TourHighlight } from "@/contexts/TourContext";
 const NOISE_SVG = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`;
 
 function Footer({ isDark }: { isDark: boolean }) {
-  const bg      = isDark ? "#020202" : "#FFFFFF";
-  const title   = isDark ? "#F5F5F5" : "#080808";
-  const sub     = isDark ? "#707070" : "#606060";
-  const ctaBg   = isDark ? "#F5F5F5" : "#0A0A0A";
-  const ctaFg   = isDark ? "#0A0A0A" : "#F5F5F5";
-  const linkClr = isDark ? "#505050" : "#909090";
-  const divider = isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.09)";
-  const fine    = isDark ? "#404040" : "#C8C8C8";
+  const [hovEmail, setHovEmail] = useState(false);
+
+  const bg      = isDark ? "#020202" : "#FAFAFA";
+  const green   = isDark ? "#5EFF80" : "#1A7A32";
+  const greenBg = isDark ? "rgba(94,255,128,0.06)"  : "rgba(26,122,50,0.05)";
+  const greenBdr= isDark ? "rgba(94,255,128,0.18)"  : "rgba(26,122,50,0.18)";
+  const title   = isDark ? "#F0F0F0" : "#080808";
+  const muted   = isDark ? "#7A7A7A" : "#5A5A5A";
+  const dim     = isDark ? "#3A3A3A" : "#C4C4C4";
+  const divider = isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)";
+  const ctaBg   = isDark ? "#ECECEC" : "#0A0A0A";
+  const ctaFg   = isDark ? "#0A0A0A" : "#F0F0F0";
+  const ctaHBg  = isDark ? "#FFFFFF" : "#222222";
+  const linkRst = isDark ? "#3C3C3C" : "#B8B8B8";
+  const linkHov = isDark ? "#909090" : "#404040";
+
+  const footerLink = (
+    href: string,
+    label: string,
+    icon?: React.ReactNode,
+    external = true,
+  ) => (
+    <a
+      key={label}
+      href={href}
+      target={external ? "_blank" : undefined}
+      rel={external ? "noopener noreferrer" : undefined}
+      style={{
+        fontFamily: "'Raleway', sans-serif",
+        fontSize: "0.62rem", fontWeight: 700,
+        letterSpacing: "0.1em", textTransform: "uppercase",
+        color: linkRst, textDecoration: "none",
+        display: "flex", alignItems: "center", gap: 5,
+        transition: "color 0.2s",
+      }}
+      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = linkHov; }}
+      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = linkRst; }}
+    >
+      {icon}{label}
+    </a>
+  );
 
   return (
-    <section
-      style={{
-        scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh",
-        background: bg,
-        display: "flex", flexDirection: "column",
-        alignItems: "center", justifyContent: "center",
-        position: "relative", overflow: "hidden",
-      }}
-    >
+    <section style={{
+      scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh",
+      background: bg,
+      display: "flex", flexDirection: "column",
+      justifyContent: "center",
+      position: "relative", overflow: "hidden",
+    }}>
+      {/* Noise */}
       <div style={{
         position: "absolute", inset: 0, pointerEvents: "none",
         backgroundImage: NOISE_SVG, backgroundSize: "180px 180px",
-        opacity: isDark ? 0.05 : 0.09, mixBlendMode: (isDark ? "overlay" : "multiply") as const,
+        opacity: isDark ? 0.055 : 0.09,
+        mixBlendMode: (isDark ? "overlay" : "multiply") as const,
       }} />
+      {/* Subtle radial vignette */}
       <div style={{
         position: "absolute", inset: 0, pointerEvents: "none",
         background: isDark
-          ? "radial-gradient(ellipse 80% 80% at 50% 50%, rgba(255,255,255,0.015) 0%, transparent 70%)"
-          : "radial-gradient(ellipse 80% 80% at 50% 50%, rgba(0,0,0,0.012) 0%, transparent 70%)",
+          ? "radial-gradient(ellipse 90% 70% at 20% 50%, rgba(255,255,255,0.012) 0%, transparent 65%)"
+          : "radial-gradient(ellipse 90% 70% at 20% 50%, rgba(0,0,0,0.008) 0%, transparent 65%)",
       }} />
 
       <div style={{
-        maxWidth: 500, width: "100%",
-        padding: "0 clamp(24px, 5vw, 48px)",
-        textAlign: "center",
+        maxWidth: 680, width: "100%",
+        margin: "0 auto",
+        padding: "0 clamp(28px, 6vw, 64px)",
         display: "flex", flexDirection: "column",
-        alignItems: "center", gap: 24,
+        gap: "clamp(28px, 4vh, 40px)",
         position: "relative", zIndex: 1,
       }}>
+
+        {/* ── Status pill ── */}
         <div style={{
-          display: "flex", alignItems: "center", gap: 10,
-          background: isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)",
-          border: `1px solid ${divider}`,
-          borderRadius: 100, padding: "6px 16px",
+          display: "inline-flex", alignItems: "center", gap: 8,
+          alignSelf: "flex-start",
+          background: greenBg,
+          border: `1px solid ${greenBdr}`,
+          borderRadius: 100, padding: "5px 14px",
         }}>
-          <div style={{ width: 6, height: 6, borderRadius: "50%", background: isDark ? "#5EFF80" : "#1A7A32" }} />
+          <span style={{
+            width: 5, height: 5, borderRadius: "50%",
+            background: green, flexShrink: 0,
+            boxShadow: `0 0 6px ${isDark ? "rgba(94,255,128,0.6)" : "rgba(26,122,50,0.5)"}`,
+          }} />
           <span style={{
             fontFamily: "'Raleway', sans-serif",
-            fontSize: "0.62rem", fontWeight: 700,
-            letterSpacing: "0.14em", textTransform: "uppercase",
-            color: sub,
-          }}>Open to Opportunities</span>
+            fontSize: "0.56rem", fontWeight: 800,
+            letterSpacing: "0.2em", textTransform: "uppercase",
+            color: green,
+          }}>Available for new work</span>
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {/* ── Headline ── */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           <h2 style={{
             fontFamily: "'Poppins', sans-serif",
-            fontSize: "clamp(2rem, 4.5vw, 3.2rem)",
-            fontWeight: 800, lineHeight: 1.06,
-            letterSpacing: "-0.035em",
+            fontSize: "clamp(2.4rem, 5.8vw, 4.2rem)",
+            fontWeight: 800, lineHeight: 1.04,
+            letterSpacing: "-0.04em",
             color: title, margin: 0,
           }}>
-            Let's Collaborate
+            Let's build<br />
+            something{" "}
+            <span style={{ color: green }}>intentional.</span>
           </h2>
           <p style={{
             fontFamily: "'Raleway', sans-serif",
-            fontSize: "0.92rem", lineHeight: 1.7, fontWeight: 500,
-            color: sub, margin: 0,
+            fontSize: "clamp(0.82rem, 1.15vw, 0.92rem)",
+            lineHeight: 1.72, fontWeight: 500,
+            color: muted, margin: 0,
+            maxWidth: 460,
           }}>
-            Building accessible, intentional, and delightful digital experiences.
+            UI/UX Design Lead based in Ontario, Canada — open for full-time roles,
+            freelance projects, and design collaborations worldwide.
           </p>
         </div>
 
-        <a
-          href="mailto:qureshi.ux@gmail.com"
-          style={{
-            fontFamily: "'Poppins', sans-serif",
-            fontSize: "0.88rem", fontWeight: 700,
-            letterSpacing: "0.01em",
-            padding: "14px 36px", borderRadius: 100,
-            background: ctaBg, color: ctaFg,
-            textDecoration: "none",
-            boxShadow: isDark ? "0 6px 24px rgba(0,0,0,0.5)" : "0 6px 24px rgba(0,0,0,0.15)",
-          }}
-        >
-          qureshi.ux@gmail.com
-        </a>
-
-        <div style={{ height: 1, width: 32, background: divider }} />
-
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"
+        {/* ── Email CTA ── */}
+        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+          <a
+            href="mailto:qureshi.ux@gmail.com"
+            onMouseEnter={() => setHovEmail(true)}
+            onMouseLeave={() => setHovEmail(false)}
             style={{
-              fontFamily: "'Raleway', sans-serif",
-              fontSize: "0.7rem", fontWeight: 700,
-              letterSpacing: "0.08em", textTransform: "uppercase",
-              color: linkClr, textDecoration: "none",
-              padding: "6px 12px", borderRadius: 6,
+              fontFamily: "'Poppins', sans-serif",
+              fontSize: "0.86rem", fontWeight: 700,
+              letterSpacing: "0.01em",
+              padding: "13px 28px",
+              borderRadius: 100,
+              background: hovEmail ? ctaHBg : ctaBg,
+              color: ctaFg,
+              textDecoration: "none",
+              display: "flex", alignItems: "center", gap: 8,
+              transition: "background 0.25s ease",
+              boxShadow: isDark
+                ? "0 4px 20px rgba(0,0,0,0.5)"
+                : "0 4px 20px rgba(0,0,0,0.12)",
             }}
-          >LinkedIn</a>
-          <div style={{ width: 1, height: 12, background: divider }} />
-          <a href="#"
-            style={{
-              fontFamily: "'Raleway', sans-serif",
-              fontSize: "0.7rem", fontWeight: 700,
-              letterSpacing: "0.08em", textTransform: "uppercase",
-              color: linkClr, textDecoration: "none",
-              padding: "6px 12px", borderRadius: 6,
-            }}
-          >Download CV</a>
+          >
+            qureshi.ux@gmail.com
+            <ArrowUpRight size={14} />
+          </a>
+          <span style={{
+            fontFamily: "'Raleway', sans-serif",
+            fontSize: "0.62rem", fontWeight: 600,
+            color: dim, letterSpacing: "0.04em",
+          }}>or reach out directly</span>
         </div>
 
-        <span style={{
-          fontFamily: "'Raleway', sans-serif",
-          fontSize: "0.58rem", letterSpacing: "0.12em",
-          color: fine, textTransform: "uppercase",
+        {/* ── Bottom bar ── */}
+        <div style={{
+          display: "flex", alignItems: "center",
+          justifyContent: "space-between",
+          paddingTop: "clamp(16px, 2.5vh, 24px)",
+          borderTop: `1px solid ${divider}`,
+          flexWrap: "wrap", gap: 14,
         }}>
-          Haseeb Qureshi · UI/UX Design Lead · {new Date().getFullYear()}
-        </span>
+          {/* Links */}
+          <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
+            {footerLink(
+              "https://linkedin.com/in/haseeb-qureshi-design",
+              "LinkedIn",
+              <Linkedin size={11} />,
+            )}
+            <span style={{ width: 1, height: 10, background: divider }} />
+            {footerLink(
+              "https://instagram.com",
+              "Instagram",
+              <Instagram size={11} />,
+            )}
+            <span style={{ width: 1, height: 10, background: divider }} />
+            {footerLink("#", "Download CV", <Download size={11} />, false)}
+          </div>
+
+          {/* Copyright */}
+          <span style={{
+            fontFamily: "'Raleway', sans-serif",
+            fontSize: "0.54rem", fontWeight: 600,
+            letterSpacing: "0.1em", textTransform: "uppercase",
+            color: dim,
+          }}>
+            Haseeb Qureshi · {new Date().getFullYear()}
+          </span>
+        </div>
       </div>
     </section>
   );
