@@ -1,7 +1,7 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowUpRight, Trophy } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { useLocation } from "wouter";
 import { useTourHighlight } from "@/contexts/TourContext";
 
@@ -37,8 +37,6 @@ function pal(isDark: boolean) {
     arrowHover: isDark ? "#5EFF80" : "#1A7A32",
     pillBg:     isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.04)",
     pillColor:  isDark ? "#787878" : "#505050",
-    awardBg:    isDark ? "rgba(255,209,102,0.09)" : "rgba(176,128,0,0.07)",
-    awardColor: isDark ? "#FFD166" : "#B08000",
     ctaBg:      isDark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.025)",
     ctaBorder:  isDark ? "rgba(255,255,255,0.1)"  : "rgba(0,0,0,0.09)",
     noiseOp:    isDark ? 0.055 : 0.09,
@@ -61,7 +59,6 @@ const CASE_STUDIES = [
   },
 ];
 
-/* 5 real projects + 1 CTA card in a strict 6-card bento (3 cols × 2 rows) */
 interface BentoProject {
   id: number; tag: string; title: string; year: string;
   description: string; award?: string; colSpan?: number;
@@ -89,9 +86,62 @@ const BENTO_PROJECTS: BentoProject[] = [
   {
     id: 5, tag: "Game Design", title: "Codex — Winter Game Jam", year: "2023",
     description: "Designed and co-developed a complete game from concept to launch. Led all UI/UX, concept, and game design.",
-    award: "Best Project · SIBAU 2023",
+    award: "BEST PROJECT · SIBAU 2023",
   },
 ];
+
+/* ── Corner cross-lines: each arm extends 10px past the card corner ── */
+const ARM_OUT = 10;  /* extends outside card */
+const ARM_IN  = 14;  /* extends inside card  */
+const ARM_TOT = ARM_OUT + ARM_IN;
+
+function CardCorners({ isHov, isDark }: { isHov: boolean; isDark: boolean }) {
+  const restClr  = isDark ? "rgba(255,255,255,0.16)" : "rgba(0,0,0,0.12)";
+  const hovClr   = "#5EFF80";
+  const clr = isHov ? hovClr : restClr;
+
+  const corners = [
+    { key: "tl", outer: { top: -ARM_OUT, left: -ARM_OUT } },
+    { key: "tr", outer: { top: -ARM_OUT, right: -ARM_OUT } },
+    { key: "bl", outer: { bottom: -ARM_OUT, left: -ARM_OUT } },
+    { key: "br", outer: { bottom: -ARM_OUT, right: -ARM_OUT } },
+  ];
+
+  return (
+    <>
+      {corners.map(({ key, outer }) => (
+        <div
+          key={key}
+          style={{
+            position: "absolute",
+            width: ARM_TOT, height: ARM_TOT,
+            pointerEvents: "none", zIndex: 3,
+            ...outer,
+          }}
+        >
+          {/* Horizontal arm */}
+          <div style={{
+            position: "absolute",
+            top: ARM_OUT - 0.25,
+            left: 0, right: 0,
+            height: "0.5px",
+            background: clr,
+            transition: "background 0.22s ease",
+          }} />
+          {/* Vertical arm */}
+          <div style={{
+            position: "absolute",
+            left: ARM_OUT - 0.25,
+            top: 0, bottom: 0,
+            width: "0.5px",
+            background: clr,
+            transition: "background 0.22s ease",
+          }} />
+        </div>
+      ))}
+    </>
+  );
+}
 
 export function CaseStudiesSection() {
   const isDark = useDark();
@@ -184,8 +234,6 @@ export function CaseStudiesSection() {
                     ))}
                   </div>
                 </div>
-
-                {/* Arrow — bounces continuously to invite click */}
                 <motion.div
                   style={{
                     width: 40, height: 40, borderRadius: "50%", flexShrink: 0,
@@ -197,13 +245,7 @@ export function CaseStudiesSection() {
                   animate={cs.link ? { x: [0, 3, 0] } : {}}
                   transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut", repeatDelay: 0.6 }}
                 >
-                  <ArrowUpRight
-                    size={16}
-                    style={{
-                      color: isHov ? c.arrowHover : c.arrow,
-                      transition: "color 0.22s ease",
-                    }}
-                  />
+                  <ArrowUpRight size={16} style={{ color: isHov ? c.arrowHover : c.arrow, transition: "color 0.22s ease" }} />
                 </motion.div>
               </div>
             );
@@ -221,12 +263,44 @@ export function ProjectsSection() {
   const [, navigate] = useLocation();
   const highlight = useTourHighlight();
 
+  /* Token shortcuts for this section */
+  const green     = "#5EFF80";
+  const greenLt   = "#1A7A32";
+  const accent    = isDark ? green : greenLt;
+  /* bg-white/2 at rest — barely there */
+  const cardRest  = isDark ? "rgba(255,255,255,0.02)"  : "rgba(0,0,0,0.014)";
+  const cardHov   = isDark ? "rgba(255,255,255,0.05)"  : "rgba(0,0,0,0.035)";
+  const tagTxt    = isDark ? "#484848" : "#A0A0A0";
+  const tagTxtHov = isDark ? green : greenLt;
+  const bodyTxt   = isDark ? "#545454" : "#787878";
+  const yearTxt   = isDark ? "#303030" : "#C0C0C0";
+  const titleTxt  = isDark ? "#E0E0E0" : "#080808";
+  const ruleTxt   = isDark ? "#282828" : "#CACACA";
+  const linkTxt   = isDark ? "#484848" : "#ABABAB";
+  const linkHov   = isDark ? green : greenLt;
+  const divThin   = isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)";
+  /* Top rule for Codex card (the line the label bridges) */
+  const topRule   = isDark ? "rgba(255,255,255,0.14)" : "rgba(0,0,0,0.1)";
+
+  /* Eyebrow label style (shared) */
+  const eyebrowLabel = (txt: string) => (
+    <span style={{
+      fontFamily: "'Raleway', sans-serif",
+      fontSize: "0.5rem", fontWeight: 700,
+      letterSpacing: "0.22em", textTransform: "uppercase",
+      color: isDark ? "#282828" : "#C0C0C0",
+    }}>{txt}</span>
+  );
+
   return (
     <div style={{
-      minHeight: "100vh", paddingTop: 64, paddingBottom: 72, boxSizing: "border-box",
+      minHeight: "100vh", paddingTop: 64, paddingBottom: 72,
+      boxSizing: "border-box",
       background: c.bgAlt, display: "flex", flexDirection: "column",
-      justifyContent: "center", position: "relative", transition: "background 0.4s",
+      justifyContent: "center", position: "relative",
+      transition: "background 0.4s",
     }}>
+      {/* Noise */}
       <div style={{
         position: "absolute", inset: 0, pointerEvents: "none",
         backgroundImage: NOISE_SVG, backgroundSize: "160px 160px",
@@ -234,156 +308,211 @@ export function ProjectsSection() {
       }} />
 
       <div style={{
-        maxWidth: 900, width: "100%", margin: "0 auto",
-        padding: "0 clamp(24px, 5vw, 72px)",
+        maxWidth: 920, width: "100%", margin: "0 auto",
+        padding: "0 clamp(24px, 5vw, 64px)",
         position: "relative", zIndex: 1,
         display: "flex", flexDirection: "column",
         gap: "clamp(24px, 3.5vh, 40px)",
       }}>
+
+        {/* Header */}
         <div>
-          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-            <div style={{ width: 28, height: 1, background: c.eyebrow }} />
-            <span style={{ fontFamily: "'Raleway', sans-serif", fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: c.eyebrow }}>Selected Work</span>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+            <div style={{ width: 20, height: "0.5px", background: c.eyebrow }} />
+            {eyebrowLabel("Selected Work")}
           </div>
           <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
-            <h2 style={{ fontFamily: "'Poppins', sans-serif", fontSize: "clamp(1.7rem, 3.2vw, 2.5rem)", fontWeight: 800, lineHeight: 1.1, letterSpacing: "-0.025em", color: c.title, margin: 0 }}>Projects</h2>
-            <span style={{ fontFamily: "'Raleway', sans-serif", fontSize: "0.7rem", fontWeight: 600, color: c.tagColor, letterSpacing: "0.03em" }}>Focused executions</span>
+            <h2 style={{ fontFamily: "'Poppins', sans-serif", fontSize: "clamp(1.5rem, 2.8vw, 2.2rem)", fontWeight: 800, lineHeight: 1.1, letterSpacing: "-0.025em", color: c.title, margin: 0 }}>Projects</h2>
+            <span style={{ fontFamily: "'Raleway', sans-serif", fontSize: "0.62rem", fontWeight: 600, color: c.eyebrow, letterSpacing: "0.06em" }}>Focused executions</span>
           </div>
         </div>
 
-        {/* 3-col bento — 2 full rows + 1 wide CTA row = 6 cards strictly */}
+        {/* ── Blueprint bento grid ── */}
+        {/* Extra padding so outermost card corners aren't clipped */}
         <div style={{
           display: "grid",
           gridTemplateColumns: "repeat(3, 1fr)",
-          gridTemplateRows: "auto auto auto",
-          gap: "clamp(10px, 1.4vw, 16px)",
+          gap: "clamp(20px, 2.4vw, 28px)",
+          padding: `${ARM_OUT + 2}px`,
         }}>
+
           {BENTO_PROJECTS.map((proj) => {
             const isHov = hovered === proj.id;
             const hasLink = !!proj.link;
+            const isAward = !!proj.award;
+
             return (
-              <motion.div
+              <div
                 key={proj.id}
                 onMouseEnter={() => setHovered(proj.id)}
                 onMouseLeave={() => setHovered(null)}
                 onClick={() => hasLink && navigate(proj.link!)}
-                whileHover={{ y: -2 }}
-                transition={{ duration: 0.18 }}
                 style={{
                   gridColumn: proj.colSpan ? `span ${proj.colSpan}` : "span 1",
-                  background: isHov ? c.cardHover : c.cardBg,
-                  border: `1.5px solid ${isHov ? c.greenBorder : c.cardBorder}`,
-                  borderRadius: 14,
-                  padding: "clamp(16px, 2.2vh, 22px) clamp(16px, 2vw, 22px)",
-                  cursor: hasLink ? "pointer" : "default",
-                  transition: "border-color 0.22s ease, background 0.22s ease",
-                  display: "flex", flexDirection: "column", gap: 10,
                   position: "relative",
+                  /* bg-white/2 — barely visible at rest */
+                  background: isHov ? cardHov : cardRest,
+                  /* NO border — corners do the job */
+                  border: "none",
+                  borderRadius: 0,  /* blueprint = no radius */
+                  padding: "clamp(18px, 2.5vh, 26px) clamp(16px, 2vw, 24px)",
+                  cursor: hasLink ? "pointer" : "default",
+                  display: "flex", flexDirection: "column", gap: 10,
+                  overflow: "visible",
+                  transition: "background 0.22s ease",
                 }}
               >
-                {proj.award && (
-                  <div style={{
-                    position: "absolute", top: 14, right: 14,
-                    display: "flex", alignItems: "center", gap: 5,
-                    padding: "4px 10px", borderRadius: 100,
-                    background: c.awardBg, border: `1px solid ${c.awardColor}22`,
-                  }}>
-                    <Trophy size={10} style={{ color: c.awardColor }} />
-                    <span style={{ fontFamily: "'Raleway', sans-serif", fontSize: "0.5rem", fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", color: c.awardColor }}>{proj.award}</span>
-                  </div>
+                {/* ── Corner cross-lines — the blueprint touch ── */}
+                <CardCorners isHov={isHov} isDark={isDark} />
+
+                {/* ── Codex: top rule + bridging award label ── */}
+                {isAward && (
+                  <>
+                    {/* Full-width top line that the label bridges */}
+                    <div style={{
+                      position: "absolute", top: 0, left: 0, right: 0,
+                      height: "0.5px",
+                      background: isHov ? (isDark ? "rgba(94,255,128,0.5)" : "rgba(26,122,50,0.4)") : topRule,
+                      transition: "background 0.22s",
+                    }} />
+                    {/* Pure white label physically bridging the line */}
+                    <div style={{
+                      position: "absolute",
+                      top: -9, left: 16,
+                      background: "#FFFFFF",
+                      color: "#000000",
+                      padding: "2px 8px",
+                      fontFamily: "'Raleway', sans-serif",
+                      fontSize: "0.42rem", fontWeight: 800,
+                      letterSpacing: "0.14em", textTransform: "uppercase",
+                      whiteSpace: "nowrap",
+                      zIndex: 4,
+                    }}>{proj.award}</div>
+                  </>
                 )}
 
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                {/* Tag + Year */}
+                <div style={{
+                  display: "flex", alignItems: "center",
+                  justifyContent: "space-between",
+                  marginTop: isAward ? 10 : 0,
+                }}>
                   <span style={{
-                    fontFamily: "'Raleway', sans-serif", fontSize: "0.58rem", fontWeight: 700,
-                    letterSpacing: "0.12em", textTransform: "uppercase",
-                    padding: "3px 9px", borderRadius: 100,
-                    background: isHov ? (isDark ? "rgba(94,255,128,0.1)" : "rgba(26,122,50,0.07)") : c.tagBg,
-                    color: isHov ? c.tagHover : c.tagColor,
-                    transition: "all 0.22s ease",
+                    fontFamily: "'Raleway', sans-serif",
+                    fontSize: "0.48rem", fontWeight: 700,
+                    letterSpacing: "0.18em", textTransform: "uppercase",
+                    color: isHov ? tagTxtHov : tagTxt,
+                    transition: "color 0.22s",
                   }}>{proj.tag}</span>
-                  <span style={{ fontFamily: "'Poppins', sans-serif", fontSize: "0.6rem", color: c.year, fontWeight: 600 }}>{proj.year}</span>
+                  <span style={{
+                    fontFamily: "'Poppins', sans-serif",
+                    fontSize: "0.54rem", fontWeight: 600,
+                    color: yearTxt, fontVariantNumeric: "tabular-nums",
+                  }}>{proj.year}</span>
                 </div>
 
+                {/* Title */}
                 <h3 style={{
                   fontFamily: "'Poppins', sans-serif",
-                  fontSize: "clamp(0.9rem, 1.3vw, 1.08rem)",
+                  fontSize: "clamp(0.86rem, 1.2vw, 1rem)",
                   fontWeight: 700, letterSpacing: "-0.015em",
-                  color: c.cardTitle, margin: 0, lineHeight: 1.2,
-                  paddingRight: proj.award ? 110 : 0,
+                  color: titleTxt, margin: 0, lineHeight: 1.25,
+                  flex: "0 0 auto",
                 }}>{proj.title}</h3>
 
+                {/* Description */}
                 <p style={{
                   fontFamily: "'Raleway', sans-serif",
-                  fontSize: "clamp(0.72rem, 0.98vw, 0.8rem)",
-                  lineHeight: 1.62, color: c.cardBody,
+                  fontSize: "clamp(0.68rem, 0.92vw, 0.76rem)",
+                  lineHeight: 1.68, color: bodyTxt,
                   margin: 0, flex: 1, fontWeight: 500,
                 }}>{proj.description}</p>
 
+                {/* Footer: Case Study / NDA / View */}
                 <div style={{
-                  display: "flex", alignItems: "center", justifyContent: "space-between",
-                  borderTop: `1px solid ${c.divider}`, paddingTop: 10, marginTop: 2,
+                  display: "flex", alignItems: "center",
+                  justifyContent: "space-between",
+                  borderTop: `0.5px solid ${isHov ? divThin : "rgba(0,0,0,0)"}`,
+                  paddingTop: isHov ? 10 : 0,
+                  marginTop: 2,
+                  transition: "border-color 0.22s, padding-top 0.22s",
                 }}>
                   <span style={{
-                    fontFamily: "'Raleway', sans-serif", fontSize: "0.58rem", fontWeight: 700,
-                    letterSpacing: "0.06em", textTransform: "uppercase",
-                    color: isHov ? c.arrowHover : c.arrow,
-                    transition: "color 0.22s",
-                  }}>{hasLink ? "Case Study" : "View"}</span>
-                  <ArrowUpRight size={12} style={{
-                    color: isHov ? c.arrowHover : c.arrow,
-                    transition: "color 0.22s",
-                  }} />
+                    fontFamily: "'Raleway', sans-serif",
+                    fontSize: "0.48rem", fontWeight: 700,
+                    letterSpacing: "0.1em", textTransform: "uppercase",
+                    color: isHov ? linkHov : linkTxt,
+                    textDecoration: "none",
+                    borderBottom: `0.5px solid ${isHov ? (isDark ? "rgba(94,255,128,0.4)" : "rgba(26,122,50,0.35)") : "transparent"}`,
+                    transition: "color 0.22s, border-color 0.22s",
+                  }}>
+                    {hasLink ? "Case Study" : "NDA"}
+                  </span>
+                  <ArrowUpRight
+                    size={11}
+                    style={{
+                      color: isHov ? linkHov : linkTxt,
+                      transition: "color 0.22s",
+                      opacity: hasLink ? 1 : 0.3,
+                    }}
+                  />
                 </div>
-              </motion.div>
+              </div>
             );
           })}
 
-          {/* 6th card — CTA to view all */}
-          <motion.div
+          {/* ── CTA card — full width, blueprint corners ── */}
+          <div
             onMouseEnter={() => setHovered(99)}
             onMouseLeave={() => setHovered(null)}
-            whileHover={{ y: -2 }}
-            transition={{ duration: 0.18 }}
             style={{
               gridColumn: "span 3",
-              background: hovered === 99 ? c.cardHover : c.ctaBg,
-              border: `1.5px solid ${hovered === 99 ? c.greenBorder : c.ctaBorder}`,
-              borderRadius: 14,
-              padding: "clamp(18px, 2.5vh, 26px) clamp(20px, 2.5vw, 28px)",
+              position: "relative",
+              background: hovered === 99 ? cardHov : cardRest,
+              border: "none", borderRadius: 0,
+              padding: "clamp(16px, 2.2vh, 22px) clamp(18px, 2.2vw, 26px)",
               cursor: "pointer",
-              transition: "all 0.22s ease",
-              display: "flex", alignItems: "center", justifyContent: "space-between",
+              display: "flex", alignItems: "center",
+              justifyContent: "space-between",
+              overflow: "visible",
+              transition: "background 0.22s ease",
             }}
           >
+            <CardCorners isHov={hovered === 99} isDark={isDark} />
+
             <div>
               <p style={{
                 fontFamily: "'Poppins', sans-serif",
-                fontSize: "clamp(0.88rem, 1.3vw, 1.05rem)",
-                fontWeight: 700, color: hovered === 99 ? (isDark ? "#5EFF80" : "#1A7A32") : c.cardTitle,
+                fontSize: "clamp(0.84rem, 1.2vw, 1rem)",
+                fontWeight: 700,
+                color: hovered === 99 ? accent : titleTxt,
                 margin: 0, letterSpacing: "-0.01em",
                 transition: "color 0.22s",
               }}>There's more — visit the full archive</p>
               <p style={{
                 fontFamily: "'Raleway', sans-serif",
-                fontSize: "0.72rem", fontWeight: 500, color: c.cardBody,
-                margin: "4px 0 0", lineHeight: 1.5,
-              }}>Including AI SaaS Platform UX, AML Government System, UBIOX Brand Design, and more.</p>
+                fontSize: "0.68rem", fontWeight: 500,
+                color: bodyTxt, margin: "4px 0 0", lineHeight: 1.55,
+              }}>
+                AI SaaS Platform UX · AML Government System · UBIOX Brand Design · and more.
+              </p>
             </div>
+
             <motion.div
               animate={{ x: [0, 4, 0] }}
-              transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut", repeatDelay: 0.5 }}
-              style={{
-                width: 44, height: 44, borderRadius: "50%", flexShrink: 0,
-                border: `1.5px solid ${hovered === 99 ? c.arrowHover : c.ctaBorder}`,
-                display: "flex", alignItems: "center", justifyContent: "center",
-                background: hovered === 99 ? (isDark ? "rgba(94,255,128,0.09)" : "rgba(26,122,50,0.07)") : "transparent",
-                transition: "all 0.22s ease",
-              }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", repeatDelay: 0.5 }}
+              style={{ flexShrink: 0, marginLeft: 16 }}
             >
-              <ArrowUpRight size={18} style={{ color: hovered === 99 ? c.arrowHover : c.arrow, transition: "color 0.22s" }} />
+              <ArrowUpRight
+                size={20}
+                style={{
+                  color: hovered === 99 ? accent : linkTxt,
+                  transition: "color 0.22s",
+                }}
+              />
             </motion.div>
-          </motion.div>
+          </div>
+
         </div>
       </div>
     </div>
