@@ -14,31 +14,60 @@ const NOISE = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http:
 const CATEGORIES = [
   {
     title: "Core UX Skills",
-    skills: ["User Interviews", "Persona Creation", "Information Architecture", "Wireframing (Lo & Hi-Fi)", "Journey Mapping", "Usability Testing", "Heuristic Evaluation", "Competitive Analysis"],
+    skills: [
+      "User Interviews", "Persona Creation", "Information Architecture",
+      "Wireframing (Lo & Hi-Fi)", "Journey Mapping", "Usability Testing",
+      "Heuristic Evaluation", "Competitive Analysis",
+    ],
   },
   {
     title: "UI & Design Systems",
-    skills: ["Scalable Design Systems", "UI Kits & Components", "Dark/Light Mode Systems", "Visual Hierarchy", "Interaction & Motion UI", "Responsive Web & Mobile", "Pixel-Perfect Handoff", "Accessibility (WCAG 2.1 AA)"],
+    skills: [
+      "Scalable Design Systems", "UI Kits & Components", "Dark/Light Mode Systems",
+      "Visual Hierarchy", "Interaction & Motion UI", "Responsive Web & Mobile",
+      "Pixel-Perfect Handoff", "Accessibility (WCAG 2.1 AA)",
+    ],
   },
   {
     title: "Workflow & Strategy",
-    skills: ["A/B Testing", "UX Audits", "Figma Dev Mode", "Design-to-Dev Handoff", "Agile & Scrum", "UX Writing", "KPI-Driven UX", "Stakeholder Communication"],
+    skills: [
+      "Design Thinking", "Agile Development", "Sprint Planning",
+      "UX Audits", "A/B Testing", "Performance Tracking",
+      "KPI & OKR Alignment", "Roadmap Planning",
+      "Design-to-Dev Handoff", "Stakeholder Communication",
+      "UX Writing", "Data-Driven Design",
+    ],
   },
 ];
 
-const TOOLS = [
-  { name: "Figma",       level: "Pro",          years: "4+ Years" },
-  { name: "FigJam",      level: "Pro",          years: "2 Years"  },
-  { name: "ProtoPie",    level: "Advanced",     years: "2 Years"  },
-  { name: "Illustrator", level: "Pro",          years: "3 Years"  },
-  { name: "Trello",      level: "Pro",          years: "3 Years"  },
-  { name: "Adobe XD",    level: "Pro",          years: "2 Years"  },
-  { name: "Replit",      level: "Intermediate", years: "1 Year"   },
-  { name: "Stitch",      level: "Intermediate", years: "1 Year"   },
-  { name: "Jira",        level: "Advanced",     years: "2 Years"  },
-  { name: "Notion",      level: "Advanced",     years: "3 Years"  },
-  { name: "GPT",         level: "Advanced",     years: "2 Years"  },
-  { name: "Gemini",      level: "Pro",          years: "1 Year"   },
+const TOOL_GROUPS = [
+  {
+    label: "Design",
+    tools: [
+      { name: "Figma",       level: "Pro",          years: "4+ yrs" },
+      { name: "FigJam",      level: "Pro",          years: "2 yrs"  },
+      { name: "ProtoPie",    level: "Advanced",     years: "2 yrs"  },
+      { name: "Illustrator", level: "Pro",          years: "3 yrs"  },
+      { name: "Adobe XD",    level: "Pro",          years: "2 yrs"  },
+    ],
+  },
+  {
+    label: "Collab & PM",
+    tools: [
+      { name: "Trello",  level: "Pro",          years: "3 yrs" },
+      { name: "Notion",  level: "Advanced",     years: "3 yrs" },
+      { name: "Jira",    level: "Advanced",     years: "2 yrs" },
+      { name: "Stitch",  level: "Intermediate", years: "1 yr"  },
+    ],
+  },
+  {
+    label: "AI & Code",
+    tools: [
+      { name: "GPT",    level: "Advanced",     years: "2 yrs" },
+      { name: "Gemini", level: "Pro",          years: "1 yr"  },
+      { name: "Replit", level: "Intermediate", years: "1 yr"  },
+    ],
+  },
 ];
 
 function useDark() {
@@ -50,76 +79,96 @@ function useDark() {
   return mounted ? resolvedTheme === "dark" : system;
 }
 
-function FlipTile({ tool, isDark }: { tool: typeof TOOLS[0]; isDark: boolean }) {
-  const [flipped, setFlipped] = useState(false);
-  const frontBg  = isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.03)";
-  const frontBdr = isDark ? "rgba(255,255,255,0.09)" : "rgba(0,0,0,0.08)";
-  const frontTxt = isDark ? "#B0B0B0" : "#282828";
-  const backBg   = isDark ? "#F5F5F5" : "#0A0A0A";
-  const backFg   = isDark ? "#0A0A0A" : "#F5F5F5";
-  const backSub  = isDark ? "rgba(0,0,0,0.45)" : "rgba(255,255,255,0.55)";
+function ToolChip({ tool, isDark }: { tool: { name: string; level: string; years: string }; isDark: boolean }) {
+  const [hov, setHov] = useState(false);
+
+  const levelStyles = {
+    Pro: {
+      bg: isDark ? "#F2F2F2" : "#0A0A0A",
+      text: isDark ? "#0A0A0A" : "#F2F2F2",
+      pillBg: isDark ? "#F2F2F2" : "#0A0A0A",
+      pillText: isDark ? "#0A0A0A" : "#F2F2F2",
+    },
+    Advanced: {
+      bg: isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.07)",
+      text: isDark ? "#D0D0D0" : "#181818",
+      pillBg: isDark ? "rgba(255,255,255,0.18)" : "rgba(0,0,0,0.13)",
+      pillText: isDark ? "#E0E0E0" : "#101010",
+    },
+    Intermediate: {
+      bg: isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.03)",
+      text: isDark ? "#888" : "#707070",
+      pillBg: isDark ? "rgba(255,255,255,0.09)" : "rgba(0,0,0,0.06)",
+      pillText: isDark ? "#909090" : "#606060",
+    },
+  };
+
+  const s = levelStyles[tool.level as keyof typeof levelStyles] || levelStyles.Intermediate;
+  const bdr = isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.08)";
 
   return (
-    <div
-      style={{ perspective: 700, cursor: "pointer", height: "clamp(58px, 8.5vh, 78px)" }}
-      onMouseEnter={() => setFlipped(true)}
-      onMouseLeave={() => setFlipped(false)}
+    <motion.div
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      animate={{ y: hov ? -1 : 0 }}
+      transition={{ duration: 0.15 }}
+      style={{
+        display: "inline-flex", alignItems: "center", gap: 6,
+        padding: "6px 10px 6px 10px",
+        borderRadius: 8,
+        background: hov ? s.bg : (isDark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.028)"),
+        border: `1px solid ${bdr}`,
+        cursor: "default",
+        transition: "background 0.2s",
+      }}
     >
+      <span style={{
+        fontFamily: "'Poppins', sans-serif",
+        fontSize: "0.72rem", fontWeight: 700,
+        letterSpacing: "-0.01em",
+        color: hov ? s.text : (isDark ? "#A0A0A0" : "#303030"),
+        transition: "color 0.2s",
+      }}>{tool.name}</span>
+
       <motion.div
-        animate={{ rotateY: flipped ? 180 : 0 }}
-        transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-        style={{ width: "100%", height: "100%", position: "relative", transformStyle: "preserve-3d" }}
+        animate={{ opacity: hov ? 1 : 0, x: hov ? 0 : -4 }}
+        transition={{ duration: 0.15 }}
+        style={{ display: "flex", alignItems: "center", gap: 4, overflow: "hidden" }}
       >
-        <div style={{
-          position: "absolute", inset: 0,
-          backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden",
-          background: frontBg, borderRadius: 10,
-          border: `1px solid ${frontBdr}`,
-          display: "flex", alignItems: "center", justifyContent: "center",
-        }}>
-          <span style={{
-            fontFamily: "'Poppins', sans-serif",
-            fontSize: "clamp(0.68rem, 0.95vw, 0.8rem)",
-            fontWeight: 700, letterSpacing: "-0.01em", color: frontTxt,
-          }}>{tool.name}</span>
-        </div>
-        <div style={{
-          position: "absolute", inset: 0,
-          backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden",
-          transform: "rotateY(180deg)",
-          background: backBg, borderRadius: 10,
-          display: "flex", flexDirection: "column",
-          alignItems: "center", justifyContent: "center", gap: 3,
-        }}>
-          <span style={{
-            fontFamily: "'Poppins', sans-serif",
-            fontSize: "clamp(0.62rem, 0.85vw, 0.74rem)",
-            fontWeight: 800, color: backFg, letterSpacing: "-0.01em",
-          }}>{tool.level}</span>
-          <span style={{
-            fontFamily: "'Raleway', sans-serif",
-            fontSize: "0.56rem", fontWeight: 700, color: backSub,
-          }}>{tool.years}</span>
-        </div>
+        <span style={{
+          fontFamily: "'Raleway', sans-serif",
+          fontSize: "0.5rem", fontWeight: 800,
+          letterSpacing: "0.1em", textTransform: "uppercase",
+          padding: "2px 6px", borderRadius: 100,
+          background: s.pillBg, color: s.pillText,
+          whiteSpace: "nowrap",
+        }}>{tool.level}</span>
+        <span style={{
+          fontFamily: "'Raleway', sans-serif",
+          fontSize: "0.5rem", fontWeight: 600,
+          color: isDark ? "#505050" : "#A0A0A0",
+          whiteSpace: "nowrap",
+        }}>{tool.years}</span>
       </motion.div>
-    </div>
+    </motion.div>
   );
 }
 
 export function Skills() {
   const isDark = useDark();
 
-  const highlight    = useTourHighlight();
-  const tourSkill    = !!(highlight && CAT_HIGHLIGHT[highlight] !== undefined);
+  const highlight      = useTourHighlight();
+  const tourSkill      = !!(highlight && CAT_HIGHLIGHT[highlight] !== undefined);
   const highlightedCat = highlight ? (CAT_HIGHLIGHT[highlight] ?? -1) : -1;
 
   const bg      = isDark ? "#060606" : "#FAFAFA";
   const eyebrow = isDark ? "#606060" : "#707070";
   const titleClr = isDark ? "#F5F5F5" : "#080808";
-  const catTitle = isDark ? "#C0C0C0" : "#181818";
+  const catTitle = isDark ? "#C8C8C8" : "#181818";
   const tagBg   = isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.05)";
   const tagTxt  = isDark ? "#808080" : "#505050";
   const divider = isDark ? "rgba(255,255,255,0.09)" : "rgba(0,0,0,0.08)";
+  const grpLbl  = isDark ? "#444" : "#C0C0C0";
 
   return (
     <div style={{
@@ -136,11 +185,11 @@ export function Skills() {
       }} />
 
       <div style={{
-        maxWidth: 880, width: "100%", margin: "0 auto",
+        maxWidth: 900, width: "100%", margin: "0 auto",
         padding: "0 clamp(24px, 5vw, 72px)",
         position: "relative", zIndex: 1,
         display: "flex", flexDirection: "column",
-        gap: "clamp(22px, 3.5vh, 36px)",
+        gap: "clamp(20px, 3vh, 32px)",
       }}>
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
@@ -156,75 +205,87 @@ export function Skills() {
             fontSize: "clamp(1.6rem, 3vw, 2.4rem)",
             fontWeight: 800, lineHeight: 1.1,
             letterSpacing: "-0.025em", color: titleClr, margin: 0,
-          }}>Skills & Tools</h2>
+          }}>Skills &amp; Tools</h2>
         </div>
 
-        {/* Category columns — no card borders */}
+        {/* Skill categories */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)" }}>
           {CATEGORIES.map((cat, ci) => {
             const isTourHl = tourSkill && ci === highlightedCat;
             const isDimmed = tourSkill && !isTourHl;
             return (
-            <motion.div
-              key={cat.title}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: tourSkill ? (isDimmed ? 0.25 : 1) : 1, y: 0 }}
-              transition={{ duration: 0.28, delay: ci * 0.08 }}
-              style={{
-                padding: "clamp(14px, 2vh, 20px) clamp(16px, 2vw, 24px)",
-                borderLeft: ci > 0 ? `1px solid ${divider}` : "none",
-                display: "flex", flexDirection: "column", gap: 12,
-                transition: "opacity 0.28s ease",
-                borderRadius: isTourHl ? 10 : 0,
-                outline: isTourHl
-                  ? `1.5px solid ${isDark ? "rgba(255,255,255,0.35)" : "rgba(0,0,0,0.3)"}`
-                  : "none",
-              }}
-            >
-              <span style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontSize: "0.82rem", fontWeight: 700,
-                letterSpacing: "-0.01em", color: catTitle,
-              }}>{cat.title}</span>
-              <div style={{ height: 1, background: divider }} />
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "6px 6px" }}>
-                {cat.skills.map((skill) => (
-                  <span key={skill} style={{
-                    fontFamily: "'Raleway', sans-serif",
-                    fontSize: "0.65rem", fontWeight: 700,
-                    letterSpacing: "0.02em",
-                    padding: "4px 10px", borderRadius: 100,
-                    background: tagBg, color: tagTxt,
-                  }}>{skill}</span>
-                ))}
-              </div>
-            </motion.div>
+              <motion.div
+                key={cat.title}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: tourSkill ? (isDimmed ? 0.25 : 1) : 1, y: 0 }}
+                transition={{ duration: 0.28, delay: ci * 0.08 }}
+                style={{
+                  padding: "clamp(12px, 1.8vh, 18px) clamp(14px, 1.8vw, 22px)",
+                  borderLeft: ci > 0 ? `1px solid ${divider}` : "none",
+                  display: "flex", flexDirection: "column", gap: 10,
+                  transition: "opacity 0.28s ease",
+                  borderRadius: isTourHl ? 10 : 0,
+                  outline: isTourHl
+                    ? `1.5px solid ${isDark ? "rgba(255,255,255,0.35)" : "rgba(0,0,0,0.3)"}`
+                    : "none",
+                }}
+              >
+                <span style={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontSize: "0.8rem", fontWeight: 700,
+                  letterSpacing: "-0.01em", color: catTitle,
+                }}>{cat.title}</span>
+                <div style={{ height: 1, background: divider }} />
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "5px 5px" }}>
+                  {cat.skills.map((skill) => (
+                    <span key={skill} style={{
+                      fontFamily: "'Raleway', sans-serif",
+                      fontSize: "0.62rem", fontWeight: 700,
+                      letterSpacing: "0.02em",
+                      padding: "3px 9px", borderRadius: 100,
+                      background: tagBg, color: tagTxt,
+                    }}>{skill}</span>
+                  ))}
+                </div>
+              </motion.div>
             );
           })}
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-          <div style={{ flex: 1, height: 1, background: divider }} />
-          <span style={{
-            fontFamily: "'Raleway', sans-serif",
-            fontSize: "0.55rem", fontWeight: 700,
-            letterSpacing: "0.14em", textTransform: "uppercase", color: eyebrow,
-          }}>hover to reveal proficiency</span>
-          <div style={{ flex: 1, height: 1, background: divider }} />
-        </div>
+        {/* Tools — grouped chips */}
+        <div style={{ height: 1, background: divider }} />
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: "clamp(8px, 1.2vw, 14px)" }}>
-          {TOOLS.map((tool, i) => (
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          {TOOL_GROUPS.map((group, gi) => (
             <motion.div
-              key={tool.name}
-              initial={{ opacity: 0, scale: 0.92 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.24, delay: 0.16 + i * 0.05 }}
+              key={group.label}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.24, delay: 0.2 + gi * 0.07 }}
+              style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}
             >
-              <FlipTile tool={tool} isDark={isDark} />
+              <span style={{
+                fontFamily: "'Raleway', sans-serif",
+                fontSize: "0.5rem", fontWeight: 800,
+                letterSpacing: "0.14em", textTransform: "uppercase",
+                color: grpLbl, flexShrink: 0, width: 72,
+              }}>{group.label}</span>
+              <div style={{ width: 1, height: 16, background: divider, flexShrink: 0 }} />
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "6px 6px" }}>
+                {group.tools.map(tool => (
+                  <ToolChip key={tool.name} tool={tool} isDark={isDark} />
+                ))}
+              </div>
             </motion.div>
           ))}
         </div>
+
+        <p style={{
+          fontFamily: "'Raleway', sans-serif",
+          fontSize: "0.56rem", fontWeight: 700,
+          letterSpacing: "0.12em", textTransform: "uppercase",
+          color: grpLbl, textAlign: "right", margin: 0,
+        }}>Hover any tool to reveal proficiency</p>
       </div>
     </div>
   );
