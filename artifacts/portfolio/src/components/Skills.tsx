@@ -27,12 +27,18 @@ const CATEGORIES = [
 ];
 
 const TOOLS = [
-  { name: "Figma",        level: "Expert",       years: "4+ Years" },
-  { name: "FigJam",       level: "Advanced",     years: "2 Years"  },
-  { name: "ProtoPie",     level: "Intermediate", years: "2 Years"  },
-  { name: "Illustrator",  level: "Intermediate", years: "2 Years"  },
-  { name: "Miro",         level: "Advanced",     years: "2 Years"  },
-  { name: "Notion",       level: "Advanced",     years: "3 Years"  },
+  { name: "Figma Pro",        level: "Expert",       years: "4+ Years" },
+  { name: "FigJam Pro",       level: "Advanced",     years: "2 Years"  },
+  { name: "ProtoPie Advanced", level: "Intermediate", years: "2 Years"  },
+  { name: "Illustrator Pro",  level: "Advanced",     years: "3 Years"  },
+  { name: "Trello Pro",       level: "Advanced",     years: "3 Years"  },
+  { name: "Adobe XD Pro",     level: "Advanced",     years: "2 Years"  },
+  { name: "Replit",           level: "Intermediate", years: "1 Year"   },
+  { name: "Stitch",           level: "Intermediate", years: "1 Year"   },
+  { name: "Jira",             level: "Advanced",     years: "2 Years"  },
+  { name: "Notion",           level: "Advanced",     years: "3 Years"  },
+  { name: "GPT",              level: "Advanced",     years: "2 Years"  },
+  { name: "Gemini Pro",       level: "Intermediate", years: "1 Year"   },
 ];
 
 function useDark() {
