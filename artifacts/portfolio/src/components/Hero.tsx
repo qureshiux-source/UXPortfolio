@@ -1,27 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTheme } from "next-themes";
 import { MoveRight, MessageCircle, Play } from "lucide-react";
 import { motion } from "framer-motion";
 
 const NOISE_SVG = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`;
 
-const MARQUEE_SKILLS = [
-  "User Research","Wireframing","Prototyping","Design Systems","WCAG 2.1 AAA",
-  "Figma","Information Architecture","Journey Mapping","Usability Testing",
-  "Accessibility","Hi-Fi Mockups","Dev Handoff","A/B Testing","UX Audits",
-  "Visual Hierarchy","ProtoPie","Interaction Design",
-];
-
-const REVEAL = [0.16, 1, 0.3, 1] as const;
+const EASE = [0.16, 1, 0.3, 1] as const;
 
 interface HeroProps { onStartTour?: () => void; }
 
 export function Hero({ onStartTour }: HeroProps) {
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const [hov1, setHov1] = useState(false);
-  const [hov2, setHov2] = useState(false);
-  const [hov3, setHov3] = useState(false);
+  const [activeDoc, setActiveDock] = useState(0); /* 0=Work Process, 1=Talk, 2=Tour */
 
   useEffect(() => { setMounted(true); }, []);
   const system = typeof document !== "undefined"
@@ -29,39 +20,32 @@ export function Hero({ onStartTour }: HeroProps) {
   const isDark = mounted ? resolvedTheme === "dark" : system;
 
   /* ── Tokens ── */
-  const bg        = isDark ? "#030303" : "#F8F8F8";
-  const line      = isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.06)";
-  const corner    = isDark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.14)";
+  const bg        = isDark ? "#030303" : "#F7F7F7";
+  const headClr   = isDark ? "#EFEFEF" : "#0A0A0A";
+  const subClr    = isDark ? "#3C3C3C" : "#ABABAB";
+  const statNumClr= isDark ? "#D8D8D8" : "#1A1A1A";
+  const statLblClr= isDark ? "#303030" : "#BBBBBB";
+  /* Line: 0.5px, opacity-20 white */
+  const lineClr   = isDark ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.15)";
+  const pillBdr   = isDark ? "rgba(255,255,255,0.1)"  : "rgba(0,0,0,0.1)";
+  const pillBg    = isDark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.03)";
   const green     = "#5EFF80";
   const greenLt   = "#1A7A32";
-  const dotGreen  = isDark ? green : greenLt;
-  const headClr   = isDark ? "#EEEEEE" : "#0A0A0A";
-  const subClr    = isDark ? "#505050" : "#707070";
-  const bodyClr   = isDark ? "#383838" : "#808080";
-  const linkClr   = isDark ? "#5A5A5A" : "#505050";
-  const linkUl    = isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)";
-  const linkUlHov = isDark ? green : greenLt;
-  const marqClr   = isDark ? "#242424" : "#CECECE";
-  const marqSep   = isDark ? "#181818" : "#E4E4E4";
-  const divClr    = isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.07)";
+  const accent    = isDark ? green : greenLt;
 
-  const statLbl   = isDark ? "#303030" : "#B0B0B0";
+  /* Dock tokens */
+  const dockBdr   = isDark ? "rgba(255,255,255,0.1)"  : "rgba(0,0,0,0.1)";
+  const dockDivClr= isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)";
+  const dockTxt   = isDark ? "#585858" : "#888888";
+  /* Active pill: pure white bg / black text */
+  const actBg     = "#FFFFFF";
+  const actFg     = "#000000";
 
-  const STATS = [
-    { num: "2+",  lbl: "Years Exp."     },
-    { num: "10+", lbl: "Certifications" },
-    { num: "—",   lbl: "Wired Hub"      },
+  const DOCK_ITEMS = [
+    { label: "Work Process", icon: <MoveRight size={12} />, onClick: undefined },
+    { label: "Talk",         icon: <MessageCircle size={12} />, onClick: "mailto:qureshi.ux@gmail.com" },
+    { label: "Tour",         icon: <Play size={11} />,          onClick: undefined },
   ];
-
-  const CTAS = [
-    { label: "Work Process", icon: <MoveRight size={11} />, action: undefined,                        hov: hov1, set: setHov1 },
-    { label: "Let's Talk",   icon: <MessageCircle size={11} />, action: "mailto:qureshi.ux@gmail.com", hov: hov2, set: setHov2 },
-    { label: "Quick Tour",   icon: <Play size={10} />,          action: undefined,                    hov: hov3, set: setHov3 },
-  ];
-
-  /* Corner bracket dimensions */
-  const CORNER = 18;
-  const CBW    = 1.5;
 
   return (
     <section style={{
@@ -70,294 +54,259 @@ export function Hero({ onStartTour }: HeroProps) {
       display: "flex", flexDirection: "column",
       transition: "background 0.4s",
     }}>
-      <style>{`@keyframes hq-ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}`}</style>
 
-      {/* Noise grain */}
+      {/* ── Noise — 7% ── */}
       <div style={{
         position: "absolute", inset: 0, pointerEvents: "none", zIndex: 1,
         backgroundImage: NOISE_SVG, backgroundSize: "160px 160px",
-        opacity: isDark ? 0.05 : 0.07,
+        opacity: 0.07,
         mixBlendMode: (isDark ? "overlay" : "multiply") as const,
       }} />
 
-      {/* ── MAIN AREA ── */}
+      {/* ── Axis glow — diffuse along the horizontal center ── */}
       <div style={{
-        flex: 1, display: "flex", alignItems: "center", justifyContent: "center",
+        position: "absolute", inset: 0, pointerEvents: "none", zIndex: 1,
+        background: isDark
+          ? "radial-gradient(ellipse 70% 22% at 50% 50%, rgba(94,255,128,0.045) 0%, transparent 70%)"
+          : "radial-gradient(ellipse 70% 22% at 50% 50%, rgba(26,122,50,0.03) 0%, transparent 70%)",
+      }} />
+
+      {/* ══ CENTRE CONTENT ══ */}
+      <div style={{
+        flex: 1, display: "flex", flexDirection: "column",
+        alignItems: "center", justifyContent: "center",
         position: "relative", zIndex: 2,
+        /* bottom padding so content avoids the dock */
+        paddingBottom: "clamp(72px, 12vh, 96px)",
       }}>
 
-        {/* ══ HUD CONTAINER: 700 × 500 ══ */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, ease: REVEAL }}
+        {/* 1 ── Positioning statement ABOVE the axis */}
+        <motion.p
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: EASE, delay: 0.7 }}
           style={{
-            width: 700, height: 500,
-            position: "relative",
-            border: `1px solid ${isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.06)"}`,
-            borderRadius: 2,
-            flexShrink: 0,
+            fontFamily: "'Raleway', sans-serif",
+            fontSize: "clamp(0.48rem, 0.7vw, 0.58rem)",
+            fontWeight: 700, letterSpacing: "0.26em",
+            textTransform: "uppercase",
+            color: subClr, margin: 0,
+            marginBottom: "clamp(22px, 4vh, 36px)",
+            textAlign: "center",
           }}
         >
+          Turning Complex Systems into Clean, Usable Interfaces
+        </motion.p>
 
-          {/* ── Atmosphere: green glow projected from crosshair center ── */}
-          {isDark && (
-            <div style={{
-              position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
-              borderRadius: 2, overflow: "hidden",
-              background: "radial-gradient(ellipse 50% 45% at 50% 50%, rgba(94,255,128,0.055) 0%, rgba(94,255,128,0.01) 40%, transparent 70%)",
-            }} />
-          )}
-          {!isDark && (
-            <div style={{
-              position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
-              borderRadius: 2, overflow: "hidden",
-              background: "radial-gradient(ellipse 50% 45% at 50% 50%, rgba(26,122,50,0.04) 0%, transparent 65%)",
-            }} />
-          )}
+        {/* 2 ── AXIS ROW — full-width flex: [left-line] [name] [right-line] */}
+        <div style={{
+          display: "flex", alignItems: "center",
+          width: "100%", position: "relative",
+        }}>
 
-          {/* ── Corner brackets ── */}
-          {[
-            { top: -1, left: -1, bt: "top", bl: "left" },
-            { top: -1, right: -1, bt: "top", bl: "right" },
-            { bottom: -1, left: -1, bt: "bottom", bl: "left" },
-            { bottom: -1, right: -1, bt: "bottom", bl: "right" },
-          ].map((c, i) => (
-            <div key={i} style={{
-              position: "absolute",
-              ...(c.top    !== undefined ? { top:    c.top    } : {}),
-              ...(c.bottom !== undefined ? { bottom: c.bottom } : {}),
-              ...(c.left   !== undefined ? { left:   c.left   } : {}),
-              ...(c.right  !== undefined ? { right:  c.right  } : {}),
-              width: CORNER, height: CORNER, pointerEvents: "none", zIndex: 4,
-              borderTop:    c.bt === "top"    ? `${CBW}px solid ${corner}` : "none",
-              borderBottom: c.bt === "bottom" ? `${CBW}px solid ${corner}` : "none",
-              borderLeft:   c.bl === "left"   ? `${CBW}px solid ${corner}` : "none",
-              borderRight:  c.bl === "right"  ? `${CBW}px solid ${corner}` : "none",
-            }} />
-          ))}
-
-          {/* ── Crosshair — horizontal ── */}
-          <div style={{
-            position: "absolute", top: "50%", left: 0, right: 0,
-            height: 1, background: line, zIndex: 1,
-            transform: "translateY(-0.5px)",
-          }} />
-
-          {/* ── Crosshair — vertical ── */}
-          <div style={{
-            position: "absolute", left: "50%", top: 0, bottom: 0,
-            width: 1, background: line, zIndex: 1,
-            transform: "translateX(-0.5px)",
-          }} />
-
-          {/* ── Center pulsing dot ── */}
-          <div style={{
-            position: "absolute", top: "50%", left: "50%",
-            transform: "translate(-50%, -50%)",
-            zIndex: 3, display: "flex", alignItems: "center", justifyContent: "center",
-          }}>
-            {/* Outer ring pulse */}
+          {/* LEFT line segment — draws from name edge → left screen edge */}
+          <div style={{ flex: 1, height: 1, position: "relative", overflow: "hidden" }}>
             <motion.div
-              animate={{ scale: [1, 2.2, 1], opacity: [0.35, 0, 0.35] }}
-              transition={{ duration: 2.4, repeat: Infinity, ease: "easeOut" }}
+              initial={{ width: "0%" }}
+              animate={{ width: "100%" }}
+              transition={{ duration: 1.1, ease: EASE, delay: 0.08 }}
               style={{
-                position: "absolute", width: 10, height: 10, borderRadius: "50%",
-                background: dotGreen, opacity: 0.35,
+                position: "absolute", right: 0, top: 0,
+                height: "0.5px", background: lineClr,
               }}
             />
-            {/* Middle ring */}
+            {/* Designation pill — sits ON the line, to the left */}
             <motion.div
-              animate={{ scale: [1, 1.7, 1], opacity: [0.5, 0, 0.5] }}
-              transition={{ duration: 2.4, repeat: Infinity, ease: "easeOut", delay: 0.3 }}
+              initial={{ opacity: 0, scale: 0.92 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.55, ease: EASE, delay: 0.85 }}
               style={{
-                position: "absolute", width: 7, height: 7, borderRadius: "50%",
-                background: dotGreen,
+                position: "absolute",
+                left: "clamp(32px, 6vw, 72px)",
+                top: "50%", transform: "translateY(-50%)",
+                display: "inline-flex", alignItems: "center", gap: 7,
+                padding: "5px 12px",
+                borderRadius: 100,
+                border: `1px solid ${pillBdr}`,
+                background: pillBg,
+                whiteSpace: "nowrap",
               }}
-            />
-            {/* Core dot */}
-            <div style={{ width: 5, height: 5, borderRadius: "50%", background: dotGreen }} />
+            >
+              <motion.div
+                animate={{ scale: [1, 1.6, 1], opacity: [1, 0.25, 1] }}
+                transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
+                style={{ width: 5, height: 5, borderRadius: "50%", background: accent, flexShrink: 0 }}
+              />
+              <span style={{
+                fontFamily: "'Poppins', sans-serif",
+                fontSize: "0.5rem", fontWeight: 600,
+                letterSpacing: "0.06em", textTransform: "uppercase",
+                color: isDark ? "rgba(255,255,255,0.45)" : "rgba(0,0,0,0.45)",
+              }}>UI/UX Design Lead</span>
+            </motion.div>
           </div>
 
-          {/* ── 2 × 2 GRID of quadrant content ── */}
-          <div style={{
-            position: "absolute", inset: 0,
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gridTemplateRows: "1fr 1fr",
-            zIndex: 2,
-          }}>
+          {/* NAME — the centerpiece */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.65, ease: EASE, delay: 0.52 }}
+            style={{
+              padding: "0 clamp(20px, 3.5vw, 52px)",
+              flexShrink: 0, textAlign: "center",
+            }}
+          >
+            <h1 style={{
+              fontFamily: "'Poppins', sans-serif",
+              fontSize: "clamp(2.8rem, 6.2vw, 5.4rem)",
+              fontWeight: 800, lineHeight: 1,
+              letterSpacing: "-0.04em",
+              color: headClr, margin: 0,
+              whiteSpace: "nowrap",
+            }}>
+              Haseeb
+              <span style={{
+                color: accent,
+                margin: "0 clamp(10px, 1.6vw, 20px)",
+                fontWeight: 300, opacity: 0.7,
+              }}>/</span>
+              Qureshi.
+            </h1>
+          </motion.div>
 
-            {/* ▸ TL — Name + Designation */}
+          {/* RIGHT line segment — draws from name edge → right screen edge */}
+          <div style={{ flex: 1, height: 1, position: "relative", overflow: "hidden" }}>
             <motion.div
-              initial={{ opacity: 0, x: -8, y: -8 }}
-              animate={{ opacity: 1, x: 0, y: 0 }}
-              transition={{ duration: 0.7, ease: REVEAL, delay: 0.18 }}
+              initial={{ width: "0%" }}
+              animate={{ width: "100%" }}
+              transition={{ duration: 1.1, ease: EASE, delay: 0.08 }}
               style={{
-                display: "flex", flexDirection: "column",
-                justifyContent: "flex-end", alignItems: "flex-end",
-                padding: "0 32px 28px 0",
-                textAlign: "right",
+                position: "absolute", left: 0, top: 0,
+                height: "0.5px", background: lineClr,
               }}
-            >
-              <h1 style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontSize: "clamp(1.5rem, 2.8vw, 2.2rem)",
-                fontWeight: 800, letterSpacing: "-0.03em",
-                lineHeight: 1.1, color: headClr, margin: 0,
-              }}>Haseeb Qureshi.</h1>
-              <p style={{
-                fontFamily: "'Raleway', sans-serif",
-                fontSize: "0.58rem", fontWeight: 700,
-                letterSpacing: "0.18em", textTransform: "uppercase",
-                color: subClr, margin: "8px 0 0",
-              }}>UI/UX Design Lead</p>
-            </motion.div>
+            />
+          </div>
+        </div>
 
-            {/* ▸ TR — Stats */}
-            <motion.div
-              initial={{ opacity: 0, x: 8, y: -8 }}
-              animate={{ opacity: 1, x: 0, y: 0 }}
-              transition={{ duration: 0.7, ease: REVEAL, delay: 0.26 }}
-              style={{
-                display: "flex", flexDirection: "column",
-                justifyContent: "flex-end", alignItems: "flex-start",
-                padding: "0 0 28px 32px",
-                gap: 10,
-              }}
-            >
-              {STATS.map((s) => (
-                <div key={s.lbl} style={{
-                  display: "flex", alignItems: "baseline", gap: 10,
-                }}>
-                  <span style={{
-                    fontFamily: "'Poppins', sans-serif",
-                    fontWeight: 600,
-                    fontVariantNumeric: "tabular-nums",
-                    fontSize: s.num === "—" ? "0.7rem" : "clamp(1rem, 1.8vw, 1.3rem)",
-                    letterSpacing: "-0.03em",
-                    color: s.num === "—" ? statLbl : headClr,
-                    lineHeight: 1, minWidth: 36,
-                  }}>{s.num}</span>
+        {/* 3 ── Stats — single line, green dot separators */}
+        <motion.div
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.65, ease: EASE, delay: 0.78 }}
+          style={{
+            display: "flex", alignItems: "center", gap: "clamp(10px, 2vw, 18px)",
+            marginTop: "clamp(18px, 3vh, 28px)",
+          }}
+        >
+          {[
+            { num: "2+",          lbl: "Years Exp."     },
+            { num: "10+",         lbl: "Certs"          },
+            { num: "Wired Hub",   lbl: ""               },
+          ].map((s, i, arr) => (
+            <div key={s.num} style={{ display: "flex", alignItems: "center", gap: "clamp(10px, 2vw, 18px)" }}>
+              <span style={{ display: "flex", alignItems: "baseline", gap: 5 }}>
+                <span style={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontVariantNumeric: "tabular-nums",
+                  fontWeight: 600,
+                  fontSize: i < 2 ? "clamp(0.85rem, 1.4vw, 1.1rem)" : "clamp(0.72rem, 1.1vw, 0.86rem)",
+                  letterSpacing: i < 2 ? "-0.03em" : "0",
+                  color: statNumClr,
+                }}>{s.num}</span>
+                {s.lbl && (
                   <span style={{
                     fontFamily: "'Raleway', sans-serif",
-                    fontSize: "0.55rem", fontWeight: 700,
+                    fontSize: "0.5rem", fontWeight: 700,
                     letterSpacing: "0.16em", textTransform: "uppercase",
-                    color: statLbl,
+                    color: statLblClr,
                   }}>{s.lbl}</span>
-                </div>
-              ))}
-            </motion.div>
-
-            {/* ▸ BL — Paragraph */}
-            <motion.div
-              initial={{ opacity: 0, x: -8, y: 8 }}
-              animate={{ opacity: 1, x: 0, y: 0 }}
-              transition={{ duration: 0.7, ease: REVEAL, delay: 0.34 }}
-              style={{
-                display: "flex",
-                justifyContent: "flex-end", alignItems: "flex-start",
-                padding: "28px 32px 0 0",
-              }}
-            >
-              <p style={{
-                fontFamily: "'Raleway', sans-serif",
-                fontSize: "clamp(0.72rem, 0.95vw, 0.8rem)",
-                fontWeight: 500, lineHeight: 2.1,
-                color: bodyClr, margin: 0,
-                maxWidth: 300,
-                textAlign: "right",
-              }}>
-                Turning complex systems into clean, usable interfaces — from lo-fi to
-                pixel-perfect, WCAG-compliant products that ship.
-              </p>
-            </motion.div>
-
-            {/* ▸ BR — CTAs */}
-            <motion.div
-              initial={{ opacity: 0, x: 8, y: 8 }}
-              animate={{ opacity: 1, x: 0, y: 0 }}
-              transition={{ duration: 0.7, ease: REVEAL, delay: 0.42 }}
-              style={{
-                display: "flex", flexDirection: "column",
-                justifyContent: "flex-start", alignItems: "flex-start",
-                padding: "28px 0 0 32px",
-                gap: 14,
-              }}
-            >
-              {CTAS.map(({ label, icon, action, hov, set }) => {
-                const isHov = hov;
-                const el = action
-                  ? (
-                    <motion.a
-                      key={label}
-                      href={action}
-                      onMouseEnter={() => set(true)}
-                      onMouseLeave={() => set(false)}
-                      style={{
-                        display: "inline-flex", alignItems: "center", gap: 7,
-                        fontFamily: "'Poppins', sans-serif",
-                        fontSize: "0.74rem", fontWeight: 600,
-                        letterSpacing: "0.01em",
-                        color: isHov ? dotGreen : linkClr,
-                        textDecoration: "none", cursor: "pointer",
-                        borderBottom: `1px solid ${isHov ? linkUlHov : linkUl}`,
-                        paddingBottom: 2,
-                        transition: "color 0.18s, border-color 0.18s",
-                      }}
-                    >
-                      {label} {icon}
-                    </motion.a>
-                  )
-                  : (
-                    <motion.button
-                      key={label}
-                      onMouseEnter={() => set(true)}
-                      onMouseLeave={() => set(false)}
-                      onClick={label === "Quick Tour" ? onStartTour : undefined}
-                      style={{
-                        all: "unset", cursor: "pointer",
-                        display: "inline-flex", alignItems: "center", gap: 7,
-                        fontFamily: "'Poppins', sans-serif",
-                        fontSize: "0.74rem", fontWeight: 600,
-                        letterSpacing: "0.01em",
-                        color: isHov ? dotGreen : linkClr,
-                        borderBottom: `1px solid ${isHov ? linkUlHov : linkUl}`,
-                        paddingBottom: 2,
-                        transition: "color 0.18s, border-color 0.18s",
-                      }}
-                    >
-                      {label} {icon}
-                    </motion.button>
-                  );
-                return el;
-              })}
-            </motion.div>
-
-          </div>{/* end grid */}
-
-        </motion.div>{/* end HUD container */}
-      </div>
-
-      {/* ── MARQUEE ── */}
-      <div style={{
-        flexShrink: 0, borderTop: `1px solid ${divClr}`,
-        overflow: "hidden", position: "relative", zIndex: 2, padding: "9px 0",
-      }}>
-        <div style={{ display: "flex", animation: "hq-ticker 42s linear infinite", width: "max-content" }}>
-          {[...MARQUEE_SKILLS, ...MARQUEE_SKILLS].map((s, i) => (
-            <span key={i} style={{
-              fontFamily: "'Raleway', sans-serif",
-              fontSize: "0.5rem", fontWeight: 700,
-              letterSpacing: "0.16em", textTransform: "uppercase",
-              color: marqClr, whiteSpace: "nowrap",
-              padding: "0 clamp(14px, 2vw, 20px)",
-            }}>
-              {s}<span style={{ color: marqSep, marginLeft: "clamp(14px, 2vw, 20px)" }}>·</span>
-            </span>
+                )}
+              </span>
+              {/* Green dot separator */}
+              {i < arr.length - 1 && (
+                <div style={{ width: 4, height: 4, borderRadius: "50%", background: accent, flexShrink: 0, opacity: 0.75 }} />
+              )}
+            </div>
           ))}
-        </div>
+        </motion.div>
+
       </div>
+
+      {/* ══ CONTROL DOCK — hardware toggle bar ══ */}
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.65, ease: EASE, delay: 0.95 }}
+        style={{
+          position: "absolute",
+          bottom: "clamp(36px, 7vh, 56px)",
+          left: "50%", transform: "translateX(-50%)",
+          zIndex: 10,
+          width: 600, maxWidth: "calc(100vw - 48px)",
+          display: "flex",
+          border: `1px solid ${dockBdr}`,
+          borderRadius: 6,
+          overflow: "hidden",
+          backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)",
+        }}
+      >
+        {DOCK_ITEMS.map((item, i) => {
+          const isActive = activeDoc === i;
+          return (
+            <div key={item.label} style={{ display: "flex", alignItems: "stretch", flex: 1 }}>
+              {/* Divider between sections */}
+              {i > 0 && (
+                <div style={{ width: 1, background: dockDivClr, flexShrink: 0 }} />
+              )}
+              {item.onClick
+                ? (
+                  <motion.a
+                    href={item.onClick as string}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => setActiveDock(i)}
+                    style={{
+                      flex: 1, cursor: "pointer",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      gap: 7, padding: "13px 0",
+                      textDecoration: "none",
+                      fontFamily: "'Poppins', sans-serif",
+                      fontSize: "0.72rem", fontWeight: isActive ? 700 : 500,
+                      letterSpacing: "0.01em",
+                      background: isActive ? actBg : "transparent",
+                      color: isActive ? actFg : dockTxt,
+                      transition: "background 0.2s, color 0.2s",
+                    }}
+                  >
+                    {item.label} {item.icon}
+                  </motion.a>
+                )
+                : (
+                  <motion.button
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => {
+                      setActiveDock(i);
+                      if (item.label === "Tour") onStartTour?.();
+                    }}
+                    style={{
+                      all: "unset", flex: 1, cursor: "pointer",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      gap: 7, padding: "13px 0",
+                      fontFamily: "'Poppins', sans-serif",
+                      fontSize: "0.72rem", fontWeight: isActive ? 700 : 500,
+                      letterSpacing: "0.01em",
+                      background: isActive ? actBg : "transparent",
+                      color: isActive ? actFg : dockTxt,
+                      transition: "background 0.2s, color 0.2s",
+                    }}
+                  >
+                    {item.label} {item.icon}
+                  </motion.button>
+                )
+              }
+            </div>
+          );
+        })}
+      </motion.div>
     </section>
   );
 }
