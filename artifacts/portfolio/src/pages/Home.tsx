@@ -5,7 +5,7 @@ import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { CaseStudiesSection, ProjectsSection } from "@/components/SelectedWork";
 import { WorkExperience } from "@/components/WorkExperience";
-import { Skills } from "@/components/Skills";
+import { Skills, ToolsSection } from "@/components/Skills";
 import { Credentials } from "@/components/Credentials";
 import { SiteTour } from "@/components/SiteTour";
 import { TourHighlightContext } from "@/contexts/TourContext";
@@ -272,6 +272,9 @@ export default function Home() {
           </section>
           <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
             <Skills />
+          </section>
+          <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
+            <ToolsSection />
           </section>
           <section style={{ scrollSnapAlign: "start" }}>
             <Credentials />
