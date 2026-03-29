@@ -13,26 +13,26 @@ const NOISE = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http:
 
 const CATEGORIES = [
   {
-    title: "Core UX Logic",
-    skills: ["User Research", "Information Architecture", "Wireframing", "Usability Testing", "Journey Mapping", "HMW Framing"],
+    title: "Core UX Skills",
+    skills: ["User Interviews", "Persona Creation", "Information Architecture", "Wireframing (Lo & Hi-Fi)", "Journey Mapping", "Usability Testing", "Heuristic Evaluation", "Competitive Analysis"],
   },
   {
-    title: "Frontend Engineering",
-    skills: ["HTML5 & CSS3", "React Handoff", "Storybook", "Design Tokens", "Responsive Design", "CSS Animations"],
+    title: "UI & Design Systems",
+    skills: ["Scalable Design Systems", "UI Kits & Components", "Dark/Light Mode Systems", "Visual Hierarchy", "Interaction & Motion UI", "Responsive Web & Mobile", "Pixel-Perfect Handoff", "Accessibility (WCAG 2.1 AA)"],
   },
   {
-    title: "Product Strategy",
-    skills: ["UX Strategy", "Stakeholder Comms", "Roadmap Planning", "A/B Testing", "Analytics Insights", "OKR Alignment"],
+    title: "Workflow & Strategy",
+    skills: ["A/B Testing", "UX Audits", "Figma Dev Mode", "Design-to-Dev Handoff", "Agile & Scrum", "UX Writing", "KPI-Driven UX", "Stakeholder Communication"],
   },
 ];
 
 const TOOLS = [
-  { name: "Figma",       level: "Expert",       years: "4 Years" },
-  { name: "Adobe XD",   level: "Advanced",     years: "3 Years" },
-  { name: "ProtoPie",   level: "Intermediate", years: "2 Years" },
-  { name: "Storybook",  level: "Advanced",     years: "2 Years" },
-  { name: "WCAG Tools", level: "Expert",       years: "4 Years" },
-  { name: "Framer",     level: "Intermediate", years: "1 Year"  },
+  { name: "Figma",        level: "Expert",       years: "4+ Years" },
+  { name: "FigJam",       level: "Advanced",     years: "2 Years"  },
+  { name: "ProtoPie",     level: "Intermediate", years: "2 Years"  },
+  { name: "Illustrator",  level: "Intermediate", years: "2 Years"  },
+  { name: "Miro",         level: "Advanced",     years: "2 Years"  },
+  { name: "Notion",       level: "Advanced",     years: "3 Years"  },
 ];
 
 function useDark() {

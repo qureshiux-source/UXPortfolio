@@ -1,0 +1,134 @@
+Haseeb Qureshi
+
+UI/UX Designer • Product Designer
+Phone: +92-331-8921216
+Email: qureshi.ux@gmail.com
+
+LinkedIn: linkedin.com/in/haseeb-qureshi
+
+Objective
+
+UI/UX Designer with strong command over user-centered design, accessibility (WCAG 2.1), and usability-first interfaces. Specialized in building scalable design systems, optimizing user flows, and transforming complex platforms into intuitive, high-performing digital experiences. Experienced in leading design direction, collaborating with engineering, and delivering pixel-perfect, developer-ready UI.
+
+Experience
+Wired Hub — UI/UX Design Lead
+
+Remote, Canada | Apr 2025 – Present
+Led UX and UI initiatives across high-impact digital products including real-estate platform redesigns, one of the largest AI SaaS platforms, and UAE government-level AML systems.
+
+Key Contributions
+Redesigned large-scale real estate websites with improved IA, reduced friction, and simplified task flows.
+Transformed a major AI platform’s UX—fixing inconsistencies, streamlining navigation, and improving feature discoverability.
+Designed end-to-end UI/UX for AML applications (gov-level) with strict compliance and accessibility requirements.
+Produced high-definition UI, moodboards, lo-fi wireframes, hi-fi prototypes, and detailed user journeys.
+Built scalable design systems with components, variants, tokens, and documentation.
+Conducted UX interviews, gathered requirements, and analyzed stakeholder needs.
+Executed competitive analysis, identified product weaknesses, and recommended UX improvements.
+Followed WCAG accessibility standards, improving readability, contrast, and interaction feedback.
+Acted as UX guide for engineering teams — aligning business, user, and technical constraints.
+Exclusive Digitals — Product Designer (UI/UX)
+
+Sukkur, Pakistan | Sep 2024 – Apr 2025
+Served as the only product designer for a complete streaming platform ecosystem.
+
+Key Contributions
+Designed all product screens end-to-end including homepage, dashboard, user flows, and supporting pages.
+Built a scalable design system to ensure UI consistency across the full platform.
+Collaborated closely with developers for smooth handoff and pixel-accurate implementation.
+Iterated designs based on client feedback and testing insights.
+Performed competitor research to match modern industry standards and introduce competitive UI patterns.
+Improved IA by removing visual noise and refining page hierarchy.
+Side Projects
+Verified by Tenants — Website Redesign
+
+UI/UX Designer
+
+Analyzed old website structure, identified UX gaps, and redesigned the platform while preserving brand identity.
+Improved information architecture, readability, and accessibility.
+Delivered a cleaner, more trustworthy interface aligned with tenant verification flow.
+UBIOX — Landing Page Design
+
+UI/UX Designer
+
+Designed a complete landing page for UBIOX, a platform offering UI/UX, web development, and educational services.
+Integrated their mission, services, and brand narrative into a strong unified design.
+Developed an organized IA ensuring seamless content flow.
+NSW Mobile App — UX/UI Redesign Clone
+
+UI/UX Designer
+
+Rebuilt the entire NSW mobile app experience from scratch with a scalable mobile design system.
+Designed screens with smooth user flows, animations, transitions, and interaction states.
+Created a full prototype including passcode unlock flow.
+Delivered complete end-to-end work: requirement gathering → design → prototype → iteration.
+Education
+
+Bachelor of Computer Science (HCI & Front-End Development Specialization)
+Sukkur IBA University — Fall 2021 to Spring 2025
+
+Certifications
+Microsoft UX Design Specialization — Coursera
+Fundamentals of UI/UX Design — Microsoft
+Designing for User Experience — Microsoft
+User Interface Design & Prototyping — Microsoft
+UX Design in Practice: Accessibility & Collaboration — Microsoft
+Accessibility-First Design — LinkedIn Learning
+Design Psychology (UX) — LinkedIn Learning
+Design Thinking: Customer Experience — LinkedIn Learning
+Performing UX Audits — LinkedIn Learning
+Skills & Expertise
+Design Tools
+Figma (advanced components, variants, tokens, auto-layout, prototypes)
+FigJam
+Adobe Illustrator
+Sketch
+Protopie
+Canva
+Miro
+InVision
+Notion
+Zeplin
+Trello
+Slack
+Jira
+ClickUp
+Google Workspace
+Core UX Skills
+User Interviews & Requirements Gathering
+Persona Creation
+Journey Mapping
+Information Architecture
+Wireframing (Lo-Fi & Hi-Fi)
+Prototyping (interactive, advanced states)
+Usability Testing (remote & moderated)
+Competitive Analysis
+Heuristic Evaluation
+Accessibility (WCAG 2.1 AA)
+UI Expertise
+Scalable Design Systems
+UI Kits & Components
+Pixel-Perfect Developer-Ready UI
+Dark/Light Mode Systems
+Responsive Web & Mobile Design
+Visual Hierarchy & Layout Systems
+Interaction & Motion-based UI
+Collaboration & Workflow
+Jira / ClickUp / Trello
+Design-to-Dev Handoff (Inspect, Zeplin, Storybook)
+Figma Dev Mode
+Documentation in Notion & Confluence
+Agile & Scrum Workflows
+Front-End Knowledge
+HTML5
+CSS3
+JavaScript Basics
+Tailwind (basic understanding)
+Understanding of React component structure
+Ability to code small React-based UI screens
+Additional Strengths
+UX Writing
+Micro-interactions
+UI Motion Elements
+A/B Testing
+KPI-Driven UX
+Data-Driven Decision Making

@@ -12,35 +12,35 @@ const CASE_STUDIES = [
     tag: "Real Estate UX",
     title: "Dubai Dunes: Engineering Trust",
     description:
-      "Redesigned a 'spartanic' real estate platform into a high-authority luxury interface — repositioning the founder as the central trust signal for high-net-worth buyers.",
+      "Redesigned a visually underperforming real estate platform into a high-authority luxury interface — repositioning the founder as the central trust signal for high-net-worth buyers.",
     year: "2026",
     skills: ["Research", "Visual Direction", "Design System", "High-Fidelity Mockups"],
     link: "/case-study/dubai-dunes",
   },
   {
     id: 2,
-    tag: "Design Systems",
-    title: "Building a Scalable Component Library",
+    tag: "Product Design",
+    title: "Exclusive Streaming Platform",
     description:
-      "Led the creation of a shared design system used across 4 product teams, cutting design-to-dev handoff time by half.",
-    year: "2022",
-    skills: ["Figma", "Tokens", "Documentation", "Accessibility"],
+      "Sole product designer for a complete streaming ecosystem — designed all screens end-to-end including homepage, dashboard, and user flows, with a full scalable design system.",
+    year: "2025",
+    skills: ["Product Design", "Design System", "Dev Handoff", "Figma"],
     link: null,
   },
 ];
 
 const PROJECTS = [
   {
-    id: 1, tag: "Mobile", title: "Banking App Redesign", year: "2023",
-    description: "Simplified transaction flows and improved discoverability for 200K+ users.",
+    id: 1, tag: "Web", title: "Verified by Tenants", year: "2024",
+    description: "Redesigned a tenant verification platform — improved IA, readability, and accessibility while preserving brand identity.",
   },
   {
-    id: 2, tag: "Web", title: "E-commerce Checkout", year: "2022",
-    description: "Streamlined a 6-step checkout into a single-page flow, lifting conversion by 18%.",
+    id: 2, tag: "Mobile", title: "NSW Mobile App Redesign", year: "2024",
+    description: "Rebuilt the entire NSW mobile app from scratch with a scalable design system, smooth flows, animations, and a full working prototype.",
   },
   {
-    id: 3, tag: "Dashboard", title: "Analytics Platform UI", year: "2021",
-    description: "Designed data-dense views that remained scannable and actionable for non-technical users.",
+    id: 3, tag: "Landing Page", title: "UBIOX Brand & Design", year: "2024",
+    description: "Designed a complete landing page integrating UBIOX's mission, services, and brand narrative into a unified, high-converting experience.",
   },
 ];
 

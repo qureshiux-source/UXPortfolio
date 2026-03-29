@@ -7,11 +7,15 @@ import { useTourHighlight } from "@/contexts/TourContext";
 const NOISE_SVG = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`;
 
 const CERTS = [
-  { id: 1, title: "UX Design Professional Certificate",  issuer: "Google",                        date: "2023", description: "End-to-end UX design process — research, wireframing, prototyping, and usability testing across real-world projects.", url: "#" },
-  { id: 2, title: "UX Design Specialization",            issuer: "Microsoft",                     date: "2022", description: "Inclusive design, accessibility standards, and enterprise-scale UX workflows for global product teams.", url: "#" },
-  { id: 3, title: "UX Research & Strategy",              issuer: "Interaction Design Foundation", date: "2022", description: "Mixed-methods research, user strategy frameworks, and evidence-based design decision making.", url: "#" },
-  { id: 4, title: "Design Psychology",                   issuer: "LinkedIn Learning",              date: "2021", description: "Cognitive load theory, Gestalt principles, and persuasive design systems for scalable UX.", url: "#" },
-  { id: 5, title: "BCS in Human-Computer Interaction",  issuer: "Sukkur IBA University",         date: "2020", description: "Academic foundation in HCI, interaction design, computing theory, and research methodology.", url: "#" },
+  { id: 1, title: "Microsoft UX Design Specialization",                    issuer: "Microsoft / Coursera",    date: "2025", description: "4-course specialization covering UX fundamentals, design for user experience, prototyping, and accessibility-first practice.", url: "#" },
+  { id: 2, title: "Fundamentals of UI/UX Design",                          issuer: "Microsoft",               date: "2025", description: "Core principles of user-centered design, visual design language, and UX research fundamentals aligned with industry standards.", url: "#" },
+  { id: 3, title: "UX Design in Practice: Accessibility & Collaboration",  issuer: "Microsoft",               date: "2025", description: "Real-world WCAG implementation, inclusive design practices, and cross-functional UX collaboration at scale.", url: "#" },
+  { id: 4, title: "User Interface Design & Prototyping",                   issuer: "Microsoft",               date: "2025", description: "High-fidelity prototyping, interactive design systems, and producing pixel-accurate, developer-ready UI specifications.", url: "#" },
+  { id: 5, title: "Accessibility-First Design",                            issuer: "LinkedIn Learning",       date: "2024", description: "Building accessible digital experiences with full WCAG 2.1 AA compliance across responsive web and mobile platforms.", url: "#" },
+  { id: 6, title: "Design Psychology (UX)",                                issuer: "LinkedIn Learning",       date: "2024", description: "Cognitive load theory, Gestalt principles, and persuasive design patterns for enhanced user engagement and retention.", url: "#" },
+  { id: 7, title: "Design Thinking: Customer Experience",                  issuer: "LinkedIn Learning",       date: "2024", description: "Applying design thinking methodologies to map, analyse, and optimise end-to-end customer journeys.", url: "#" },
+  { id: 8, title: "Performing UX Audits",                                  issuer: "LinkedIn Learning",       date: "2024", description: "Systematic UX audits, heuristic evaluations, and translating findings into prioritised, actionable design recommendations.", url: "#" },
+  { id: 9, title: "BSc Computer Science — HCI & Front-End Specialization", issuer: "Sukkur IBA University",  date: "2025", description: "4-year degree specialising in Human-Computer Interaction and Front-End Development. Graduating Spring 2025.", url: "#" },
 ];
 
 function useDark() {
