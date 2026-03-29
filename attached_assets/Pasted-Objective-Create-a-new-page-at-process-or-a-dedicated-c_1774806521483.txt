@@ -1,0 +1,55 @@
+Objective: Create a new page at /process (or a dedicated component if on a single-page setup) that details my UX workflow. It must follow the exact design language of the rest of the site: Matte black background (#030303), white text, and green accents (#5EFF80) used sparingly for highlights. Use Poppins for headers and Raleway for body text. Apply the 0.6s cubic-bezier transition [0.16, 1, 0.3, 1] for all interactive elements.
+
+Layout Structure:
+
+Header: A centered header reading 'My Work Process' with a small subtitle: 'A logic-first framework to bridge the gap between business goals, user needs, and development constraints.'
+
+The 6-Phase Timeline: Create a vertical or horizontal layout detailing the following 6 phases. Do not use heavy background boxes; separate phases with thin, semi-transparent lines (border-white/5).
+
+Phase 1: Discovery & Technical Alignment
+
+Concept: Gathering constraints and understanding the problem.
+
+Details: Analyzing client briefs, reference sites, and pain points. Conducting exploratory Google Meets to understand project goals and the developer's tech stack (React, Flutter, etc.) early on to prevent downstream engineering friction.
+
+Added Techniques: Competitive Analysis, Stakeholder Interviews.
+
+Phase 2: Concept Validation (Bridging the Gap)
+
+Concept: Secure rapid feedback through tangible visuals.
+
+Details: Clients often struggle to visualize design systems from abstract wireframes. I provide a 'Minimum Section Page' (header, footer, core mid-sections for web, or 1-2 core mobile screens) built roughly to secure real, gut-reaction feedback before mapping complex states.
+
+Phase 3: Deep Research & Architecture (For Scalable Projects)
+
+Concept: Mapping out the human element.
+
+Details: Building data-driven user personas and behaviors. Conducting card sorting, user interviews, and field research to ensure the product solves real problems.
+
+Added Techniques: Heuristic Evaluation, Information Architecture (IA) mapping.
+
+Phase 4: Design System Foundation
+
+Concept: Setting the rules of the system.
+
+Details: Once colors, typography, and layouts are locked via Concept Validation, I build a component-driven, scalable Design System tailored to the project's long-term growth needs.
+
+Phase 5: Low-Fidelity Refinement & Friction Removal
+
+Concept: Smoothing the user journey.
+
+Details: Creating user flows and mapping journeys. Building low-fidelity prototypes to test and optimize user navigation. We remove visual noise and refine layouts to ensure absolute clarity and zero friction.
+
+Added Techniques: WCAG 2.1 Accessibility checks, Usability A/B Testing.
+
+Phase 6: High-Fidelity Engineering & Motion
+
+Concept: Final product polishing.
+
+Details: Moving to high-fidelity prototyping, applying consistent interactions, and introducing micro-animations. Ensuring the end product is smooth, logical, and ready for development handoff.
+
+Interactivity:
+
+On hovering over any phase, the phase number (e.g., 01, 02) or title should transition to green.
+
+Add a floating 'Back to Home' or 'Let's Build' CTA at the bottom of the page that follows the solid white button / black text rule we used in the hero dock.

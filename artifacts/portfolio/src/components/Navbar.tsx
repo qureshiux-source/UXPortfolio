@@ -85,7 +85,7 @@ export function Navbar() {
 
           {/* ── Center: nav links + social ── */}
           <nav style={{ display: "flex", alignItems: "center", gap: 18 }}>
-            {navLink("Process", () => scrollTo("process"))}
+            {navLink("Process", () => navigate("/process"))}
             {divider}
             {navLink("Projects", () => scrollTo("projects"))}
             {divider}

@@ -6,6 +6,7 @@ import { ThemeProvider } from "next-themes";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 import DubaiDunes from "@/pages/DubaiDunes";
+import Process from "@/pages/Process";
 
 const queryClient = new QueryClient();
 
@@ -13,6 +14,7 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
+      <Route path="/process" component={Process} />
       <Route path="/case-study/dubai-dunes" component={DubaiDunes} />
       <Route component={NotFound} />
     </Switch>
