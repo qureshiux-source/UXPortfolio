@@ -261,13 +261,13 @@ export default function Home() {
           <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
             <Hero onStartTour={startTour} />
           </section>
-          <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
+          <section id="process" style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
             <WorkExperience />
           </section>
           <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
             <CaseStudiesSection />
           </section>
-          <section style={{ scrollSnapAlign: "start" }}>
+          <section id="projects" style={{ scrollSnapAlign: "start" }}>
             <ProjectsSection />
           </section>
           <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
