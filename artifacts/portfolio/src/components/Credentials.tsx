@@ -357,79 +357,154 @@ export function Credentials() {
         <div style={{ height: 1, background: divider }} />
       </div>
 
-      {/* Detail modal */}
+      {/* Detail modal — z-index 20000/20001 sits above the Resume FAB (9999) */}
       <AnimatePresence>
         {selected && (
           <>
+            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
+              transition={{ duration: 0.22 }}
               onClick={() => setSelected(null)}
-              style={{ position: "fixed", inset: 0, background: overlayBg, zIndex: 1000, backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)" }}
-            />
-            <motion.div
-              initial={{ opacity: 0, scale: 0.93, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.93, y: 10 }}
-              transition={{ duration: 0.26, ease: [0.4, 0, 0.2, 1] }}
               style={{
-                position: "fixed", top: "50%", left: "50%",
+                position: "fixed", inset: 0,
+                background: overlayBg,
+                zIndex: 20000,
+                backdropFilter: "blur(24px)",
+                WebkitBackdropFilter: "blur(24px)",
+              }}
+            />
+
+            {/* Card */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.94, y: 18 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.94, y: 10 }}
+              transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+              style={{
+                position: "fixed",
+                top: "50%", left: "50%",
                 transform: "translate(-50%, -50%)",
-                zIndex: 1001, background: modalBg,
-                border: `1px solid ${modalBdr}`, borderRadius: 20,
-                padding: "clamp(28px, 4vw, 44px)",
-                width: "min(500px, 90vw)",
-                boxShadow: isDark ? "0 32px 80px rgba(0,0,0,0.9)" : "0 32px 80px rgba(0,0,0,0.14)",
+                zIndex: 20001,
+                width: "min(480px, 92vw)",
+                background: modalBg,
+                border: `1px solid ${modalBdr}`,
+                borderRadius: 20,
+                padding: "32px",
+                boxShadow: isDark
+                  ? "0 40px 100px rgba(0,0,0,0.95), 0 0 0 1px rgba(255,255,255,0.04)"
+                  : "0 40px 100px rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.04)",
               }}
             >
-              <button onClick={() => setSelected(null)} style={{
-                position: "absolute", top: 16, right: 16,
-                width: 30, height: 30, borderRadius: "50%",
-                background: closeBg, border: "none", cursor: "pointer",
-                display: "flex", alignItems: "center", justifyContent: "center",
-              }}>
+              {/* Close */}
+              <button
+                onClick={() => setSelected(null)}
+                style={{
+                  position: "absolute", top: 16, right: 16,
+                  width: 32, height: 32, borderRadius: "50%",
+                  background: closeBg,
+                  border: `1px solid ${isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)"}`,
+                  cursor: "pointer",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  transition: "background 0.18s",
+                }}
+                onMouseEnter={e => {
+                  (e.currentTarget as HTMLElement).style.background =
+                    isDark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.1)";
+                }}
+                onMouseLeave={e => {
+                  (e.currentTarget as HTMLElement).style.background = closeBg;
+                }}
+              >
                 <X size={13} style={{ color: rowSub }} />
               </button>
 
+              {/* Icon badge */}
               <div style={{
-                width: 44, height: 44, borderRadius: 12, marginBottom: 18,
-                background: isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.04)",
+                width: 48, height: 48, borderRadius: 14,
+                marginBottom: 20,
+                background: isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.04)",
                 border: `1px solid ${modalBdr}`,
                 display: "flex", alignItems: "center", justifyContent: "center",
-                color: isDark ? TYPE_ACCENT[selected.type].dark : TYPE_ACCENT[selected.type].light,
+                color: isDark
+                  ? TYPE_ACCENT[selected.type].dark
+                  : TYPE_ACCENT[selected.type].light,
               }}>
                 {TYPE_ICON[selected.type]}
               </div>
 
-              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
-                <span style={{ fontFamily: "'Raleway', sans-serif", fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: rowSub }}>{selected.issuer}</span>
-                <div style={{ width: 3, height: 3, borderRadius: "50%", background: rowDate }} />
-                <span style={{ fontFamily: "'Raleway', sans-serif", fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.08em", color: rowDate }}>{selected.date}</span>
+              {/* Meta row */}
+              <div style={{
+                display: "flex", alignItems: "center", gap: 8,
+                marginBottom: 10,
+              }}>
+                <span style={{
+                  fontFamily: "'Raleway', sans-serif",
+                  fontSize: "0.6rem", fontWeight: 700,
+                  letterSpacing: "0.12em", textTransform: "uppercase",
+                  color: rowSub,
+                }}>{selected.issuer}</span>
+                <span style={{ width: 3, height: 3, borderRadius: "50%", background: rowDate, flexShrink: 0 }} />
+                <span style={{
+                  fontFamily: "'Raleway', sans-serif",
+                  fontSize: "0.6rem", fontWeight: 700,
+                  letterSpacing: "0.08em",
+                  color: rowDate,
+                }}>{selected.date}</span>
               </div>
 
-              <h3 style={{ fontFamily: "'Poppins', sans-serif", fontSize: "clamp(1.05rem, 1.8vw, 1.3rem)", fontWeight: 800, letterSpacing: "-0.02em", color: titleClr, margin: "0 0 14px", lineHeight: 1.2 }}>
+              {/* Title */}
+              <h3 style={{
+                fontFamily: "'Poppins', sans-serif",
+                fontSize: "clamp(1rem, 1.8vw, 1.25rem)",
+                fontWeight: 800, letterSpacing: "-0.025em",
+                lineHeight: 1.2,
+                color: titleClr, margin: "0 0 14px",
+              }}>
                 {selected.title}
               </h3>
 
-              <p style={{ fontFamily: "'Raleway', sans-serif", fontSize: "0.88rem", lineHeight: 1.65, color: bodyTxt, margin: "0 0 26px", fontWeight: 500 }}>
+              {/* Description */}
+              <p style={{
+                fontFamily: "'Raleway', sans-serif",
+                fontSize: "0.86rem", lineHeight: 1.68, fontWeight: 500,
+                color: bodyTxt, margin: "0 0 28px",
+              }}>
                 {selected.description}
               </p>
 
+              {/* Divider */}
+              <div style={{ height: 1, background: isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)", marginBottom: 20 }} />
+
+              {/* CTA */}
               {selected.url && selected.url !== "#" ? (
-                <a href={selected.url} target="_blank" rel="noopener noreferrer" style={{
-                  display: "inline-flex", alignItems: "center", gap: 8,
-                  fontFamily: "'Poppins', sans-serif", fontSize: "0.8rem", fontWeight: 700,
-                  letterSpacing: "0.02em", padding: "11px 22px", borderRadius: 100,
-                  background: ctaBg, color: ctaFg, textDecoration: "none",
-                }}>
-                  <ExternalLink size={13} /> Verify Credential
+                <a
+                  href={selected.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: "inline-flex", alignItems: "center", gap: 8,
+                    fontFamily: "'Poppins', sans-serif",
+                    fontSize: "0.78rem", fontWeight: 700,
+                    letterSpacing: "0.02em",
+                    padding: "11px 24px", borderRadius: 100,
+                    background: ctaBg, color: ctaFg,
+                    textDecoration: "none",
+                    transition: "opacity 0.18s",
+                  }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.opacity = "0.85"; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.opacity = "1"; }}
+                >
+                  <ExternalLink size={12} /> Verify Credential
                 </a>
               ) : (
                 <span style={{
                   display: "inline-flex", alignItems: "center", gap: 8,
-                  fontFamily: "'Poppins', sans-serif", fontSize: "0.8rem", fontWeight: 700,
-                  letterSpacing: "0.02em", padding: "11px 22px", borderRadius: 100,
-                  background: isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.05)",
+                  fontFamily: "'Poppins', sans-serif",
+                  fontSize: "0.78rem", fontWeight: 700,
+                  letterSpacing: "0.02em",
+                  padding: "11px 24px", borderRadius: 100,
+                  background: isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.05)",
                   color: rowDate,
                 }}>
                   Physical Credential
