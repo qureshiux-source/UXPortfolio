@@ -2,10 +2,12 @@ import { Linkedin, Instagram, FileText } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export function Navbar() {
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const navigate = useNavigate();
   useEffect(() => { setMounted(true); }, []);
 
   const system = typeof document !== "undefined"
@@ -42,7 +44,10 @@ export function Navbar() {
         }}>
 
           {/* Name */}
-          <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+          <div
+            onClick={() => navigate("/")}
+            style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0, cursor: "pointer" }}
+          >
             <span style={{
               fontFamily: "'Poppins', sans-serif",
               fontSize: "1rem", fontWeight: 600,
