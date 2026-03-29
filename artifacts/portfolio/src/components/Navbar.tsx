@@ -2,12 +2,12 @@ import { Linkedin, Instagram, FileText } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation } from "wouter";
 
 export function Navbar() {
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const navigate = useNavigate();
+  const [, navigate] = useLocation();
   useEffect(() => { setMounted(true); }, []);
 
   const system = typeof document !== "undefined"
