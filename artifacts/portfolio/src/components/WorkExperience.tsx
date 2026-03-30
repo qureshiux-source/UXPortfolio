@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, Plus } from "lucide-react";
 import { useTourHighlight } from "@/contexts/TourContext";
 import { useLocation } from "wouter";
+import { useBreakpoint } from "@/hooks/useBreakpoint";
 
 const HIGHLIGHT_TO_JOB: Record<string, string> = {
   "work-wired-hub":  "wired-hub",
@@ -89,8 +90,8 @@ function useDark() {
 
 export function WorkExperience() {
   const isDark = useDark();
+  const isMobile = useBreakpoint(640);
   const [active, setActive] = useState(JOBS[0].id);
-  const [hoveredJob, setHoveredJob] = useState<string | null>(null);
   const [, navigate] = useLocation();
   const activeJob = JOBS.find(j => j.id === active)!;
 
@@ -101,38 +102,183 @@ export function WorkExperience() {
   }, [highlight]);
 
   /* ── Tokens ── */
-  const bg         = isDark ? "#030303" : "#F5F4F2";
-  const eyebrow    = isDark ? "#444444" : "#8A8A8A";
-  const titleClr   = isDark ? "#F0F0F0" : "#080808";
-  const green      = isDark ? "#5EFF80" : "#1A7A32";
-  const divider    = isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.1)";
-
-  /* Timeline */
-  const timelineClr = isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.12)";
-  const inactDotBdr = isDark ? "rgba(255,255,255,0.22)" : "rgba(0,0,0,0.28)";
+  const bg              = isDark ? "#030303" : "#F5F4F2";
+  const eyebrow         = isDark ? "#444444" : "#8A8A8A";
+  const titleClr        = isDark ? "#F0F0F0" : "#080808";
+  const green           = isDark ? "#5EFF80" : "#1A7A32";
+  const divider         = isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.1)";
+  const timelineClr     = isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.12)";
+  const inactDotBdr     = isDark ? "rgba(255,255,255,0.22)" : "rgba(0,0,0,0.28)";
   const activeNameClr   = isDark ? "#E8E8E8" : "#0A0A0A";
   const inactNameClr    = isDark ? "#2C2C2C" : "#8A8A8A";
   const inactPeriodClr  = isDark ? "#1E1E1E" : "#B0B0B0";
   const activePeriodClr = isDark ? "#383838" : "#6A6A6A";
-
-  /* Right panel */
-  const checkTxt   = isDark ? "#B0B0B0" : "#282828";
-  const projTitle  = isDark ? "#E0E0E0" : "#0A0A0A";
-  const projSep    = isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.09)";
-  const tagTxt     = isDark ? "#484848" : "#6A6A6A";
-  const tagBdr     = isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.1)";
-
-  /* Row spacing between jobs in left nav */
+  const checkTxt        = isDark ? "#B0B0B0" : "#282828";
+  const projTitle       = isDark ? "#E0E0E0" : "#0A0A0A";
+  const projSep         = isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.09)";
+  const tagTxt          = isDark ? "#484848" : "#6A6A6A";
+  const tagBdr          = isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.1)";
   const ROW_GAP = "clamp(26px, 4.2vh, 44px)";
+
+  /* ── Right panel (shared between mobile and desktop) ── */
+  const RightPanel = () => (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={active}
+        initial={{ opacity: 0, x: isMobile ? 0 : 15, y: isMobile ? 8 : 0 }}
+        animate={{ opacity: 1, x: 0, y: 0 }}
+        exit={{ opacity: 0, x: isMobile ? 0 : -8, y: isMobile ? -4 : 0 }}
+        transition={{ duration: 0.5, ease: EASE }}
+        style={{ display: "flex", flexDirection: "column", gap: "clamp(10px, 1.8vh, 18px)" }}
+      >
+        <div>
+          <h3 style={{
+            fontFamily: "'Poppins', sans-serif",
+            fontSize: isMobile ? "1rem" : "clamp(1rem, 1.7vw, 1.3rem)",
+            fontWeight: 800, letterSpacing: "-0.022em",
+            color: titleClr, margin: "0 0 5px", lineHeight: 1.1,
+          }}>{activeJob.role}</h3>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+            <span style={{
+              fontFamily: "'Raleway', sans-serif",
+              fontSize: "0.68rem", fontWeight: 700,
+              color: activeJob.isCurrent ? green : eyebrow,
+            }}>{activeJob.company}</span>
+            <div style={{ width: "0.5px", height: 10, background: divider }} />
+            <span style={{
+              fontFamily: "'Raleway', sans-serif",
+              fontSize: "0.62rem", fontWeight: 600, color: eyebrow,
+            }}>{activeJob.period}</span>
+            {!isMobile && (
+              <>
+                <div style={{ width: "0.5px", height: 10, background: divider }} />
+                <span style={{
+                  fontFamily: "'Raleway', sans-serif",
+                  fontSize: "0.58rem", fontWeight: 500,
+                  color: isDark ? "#2E2E2E" : "#C0C0C0",
+                }}>{activeJob.location}</span>
+              </>
+            )}
+          </div>
+        </div>
+
+        <div style={{ height: "0.5px", background: divider }} />
+
+        {/* Checkpoints */}
+        <div>
+          <span style={{
+            fontFamily: "'Raleway', sans-serif",
+            fontSize: "0.5rem", fontWeight: 700,
+            letterSpacing: "0.2em", textTransform: "uppercase",
+            color: isDark ? "#282828" : "#C8C8C8",
+            marginBottom: 8, display: "block",
+          }}>Impact Checkpoints</span>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            {activeJob.checkpoints.map((cp, i) => (
+              <motion.div
+                key={cp}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, ease: EASE, delay: i * 0.07 }}
+                style={{
+                  display: "flex", alignItems: "flex-start", gap: 12,
+                  padding: "clamp(5px, 0.9vh, 8px) 0",
+                  borderBottom: i < activeJob.checkpoints.length - 1
+                    ? `0.5px solid ${divider}` : "none",
+                }}
+              >
+                <div style={{
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  width: 12, height: 12, flexShrink: 0, marginTop: 2,
+                }}>
+                  <Plus size={9} strokeWidth={1.5} style={{ color: isDark ? "rgba(255,255,255,0.25)" : "rgba(0,0,0,0.22)" }} />
+                </div>
+                <span style={{
+                  fontFamily: "'Raleway', sans-serif",
+                  fontSize: isMobile ? "0.74rem" : "clamp(0.7rem, 0.98vw, 0.78rem)",
+                  fontWeight: 600, lineHeight: 1.6, color: checkTxt,
+                }}>{cp}</span>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ height: "0.5px", background: divider }} />
+
+        {/* Projects */}
+        <div>
+          <span style={{
+            fontFamily: "'Raleway', sans-serif",
+            fontSize: "0.5rem", fontWeight: 700,
+            letterSpacing: "0.2em", textTransform: "uppercase",
+            color: isDark ? "#282828" : "#C8C8C8",
+            marginBottom: 8, display: "block",
+          }}>Projects</span>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            {activeJob.projects.map((proj, i) => {
+              const hasLink = !!proj.link;
+              return (
+                <motion.div
+                  key={proj.title}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, ease: EASE, delay: 0.12 + i * 0.07 }}
+                  onClick={() => hasLink && navigate(proj.link!)}
+                  style={{
+                    display: "flex", alignItems: "center",
+                    justifyContent: "space-between",
+                    padding: "clamp(5px, 0.9vh, 8px) 0",
+                    borderBottom: i < activeJob.projects.length - 1
+                      ? `0.5px solid ${projSep}` : "none",
+                    cursor: hasLink ? "pointer" : "default",
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    <span style={{
+                      fontFamily: "'Raleway', sans-serif",
+                      fontSize: "0.46rem", fontWeight: 700,
+                      letterSpacing: "0.14em", textTransform: "uppercase",
+                      color: tagTxt, paddingRight: 8,
+                      borderRight: `0.5px solid ${tagBdr}`,
+                    }}>{proj.tag}</span>
+                    <span style={{
+                      fontFamily: "'Poppins', sans-serif",
+                      fontSize: isMobile ? "0.74rem" : "clamp(0.7rem, 0.98vw, 0.8rem)",
+                      fontWeight: 600, letterSpacing: "-0.01em",
+                      color: projTitle,
+                    }}>{proj.title}</span>
+                  </div>
+                  <div style={{
+                    display: "flex", alignItems: "center", gap: 4,
+                    flexShrink: 0, opacity: hasLink ? 1 : 0.25,
+                  }}>
+                    <span style={{
+                      fontFamily: "'Raleway', sans-serif",
+                      fontSize: "0.5rem", fontWeight: 700,
+                      letterSpacing: "0.08em", textTransform: "uppercase",
+                      color: hasLink ? green : eyebrow,
+                    }}>{hasLink ? "Case Study" : "NDA"}</span>
+                    <ArrowUpRight size={9} style={{ color: hasLink ? green : eyebrow }} />
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </motion.div>
+    </AnimatePresence>
+  );
 
   return (
     <div style={{
-      height: "100vh", paddingTop: 64, boxSizing: "border-box",
+      minHeight: "100vh", paddingTop: 64,
+      paddingBottom: isMobile ? 32 : 0,
+      boxSizing: "border-box",
       background: bg, display: "flex", flexDirection: "column",
-      justifyContent: "center", overflow: "hidden",
+      justifyContent: "center",
+      overflow: isMobile ? "visible" : "hidden",
       position: "relative", transition: "background 0.4s",
     }}>
-      {/* Noise */}
       <div style={{
         position: "absolute", inset: 0, pointerEvents: "none",
         backgroundImage: NOISE, backgroundSize: "180px 180px",
@@ -143,9 +289,11 @@ export function WorkExperience() {
 
       <div style={{
         maxWidth: 960, width: "100%", margin: "0 auto",
-        padding: "0 clamp(24px, 5vw, 64px)",
+        padding: isMobile
+          ? "clamp(24px, 4vh, 40px) clamp(20px, 5vw, 32px) 0"
+          : "0 clamp(24px, 5vw, 64px)",
         display: "flex", flexDirection: "column",
-        gap: "clamp(18px, 2.8vh, 26px)",
+        gap: isMobile ? 16 : "clamp(18px, 2.8vh, 26px)",
         position: "relative", zIndex: 1,
       }}>
 
@@ -162,261 +310,146 @@ export function WorkExperience() {
           </div>
           <h2 style={{
             fontFamily: "'Poppins', sans-serif",
-            fontSize: "clamp(1.4rem, 2.4vw, 1.9rem)",
+            fontSize: isMobile ? "1.5rem" : "clamp(1.4rem, 2.4vw, 1.9rem)",
             fontWeight: 800, letterSpacing: "-0.025em",
             color: titleClr, margin: 0, lineHeight: 1.1,
           }}>Where I've Led</h2>
         </div>
 
-        {/* Two-column grid */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "clamp(140px, 19%, 190px) 1fr",
-          gap: "clamp(32px, 5.5vw, 70px)",
-          alignItems: "start",
-        }}>
-
-          {/* ── LEFT — Geometric timeline ── */}
-          <div style={{ position: "relative" }}>
-
-            {/* Vertical axis line — 0.5px, white/10 */}
+        {isMobile ? (
+          /* ── MOBILE LAYOUT: horizontal tabs + stacked content ── */
+          <>
+            {/* Horizontal company tabs */}
             <div style={{
-              position: "absolute",
-              /* center it on the marker X */
-              left: 0,
-              top: 8, bottom: 8,
-              width: "0.5px",
-              background: timelineClr,
-            }} />
-
-            {JOBS.map((job, idx) => {
-              const isActive = job.id === active;
-              const isTourDim = tourWork && !isActive;
-
-              const isHovJob = hoveredJob === job.id;
-              return (
-                <button
-                  key={job.id}
-                  onClick={() => setActive(job.id)}
-                  onMouseEnter={() => setHoveredJob(job.id)}
-                  onMouseLeave={() => setHoveredJob(null)}
-                  style={{
-                    all: "unset", cursor: "pointer",
-                    display: "block",
-                    width: "100%",
-                    paddingLeft: 20,
-                    paddingBottom: idx < JOBS.length - 1 ? ROW_GAP : 0,
-                    position: "relative",
-                    opacity: isTourDim ? 0.2 : 1,
-                    transition: "opacity 0.3s",
-                  }}
-                >
-                  {/* ── Marker: 12px solid green circle (active) / 8px hollow outline (inactive) ── */}
-                  <div style={{
-                    position: "absolute",
-                    left: 0,
-                    top: isActive ? 6 : 7,
-                    transform: "translateX(-50%)",
-                    width: isActive ? 12 : 8,
-                    height: isActive ? 12 : 8,
-                    borderRadius: "50%",
-                    background: isActive ? green : "transparent",
-                    border: isActive ? "none" : `1.5px solid ${inactDotBdr}`,
-                    transition: "all 0.3s ease",
-                    pointerEvents: "none",
-                  }} />
-
-                  {/* Company data */}
-                  <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+              display: "flex", gap: 8, overflowX: "auto",
+              paddingBottom: 12,
+              borderBottom: `1px solid ${divider}`,
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+            } as React.CSSProperties}>
+              {JOBS.map((job) => {
+                const isActive = job.id === active;
+                const isTourDim = tourWork && !isActive;
+                return (
+                  <button
+                    key={job.id}
+                    onClick={() => setActive(job.id)}
+                    style={{
+                      all: "unset", cursor: "pointer", flexShrink: 0,
+                      padding: "7px 16px", borderRadius: 100,
+                      background: isActive ? green : "transparent",
+                      color: isActive ? "#000" : inactNameClr,
+                      fontFamily: "'Poppins', sans-serif",
+                      fontSize: "0.74rem", fontWeight: 700,
+                      whiteSpace: "nowrap",
+                      border: `1px solid ${isActive ? green : inactDotBdr}`,
+                      transition: "all 0.22s",
+                      opacity: isTourDim ? 0.25 : 1,
+                    }}
+                  >
+                    {job.company}
                     {job.tag && (
                       <span style={{
+                        marginLeft: 6,
                         fontFamily: "'Raleway', sans-serif",
-                        fontSize: "0.44rem", fontWeight: 700,
-                        letterSpacing: "0.12em", textTransform: "uppercase",
-                        color: green, marginBottom: 1,
+                        fontSize: "0.44rem", fontWeight: 800,
+                        letterSpacing: "0.1em", textTransform: "uppercase",
+                        color: isActive ? "#000" : green, opacity: 0.85,
                       }}>{job.tag}</span>
                     )}
-                    <span style={{
-                      fontFamily: "'Poppins', sans-serif",
-                      fontSize: "clamp(0.76rem, 1vw, 0.86rem)",
-                      fontWeight: isActive ? 700 : 400,
-                      letterSpacing: "-0.01em",
-                      color: (isActive || isHovJob) ? green : inactNameClr,
-                      lineHeight: 1.2,
-                      transition: "color 0.3s ease",
-                    }}>{job.company}</span>
-                    <span style={{
-                      fontFamily: "'Raleway', sans-serif",
-                      fontSize: "0.54rem", fontWeight: 600,
-                      color: isActive ? activePeriodClr : inactPeriodClr,
-                      transition: "color 0.3s ease",
-                    }}>{job.period}</span>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
+                  </button>
+                );
+              })}
+            </div>
 
-          {/* ── RIGHT — Open, no cards, thin line separators ── */}
+            {/* Content */}
+            <RightPanel />
+          </>
+        ) : (
+          /* ── DESKTOP LAYOUT: two-column grid ── */
           <div style={{
-            borderLeft: `0.5px solid ${divider}`,
-            paddingLeft: "clamp(22px, 3.5vw, 44px)",
-            overflow: "hidden",
+            display: "grid",
+            gridTemplateColumns: "clamp(140px, 19%, 190px) 1fr",
+            gap: "clamp(32px, 5.5vw, 70px)",
+            alignItems: "start",
           }}>
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={active}
-                initial={{ opacity: 0, x: 15 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -8 }}
-                transition={{ duration: 0.6, ease: EASE }}
-                style={{ display: "flex", flexDirection: "column", gap: "clamp(12px, 2vh, 20px)" }}
-              >
-                {/* Role + Meta — floating, no card */}
-                <div>
-                  <h3 style={{
-                    fontFamily: "'Poppins', sans-serif",
-                    fontSize: "clamp(1rem, 1.7vw, 1.3rem)",
-                    fontWeight: 800, letterSpacing: "-0.022em",
-                    color: titleClr, margin: "0 0 5px", lineHeight: 1.1,
-                  }}>{activeJob.role}</h3>
-                  <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-                    <span style={{
-                      fontFamily: "'Raleway', sans-serif",
-                      fontSize: "0.68rem", fontWeight: 700,
-                      color: activeJob.isCurrent ? green : eyebrow,
-                    }}>{activeJob.company}</span>
-                    <div style={{ width: "0.5px", height: 10, background: divider }} />
-                    <span style={{
-                      fontFamily: "'Raleway', sans-serif",
-                      fontSize: "0.62rem", fontWeight: 600, color: eyebrow,
-                    }}>{activeJob.period}</span>
-                    <div style={{ width: "0.5px", height: 10, background: divider }} />
-                    <span style={{
-                      fontFamily: "'Raleway', sans-serif",
-                      fontSize: "0.58rem", fontWeight: 500,
-                      color: isDark ? "#2E2E2E" : "#C0C0C0",
-                    }}>{activeJob.location}</span>
-                  </div>
-                </div>
+            {/* Left — timeline */}
+            <div style={{ position: "relative" }}>
+              <div style={{
+                position: "absolute",
+                left: 0, top: 8, bottom: 8,
+                width: "0.5px",
+                background: timelineClr,
+              }} />
 
-                {/* Thin separator */}
-                <div style={{ height: "0.5px", background: divider }} />
-
-                {/* ── Impact Checkpoints — slide from left ── */}
-                <div>
-                  <span style={{
-                    fontFamily: "'Raleway', sans-serif",
-                    fontSize: "0.5rem", fontWeight: 700,
-                    letterSpacing: "0.2em", textTransform: "uppercase",
-                    color: isDark ? "#282828" : "#C8C8C8",
-                    marginBottom: 10, display: "block",
-                  }}>Impact Checkpoints</span>
-                  <div style={{ display: "flex", flexDirection: "column" }}>
-                    {activeJob.checkpoints.map((cp, i) => (
-                      <motion.div
-                        key={cp}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.5, ease: EASE, delay: i * 0.07 }}
-                        style={{
-                          display: "flex", alignItems: "flex-start", gap: 12,
-                          padding: "clamp(6px, 1vh, 9px) 0",
-                          borderBottom: i < activeJob.checkpoints.length - 1
-                            ? `0.5px solid ${divider}` : "none",
-                        }}
-                      >
-                        {/* Axis-style marker instead of circle */}
-                        <div style={{
-                          display: "flex", alignItems: "center", justifyContent: "center",
-                          width: 12, height: 12, flexShrink: 0, marginTop: 2,
-                        }}>
-                          <Plus
-                            size={9}
-                            strokeWidth={1.5}
-                            style={{ color: isDark ? "rgba(255,255,255,0.25)" : "rgba(0,0,0,0.22)" }}
-                          />
-                        </div>
+              {JOBS.map((job, idx) => {
+                const isActive = job.id === active;
+                const isTourDim = tourWork && !isActive;
+                return (
+                  <button
+                    key={job.id}
+                    onClick={() => setActive(job.id)}
+                    style={{
+                      all: "unset", cursor: "pointer",
+                      display: "block", width: "100%",
+                      paddingLeft: 20,
+                      paddingBottom: idx < JOBS.length - 1 ? ROW_GAP : 0,
+                      position: "relative",
+                      opacity: isTourDim ? 0.2 : 1,
+                      transition: "opacity 0.3s",
+                    }}
+                  >
+                    <div style={{
+                      position: "absolute", left: 0,
+                      top: isActive ? 6 : 7,
+                      transform: "translateX(-50%)",
+                      width: isActive ? 12 : 8,
+                      height: isActive ? 12 : 8,
+                      borderRadius: "50%",
+                      background: isActive ? green : "transparent",
+                      border: isActive ? "none" : `1.5px solid ${inactDotBdr}`,
+                      transition: "all 0.3s ease",
+                      pointerEvents: "none",
+                    }} />
+                    <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                      {job.tag && (
                         <span style={{
                           fontFamily: "'Raleway', sans-serif",
-                          fontSize: "clamp(0.7rem, 0.98vw, 0.78rem)",
-                          fontWeight: 600, lineHeight: 1.6, color: checkTxt,
-                        }}>{cp}</span>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
+                          fontSize: "0.44rem", fontWeight: 700,
+                          letterSpacing: "0.12em", textTransform: "uppercase",
+                          color: green, marginBottom: 1,
+                        }}>{job.tag}</span>
+                      )}
+                      <span style={{
+                        fontFamily: "'Poppins', sans-serif",
+                        fontSize: "clamp(0.76rem, 1vw, 0.86rem)",
+                        fontWeight: isActive ? 700 : 400,
+                        letterSpacing: "-0.01em",
+                        color: isActive ? green : inactNameClr,
+                        lineHeight: 1.2, transition: "color 0.3s ease",
+                      }}>{job.company}</span>
+                      <span style={{
+                        fontFamily: "'Raleway', sans-serif",
+                        fontSize: "0.54rem", fontWeight: 600,
+                        color: isActive ? activePeriodClr : inactPeriodClr,
+                        transition: "color 0.3s ease",
+                      }}>{job.period}</span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
 
-                {/* Thin separator */}
-                <div style={{ height: "0.5px", background: divider }} />
-
-                {/* ── Projects — floating rows ── */}
-                <div>
-                  <span style={{
-                    fontFamily: "'Raleway', sans-serif",
-                    fontSize: "0.5rem", fontWeight: 700,
-                    letterSpacing: "0.2em", textTransform: "uppercase",
-                    color: isDark ? "#282828" : "#C8C8C8",
-                    marginBottom: 8, display: "block",
-                  }}>Projects</span>
-                  <div style={{ display: "flex", flexDirection: "column" }}>
-                    {activeJob.projects.map((proj, i) => {
-                      const hasLink = !!proj.link;
-                      return (
-                        <motion.div
-                          key={proj.title}
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ duration: 0.5, ease: EASE, delay: 0.12 + i * 0.07 }}
-                          onClick={() => hasLink && navigate(proj.link!)}
-                          style={{
-                            display: "flex", alignItems: "center",
-                            justifyContent: "space-between",
-                            padding: "clamp(6px, 1vh, 9px) 0",
-                            borderBottom: i < activeJob.projects.length - 1
-                              ? `0.5px solid ${projSep}` : "none",
-                            cursor: hasLink ? "pointer" : "default",
-                          }}
-                        >
-                          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                            {/* Tag — borderless, bare text */}
-                            <span style={{
-                              fontFamily: "'Raleway', sans-serif",
-                              fontSize: "0.46rem", fontWeight: 700,
-                              letterSpacing: "0.14em", textTransform: "uppercase",
-                              color: tagTxt,
-                              paddingRight: 8,
-                              borderRight: `0.5px solid ${tagBdr}`,
-                            }}>{proj.tag}</span>
-                            <span style={{
-                              fontFamily: "'Poppins', sans-serif",
-                              fontSize: "clamp(0.7rem, 0.98vw, 0.8rem)",
-                              fontWeight: 600, letterSpacing: "-0.01em",
-                              color: projTitle,
-                            }}>{proj.title}</span>
-                          </div>
-                          <div style={{
-                            display: "flex", alignItems: "center", gap: 4,
-                            flexShrink: 0, opacity: hasLink ? 1 : 0.25,
-                          }}>
-                            <span style={{
-                              fontFamily: "'Raleway', sans-serif",
-                              fontSize: "0.5rem", fontWeight: 700,
-                              letterSpacing: "0.08em", textTransform: "uppercase",
-                              color: hasLink ? green : eyebrow,
-                            }}>{hasLink ? "Case Study" : "NDA"}</span>
-                            <ArrowUpRight size={9} style={{ color: hasLink ? green : eyebrow }} />
-                          </div>
-                        </motion.div>
-                      );
-                    })}
-                  </div>
-                </div>
-
-              </motion.div>
-            </AnimatePresence>
+            {/* Right — content */}
+            <div style={{
+              borderLeft: `0.5px solid ${divider}`,
+              paddingLeft: "clamp(22px, 3.5vw, 44px)",
+              overflow: "hidden",
+            }}>
+              <RightPanel />
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

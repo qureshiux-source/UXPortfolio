@@ -11,6 +11,7 @@ import { SiteTour } from "@/components/SiteTour";
 import { ContactModal } from "@/components/ContactModal";
 import { TourHighlightContext } from "@/contexts/TourContext";
 import type { TourHighlight } from "@/contexts/TourContext";
+import { useBreakpoint } from "@/hooks/useBreakpoint";
 
 const NOISE_SVG = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`;
 
@@ -84,7 +85,7 @@ function LinkedInCard({ isDark }: { isDark: boolean }) {
   );
 }
 
-function Footer({ isDark, onOpenContact }: { isDark: boolean; onOpenContact: () => void }) {
+function Footer({ isDark, onOpenContact, isMobile }: { isDark: boolean; onOpenContact: () => void; isMobile: boolean }) {
   const bg      = isDark ? "#020202" : "#F5F4F2";
   const green   = isDark ? "#5EFF80" : "#1A7A32";
   const greenBg = isDark ? "rgba(94,255,128,0.06)"  : "rgba(26,122,50,0.06)";
@@ -117,9 +118,11 @@ function Footer({ isDark, onOpenContact }: { isDark: boolean; onOpenContact: () 
 
   return (
     <section style={{
-      scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh",
+      scrollSnapAlign: "start", scrollSnapStop: "always",
+      minHeight: "100vh",
       background: bg, display: "flex", flexDirection: "column",
-      justifyContent: "center", position: "relative", overflow: "hidden",
+      justifyContent: "center", position: "relative",
+      overflow: isMobile ? "visible" : "hidden",
     }}>
       <div style={{
         position: "absolute", inset: 0, pointerEvents: "none",
@@ -161,7 +164,7 @@ function Footer({ isDark, onOpenContact }: { isDark: boolean; onOpenContact: () 
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           <h2 style={{
             fontFamily: "'Poppins', sans-serif",
-            fontSize: "clamp(2.4rem, 5.8vw, 4.2rem)",
+            fontSize: isMobile ? "clamp(2rem, 9vw, 3rem)" : "clamp(2.4rem, 5.8vw, 4.2rem)",
             fontWeight: 800, lineHeight: 1.04,
             letterSpacing: "-0.04em", color: title, margin: 0,
           }}>
@@ -224,8 +227,8 @@ function Footer({ isDark, onOpenContact }: { isDark: boolean; onOpenContact: () 
             </a>
           </div>
 
-          {/* LinkedIn preview card */}
-          <LinkedInCard isDark={isDark} />
+          {/* LinkedIn preview card — hidden on mobile */}
+          {!isMobile && <LinkedInCard isDark={isDark} />}
         </div>
 
         {/* Bottom bar */}
@@ -270,6 +273,10 @@ export default function Home() {
   const system = typeof document !== "undefined"
     ? document.documentElement.classList.contains("dark") : false;
   const isDark = mounted ? resolvedTheme === "dark" : system;
+  const isMobile = useBreakpoint(640);
+
+  /* On mobile, sections that can overflow get minHeight; fixed sections keep 100vh */
+  const fixedSection  = isMobile ? { minHeight: "100vh" } : { height: "100vh" };
 
   const [tourActive, setTourActive]       = useState(false);
   const [tourHighlight, setTourHighlight] = useState<TourHighlight>(null);
@@ -356,25 +363,25 @@ export default function Home() {
           <section id="tour-0" style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
             <Hero onStartTour={startTour} />
           </section>
-          <section id="tour-1" style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
+          <section id="tour-1" style={{ scrollSnapAlign: "start", scrollSnapStop: "always", ...fixedSection }}>
             <WorkExperience />
           </section>
-          <section id="tour-2" style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
+          <section id="tour-2" style={{ scrollSnapAlign: "start", scrollSnapStop: "always", ...fixedSection }}>
             <CaseStudiesSection />
           </section>
           <section id="tour-3" style={{ scrollSnapAlign: "start" }}>
             <ProjectsSection />
           </section>
-          <section id="tour-4" style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
+          <section id="tour-4" style={{ scrollSnapAlign: "start", scrollSnapStop: "always", ...fixedSection }}>
             <Skills />
           </section>
-          <section id="tour-5" style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
+          <section id="tour-5" style={{ scrollSnapAlign: "start", scrollSnapStop: "always", ...fixedSection }}>
             <ToolsSection />
           </section>
           <section id="tour-6" style={{ scrollSnapAlign: "start" }}>
             <Credentials />
           </section>
-          <Footer isDark={isDark} onOpenContact={() => setContactOpen(true)} />
+          <Footer isDark={isDark} onOpenContact={() => setContactOpen(true)} isMobile={isMobile} />
         </div>
       </TourHighlightContext.Provider>
     </>

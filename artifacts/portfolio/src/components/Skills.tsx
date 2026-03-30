@@ -2,6 +2,7 @@ import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useTourHighlight } from "@/contexts/TourContext";
+import { useBreakpoint } from "@/hooks/useBreakpoint";
 
 const NOISE = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`;
 
@@ -42,7 +43,7 @@ const CATEGORIES = [
   },
 ];
 
-/* ── Tool Groups (used in ToolsSection) ─────────────────────────────────── */
+/* ── Tool Groups ─────────────────────────────────────────────────────────── */
 export const TOOL_GROUPS = [
   {
     label: "Design",
@@ -105,6 +106,7 @@ function ToolChip({
   isDark: boolean;
 }) {
   const [hov, setHov] = useState(false);
+  const isMobile = useBreakpoint(640);
 
   const styles = {
     Pro: {
@@ -131,7 +133,7 @@ function ToolChip({
 
   return (
     <motion.div
-      onMouseEnter={() => setHov(true)}
+      onMouseEnter={() => !isMobile && setHov(true)}
       onMouseLeave={() => setHov(false)}
       animate={{ y: hov ? -1 : 0 }}
       transition={{ duration: 0.14 }}
@@ -179,23 +181,27 @@ function ToolChip({
 /* ── Skills Section ─────────────────────────────────────────────────────── */
 export function Skills() {
   const isDark = useDark();
+  const isMobile = useBreakpoint(640);
   const highlight      = useTourHighlight();
   const tourSkill      = !!(highlight && CAT_HIGHLIGHT[highlight] !== undefined);
   const highlightedCat = highlight ? (CAT_HIGHLIGHT[highlight] ?? -1) : -1;
 
-  const bg      = isDark ? "#060606" : "#FFFFFF";
-  const eyebrow = isDark ? "#606060" : "#8A8A8A";
+  const bg       = isDark ? "#060606" : "#FFFFFF";
+  const eyebrow  = isDark ? "#606060" : "#8A8A8A";
   const titleClr = isDark ? "#F5F5F5" : "#080808";
   const catTitle = isDark ? "#C8C8C8" : "#181818";
-  const tagBg   = isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)";
-  const tagTxt  = isDark ? "#787878" : "#525252";
-  const divider = isDark ? "rgba(255,255,255,0.09)" : "rgba(0,0,0,0.1)";
+  const tagBg    = isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)";
+  const tagTxt   = isDark ? "#787878" : "#525252";
+  const divider  = isDark ? "rgba(255,255,255,0.09)" : "rgba(0,0,0,0.1)";
 
   return (
     <div style={{
-      height: "100vh", paddingTop: 64, boxSizing: "border-box",
+      minHeight: "100vh", paddingTop: 64,
+      paddingBottom: isMobile ? 40 : 0,
+      boxSizing: "border-box",
       background: bg, display: "flex", flexDirection: "column",
-      justifyContent: "center", overflow: "hidden",
+      justifyContent: "center",
+      overflow: isMobile ? "visible" : "hidden",
       position: "relative", transition: "background 0.4s",
     }}>
       <div style={{
@@ -207,20 +213,27 @@ export function Skills() {
 
       <div style={{
         maxWidth: 900, width: "100%", margin: "0 auto",
-        padding: "0 clamp(24px, 5vw, 72px)",
+        padding: isMobile
+          ? "clamp(28px, 4vh, 40px) clamp(20px, 5vw, 32px) 0"
+          : "0 clamp(24px, 5vw, 72px)",
         position: "relative", zIndex: 1,
         display: "flex", flexDirection: "column",
-        gap: "clamp(20px, 3vh, 32px)",
+        gap: isMobile ? "clamp(16px, 2.5vh, 24px)" : "clamp(20px, 3vh, 32px)",
       }}>
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
             <div style={{ width: 22, height: 1, background: eyebrow }} />
             <span style={{ fontFamily: "'Raleway', sans-serif", fontSize: "0.59rem", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: eyebrow }}>Technical Specification</span>
           </div>
-          <h2 style={{ fontFamily: "'Poppins', sans-serif", fontSize: "clamp(1.6rem, 3vw, 2.4rem)", fontWeight: 800, lineHeight: 1.1, letterSpacing: "-0.025em", color: titleClr, margin: 0 }}>Skills</h2>
+          <h2 style={{ fontFamily: "'Poppins', sans-serif", fontSize: isMobile ? "1.5rem" : "clamp(1.6rem, 3vw, 2.4rem)", fontWeight: 800, lineHeight: 1.1, letterSpacing: "-0.025em", color: titleClr, margin: 0 }}>Skills</h2>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)" }}>
+        {/* On mobile: vertical stacked list; on desktop: 3-col grid */}
+        <div style={isMobile ? {
+          display: "flex", flexDirection: "column", gap: 0,
+        } : {
+          display: "grid", gridTemplateColumns: "repeat(3, 1fr)",
+        }}>
           {CATEGORIES.map((cat, ci) => {
             const isTourHl = tourSkill && ci === highlightedCat;
             const isDimmed = tourSkill && !isTourHl;
@@ -230,7 +243,14 @@ export function Skills() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: tourSkill ? (isDimmed ? 0.25 : 1) : 1, y: 0 }}
                 transition={{ duration: 0.28, delay: ci * 0.08 }}
-                style={{
+                style={isMobile ? {
+                  padding: "clamp(14px, 2vh, 20px) 0",
+                  borderBottom: ci < CATEGORIES.length - 1 ? `1px solid ${divider}` : "none",
+                  display: "flex", flexDirection: "column", gap: 10,
+                  transition: "opacity 0.28s ease",
+                  borderRadius: isTourHl ? 10 : 0,
+                  outline: isTourHl ? `1.5px solid ${isDark ? "rgba(255,255,255,0.35)" : "rgba(0,0,0,0.3)"}` : "none",
+                } : {
                   padding: "clamp(14px, 2vh, 20px) clamp(16px, 2vw, 24px)",
                   borderLeft: ci > 0 ? `1px solid ${divider}` : "none",
                   display: "flex", flexDirection: "column", gap: 12,
@@ -255,31 +275,37 @@ export function Skills() {
           })}
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <div style={{ flex: 1, height: 1, background: divider }} />
-          <span style={{ fontFamily: "'Raleway', sans-serif", fontSize: "0.55rem", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: isDark ? "#383838" : "#C8C8C8" }}>Scroll for tools</span>
-          <div style={{ flex: 1, height: 1, background: divider }} />
-        </div>
+        {!isMobile && (
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <div style={{ flex: 1, height: 1, background: divider }} />
+            <span style={{ fontFamily: "'Raleway', sans-serif", fontSize: "0.55rem", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: isDark ? "#383838" : "#C8C8C8" }}>Scroll for tools</span>
+            <div style={{ flex: 1, height: 1, background: divider }} />
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
-/* ── Tools Section (separate scroll snap) ──────────────────────────────── */
+/* ── Tools Section ──────────────────────────────────────────────────────── */
 export function ToolsSection() {
   const isDark = useDark();
+  const isMobile = useBreakpoint(640);
 
-  const bg      = isDark ? "#030303" : "#F5F4F2";
-  const eyebrow = isDark ? "#606060" : "#8A8A8A";
+  const bg       = isDark ? "#030303" : "#F5F4F2";
+  const eyebrow  = isDark ? "#606060" : "#8A8A8A";
   const titleClr = isDark ? "#F5F5F5" : "#080808";
-  const divider = isDark ? "rgba(255,255,255,0.09)" : "rgba(0,0,0,0.1)";
-  const grpLbl  = isDark ? "#3A3A3A" : "#AAAAAA";
+  const divider  = isDark ? "rgba(255,255,255,0.09)" : "rgba(0,0,0,0.1)";
+  const grpLbl   = isDark ? "#3A3A3A" : "#AAAAAA";
 
   return (
     <div style={{
-      height: "100vh", paddingTop: 64, boxSizing: "border-box",
+      minHeight: "100vh", paddingTop: 64,
+      paddingBottom: isMobile ? 40 : 0,
+      boxSizing: "border-box",
       background: bg, display: "flex", flexDirection: "column",
-      justifyContent: "center", overflow: "hidden",
+      justifyContent: "center",
+      overflow: isMobile ? "visible" : "hidden",
       position: "relative", transition: "background 0.4s",
     }}>
       <div style={{
@@ -291,34 +317,45 @@ export function ToolsSection() {
 
       <div style={{
         maxWidth: 900, width: "100%", margin: "0 auto",
-        padding: "0 clamp(24px, 5vw, 72px)",
+        padding: isMobile
+          ? "clamp(28px, 4vh, 40px) clamp(20px, 5vw, 32px) 0"
+          : "0 clamp(24px, 5vw, 72px)",
         position: "relative", zIndex: 1,
         display: "flex", flexDirection: "column",
-        gap: "clamp(22px, 3.2vh, 34px)",
+        gap: isMobile ? "clamp(20px, 3vh, 28px)" : "clamp(22px, 3.2vh, 34px)",
       }}>
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
             <div style={{ width: 22, height: 1, background: eyebrow }} />
             <span style={{ fontFamily: "'Raleway', sans-serif", fontSize: "0.59rem", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: eyebrow }}>Technical Specification</span>
           </div>
-          <h2 style={{ fontFamily: "'Poppins', sans-serif", fontSize: "clamp(1.6rem, 3vw, 2.4rem)", fontWeight: 800, lineHeight: 1.1, letterSpacing: "-0.025em", color: titleClr, margin: 0 }}>Tools</h2>
+          <h2 style={{ fontFamily: "'Poppins', sans-serif", fontSize: isMobile ? "1.5rem" : "clamp(1.6rem, 3vw, 2.4rem)", fontWeight: 800, lineHeight: 1.1, letterSpacing: "-0.025em", color: titleClr, margin: 0 }}>Tools</h2>
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "clamp(14px, 2vh, 20px)" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: isMobile ? "clamp(16px, 2.5vh, 22px)" : "clamp(14px, 2vh, 20px)" }}>
           {TOOL_GROUPS.map((group, gi) => (
             <motion.div
               key={group.label}
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.24, delay: gi * 0.07 }}
-              style={{ display: "flex", alignItems: "flex-start", gap: 16 }}
+              style={{
+                display: "flex",
+                flexDirection: isMobile ? "column" : "row",
+                alignItems: isMobile ? "flex-start" : "flex-start",
+                gap: isMobile ? 8 : 16,
+              }}
             >
               <span style={{
                 fontFamily: "'Raleway', sans-serif", fontSize: "0.5rem", fontWeight: 800,
                 letterSpacing: "0.14em", textTransform: "uppercase",
-                color: grpLbl, flexShrink: 0, width: 76, paddingTop: 8,
+                color: grpLbl, flexShrink: 0,
+                width: isMobile ? "auto" : 76,
+                paddingTop: isMobile ? 0 : 8,
               }}>{group.label}</span>
-              <div style={{ width: 1, height: 28, background: divider, flexShrink: 0, marginTop: 4 }} />
+              {!isMobile && (
+                <div style={{ width: 1, height: 28, background: divider, flexShrink: 0, marginTop: 4 }} />
+              )}
               <div style={{ display: "flex", flexWrap: "wrap", gap: "6px 6px", flex: 1 }}>
                 {group.tools.map(tool => (
                   <ToolChip key={tool.name} tool={tool} isDark={isDark} />
@@ -331,8 +368,8 @@ export function ToolsSection() {
         <p style={{
           fontFamily: "'Raleway', sans-serif", fontSize: "0.56rem", fontWeight: 700,
           letterSpacing: "0.12em", textTransform: "uppercase",
-          color: grpLbl, textAlign: "right", margin: 0,
-        }}>Hover any tool to reveal proficiency</p>
+          color: grpLbl, textAlign: isMobile ? "left" : "right", margin: 0,
+        }}>{isMobile ? "Tap any tool for details" : "Hover any tool to reveal proficiency"}</p>
       </div>
     </div>
   );

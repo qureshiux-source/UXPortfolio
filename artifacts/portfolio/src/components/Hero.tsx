@@ -3,6 +3,7 @@ import { useTheme } from "next-themes";
 import { MoveRight, MessageCircle, Play } from "lucide-react";
 import { motion } from "framer-motion";
 import { ContactModal } from "./ContactModal";
+import { useBreakpoint } from "@/hooks/useBreakpoint";
 
 const NOISE_SVG = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`;
 
@@ -15,6 +16,7 @@ export function Hero({ onStartTour }: HeroProps) {
   const [mounted, setMounted] = useState(false);
   const [activeDoc, setActiveDock] = useState(0);
   const [contactOpen, setContactOpen] = useState(false);
+  const isMobile = useBreakpoint(640);
 
   useEffect(() => { setMounted(true); }, []);
   const system = typeof document !== "undefined"
@@ -83,69 +85,77 @@ export function Hero({ onStartTour }: HeroProps) {
             transition={{ duration: 0.7, ease: EASE, delay: 0.7 }}
             style={{
               fontFamily: "'Raleway', sans-serif",
-              fontSize: "clamp(0.48rem, 0.7vw, 0.58rem)",
-              fontWeight: 700, letterSpacing: "0.26em",
+              fontSize: isMobile ? "0.44rem" : "clamp(0.48rem, 0.7vw, 0.58rem)",
+              fontWeight: 700, letterSpacing: isMobile ? "0.18em" : "0.26em",
               textTransform: "uppercase",
               color: subClr, margin: 0,
-              marginBottom: "clamp(22px, 4vh, 36px)",
+              marginBottom: "clamp(16px, 3vh, 36px)",
               textAlign: "center",
+              padding: isMobile ? "0 16px" : 0,
             }}
           >
             Turning Complex Systems into Clean, Usable Interfaces
           </motion.p>
 
+          {/* ── Name row with decorative lines ── */}
           <div style={{ display: "flex", alignItems: "center", width: "100%", position: "relative" }}>
+            {/* Left line */}
             <div style={{ flex: 1, height: 1, position: "relative", overflow: "hidden" }}>
               <motion.div
                 initial={{ width: "0%" }} animate={{ width: "100%" }}
                 transition={{ duration: 1.1, ease: EASE, delay: 0.08 }}
                 style={{ position: "absolute", right: 0, top: 0, height: "0.5px", background: lineClr }}
               />
-              <motion.div
-                initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.55, ease: EASE, delay: 0.85 }}
-                style={{
-                  position: "absolute",
-                  left: "clamp(32px, 6vw, 72px)",
-                  top: "50%", transform: "translateY(-50%)",
-                  display: "inline-flex", alignItems: "center", gap: 7,
-                  padding: "5px 12px", borderRadius: 100,
-                  border: `1px solid ${pillBdr}`, background: pillBg,
-                  whiteSpace: "nowrap",
-                }}
-              >
+              {/* Pill — hidden on mobile */}
+              {!isMobile && (
                 <motion.div
-                  animate={{ scale: [1, 1.6, 1], opacity: [1, 0.25, 1] }}
-                  transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
-                  style={{ width: 5, height: 5, borderRadius: "50%", background: accent, flexShrink: 0 }}
-                />
-                <span style={{
-                  fontFamily: "'Poppins', sans-serif",
-                  fontSize: "0.5rem", fontWeight: 600,
-                  letterSpacing: "0.06em", textTransform: "uppercase",
-                  color: isDark ? "rgba(255,255,255,0.45)" : "rgba(0,0,0,0.45)",
-                }}>UI/UX Design Lead</span>
-              </motion.div>
+                  initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.55, ease: EASE, delay: 0.85 }}
+                  style={{
+                    position: "absolute",
+                    left: "clamp(32px, 6vw, 72px)",
+                    top: "50%", transform: "translateY(-50%)",
+                    display: "inline-flex", alignItems: "center", gap: 7,
+                    padding: "5px 12px", borderRadius: 100,
+                    border: `1px solid ${pillBdr}`, background: pillBg,
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  <motion.div
+                    animate={{ scale: [1, 1.6, 1], opacity: [1, 0.25, 1] }}
+                    transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
+                    style={{ width: 5, height: 5, borderRadius: "50%", background: accent, flexShrink: 0 }}
+                  />
+                  <span style={{
+                    fontFamily: "'Poppins', sans-serif",
+                    fontSize: "0.5rem", fontWeight: 600,
+                    letterSpacing: "0.06em", textTransform: "uppercase",
+                    color: isDark ? "rgba(255,255,255,0.45)" : "rgba(0,0,0,0.45)",
+                  }}>UI/UX Design Lead</span>
+                </motion.div>
+              )}
             </div>
 
+            {/* Name */}
             <motion.div
               initial={{ opacity: 0 }} animate={{ opacity: 1 }}
               transition={{ duration: 0.65, ease: EASE, delay: 0.52 }}
-              style={{ padding: "0 clamp(20px, 3.5vw, 52px)", flexShrink: 0, textAlign: "center" }}
+              style={{ padding: `0 ${isMobile ? "clamp(12px, 3vw, 24px)" : "clamp(20px, 3.5vw, 52px)"}`, flexShrink: 0, textAlign: "center" }}
             >
               <h1 style={{
                 fontFamily: "'Poppins', sans-serif",
-                fontSize: "clamp(2.8rem, 6.2vw, 5.4rem)",
+                fontSize: "clamp(1.7rem, 8vw, 5.4rem)",
                 fontWeight: 800, lineHeight: 1,
                 letterSpacing: "-0.04em",
                 color: headClr, margin: 0, whiteSpace: "nowrap",
               }}>
                 Haseeb
-                <span style={{ color: accent, margin: "0 clamp(10px, 1.6vw, 20px)", fontWeight: 300, opacity: 0.7 }}>/</span>
+                <span style={{ color: accent, margin: `0 ${isMobile ? "clamp(6px, 1.8vw, 14px)" : "clamp(10px, 1.6vw, 20px)"}`, fontWeight: 300, opacity: 0.7 }}>/</span>
                 Qureshi.
               </h1>
             </motion.div>
 
+            {/* Right line */}
             <div style={{ flex: 1, height: 1, position: "relative", overflow: "hidden" }}>
               <motion.div
                 initial={{ width: "0%" }} animate={{ width: "100%" }}
@@ -155,10 +165,11 @@ export function Hero({ onStartTour }: HeroProps) {
             </div>
           </div>
 
+          {/* ── Stats ── */}
           <motion.div
             initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, ease: EASE, delay: 0.78 }}
-            style={{ display: "flex", alignItems: "center", gap: "clamp(10px, 2vw, 18px)", marginTop: "clamp(18px, 3vh, 28px)" }}
+            style={{ display: "flex", alignItems: "center", gap: "clamp(10px, 2vw, 18px)", marginTop: "clamp(14px, 2.5vh, 28px)" }}
           >
             {[
               { num: "2+",        lbl: "Years Exp." },
@@ -170,12 +181,16 @@ export function Hero({ onStartTour }: HeroProps) {
                   <span style={{
                     fontFamily: "'Poppins', sans-serif",
                     fontVariantNumeric: "tabular-nums", fontWeight: 600,
-                    fontSize: i < 2 ? "clamp(0.85rem, 1.4vw, 1.1rem)" : "clamp(0.72rem, 1.1vw, 0.86rem)",
+                    fontSize: i < 2
+                      ? (isMobile ? "0.85rem" : "clamp(0.85rem, 1.4vw, 1.1rem)")
+                      : (isMobile ? "0.72rem" : "clamp(0.72rem, 1.1vw, 0.86rem)"),
                     letterSpacing: i < 2 ? "-0.03em" : "0", color: statNumClr,
                   }}>{s.num}</span>
                   {s.lbl && (
                     <span style={{
-                      fontFamily: "'Raleway', sans-serif", fontSize: "0.5rem", fontWeight: 700,
+                      fontFamily: "'Raleway', sans-serif",
+                      fontSize: isMobile ? "0.44rem" : "0.5rem",
+                      fontWeight: 700,
                       letterSpacing: "0.16em", textTransform: "uppercase", color: statLblClr,
                     }}>{s.lbl}</span>
                   )}
@@ -194,8 +209,11 @@ export function Hero({ onStartTour }: HeroProps) {
           transition={{ duration: 0.65, ease: EASE, delay: 0.95 }}
           style={{
             position: "absolute",
-            bottom: "clamp(36px, 7vh, 56px)", left: "50%", transform: "translateX(-50%)",
-            zIndex: 10, width: 600, maxWidth: "calc(100vw - 48px)",
+            bottom: isMobile ? "clamp(24px, 5vh, 40px)" : "clamp(36px, 7vh, 56px)",
+            left: "50%", transform: "translateX(-50%)",
+            zIndex: 10,
+            width: isMobile ? "calc(100vw - 32px)" : 600,
+            maxWidth: "calc(100vw - 32px)",
             display: "flex",
             border: `1px solid ${dockBdr}`, borderRadius: 6, overflow: "hidden",
             backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)",
@@ -219,9 +237,11 @@ export function Hero({ onStartTour }: HeroProps) {
                   style={{
                     all: "unset", flex: 1, cursor: "pointer",
                     display: "flex", alignItems: "center", justifyContent: "center",
-                    gap: 7, padding: "13px 0",
+                    gap: 7,
+                    padding: isMobile ? "11px 0" : "13px 0",
                     fontFamily: "'Poppins', sans-serif",
-                    fontSize: "0.72rem", fontWeight: isActive ? 700 : 500,
+                    fontSize: isMobile ? "0.66rem" : "0.72rem",
+                    fontWeight: isActive ? 700 : 500,
                     letterSpacing: "0.01em",
                     background: isActive ? actBg : "transparent",
                     color: isActive ? actFg : dockTxt,

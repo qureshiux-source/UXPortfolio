@@ -5,6 +5,7 @@ import { ArrowUpRight, ArrowLeft, Mail } from "lucide-react";
 import { useLocation } from "wouter";
 import { Navbar } from "@/components/Navbar";
 import { ContactModal } from "@/components/ContactModal";
+import { useBreakpoint } from "@/hooks/useBreakpoint";
 
 const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
 const NOISE = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`;
@@ -82,6 +83,7 @@ const WORK: Work[] = [
 
 export default function Projects() {
   const isDark = useDark();
+  const isMobile = useBreakpoint(640);
   const [filter, setFilter] = useState<FilterKey>("all");
   const [, navigate] = useLocation();
   const [contactOpen, setContactOpen] = useState(false);
@@ -154,7 +156,7 @@ export default function Projects() {
 
           <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: 24, marginBottom: "clamp(32px, 5vh, 52px)" }}>
             <div>
-              <h1 style={{ fontFamily: "'Poppins', sans-serif", fontSize: "clamp(2.8rem, 6vw, 5.2rem)", fontWeight: 800, lineHeight: 1, letterSpacing: "-0.045em", color: heading, margin: "0 0 12px" }}>
+              <h1 style={{ fontFamily: "'Poppins', sans-serif", fontSize: isMobile ? "clamp(2rem, 10vw, 3rem)" : "clamp(2.8rem, 6vw, 5.2rem)", fontWeight: 800, lineHeight: 1, letterSpacing: "-0.045em", color: heading, margin: "0 0 12px" }}>
                 Work &{" "}<span style={{ color: green }}>Projects</span>
               </h1>
               <p style={{ fontFamily: "'Raleway', sans-serif", fontSize: "clamp(0.82rem, 1.1vw, 0.92rem)", lineHeight: 1.7, fontWeight: 500, color: body, margin: 0, maxWidth: 480 }}>
@@ -162,18 +164,21 @@ export default function Projects() {
               </p>
             </div>
 
-            <div style={{ display: "flex", gap: 28, flexShrink: 0 }}>
-              {[
-                { n: WORK.filter(w => w.type === "case-study").length, label: "Case Studies" },
-                { n: WORK.filter(w => w.type === "project").length,    label: "Projects" },
-                { n: new Date().getFullYear() - 2021,                  label: "Yrs Exp." },
-              ].map(({ n, label }) => (
-                <div key={label} style={{ textAlign: "right" }}>
-                  <div style={{ fontFamily: "'Poppins', sans-serif", fontSize: "clamp(1.6rem, 2.8vw, 2.4rem)", fontWeight: 800, letterSpacing: "-0.04em", color: heading, lineHeight: 1 }}>{n}+</div>
-                  <div style={{ fontFamily: "'Raleway', sans-serif", fontSize: "0.52rem", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: muted, marginTop: 4 }}>{label}</div>
-                </div>
-              ))}
-            </div>
+            {/* Stats — hidden on mobile to save space */}
+            {!isMobile && (
+              <div style={{ display: "flex", gap: 28, flexShrink: 0 }}>
+                {[
+                  { n: WORK.filter(w => w.type === "case-study").length, label: "Case Studies" },
+                  { n: WORK.filter(w => w.type === "project").length,    label: "Projects" },
+                  { n: new Date().getFullYear() - 2021,                  label: "Yrs Exp." },
+                ].map(({ n, label }) => (
+                  <div key={label} style={{ textAlign: "right" }}>
+                    <div style={{ fontFamily: "'Poppins', sans-serif", fontSize: "clamp(1.6rem, 2.8vw, 2.4rem)", fontWeight: 800, letterSpacing: "-0.04em", color: heading, lineHeight: 1 }}>{n}+</div>
+                    <div style={{ fontFamily: "'Raleway', sans-serif", fontSize: "0.52rem", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: muted, marginTop: 4 }}>{label}</div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: "clamp(32px, 5vh, 52px)", borderBottom: `1px solid ${divider}`, paddingBottom: 0 }}>
@@ -240,12 +245,12 @@ export default function Projects() {
                       <div style={{ flex: 1, height: "0.5px", background: divider }} />
                     </div>
                   )}
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "clamp(10px, 1.4vw, 14px)" }}>
+                  <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: "clamp(10px, 1.4vw, 14px)" }}>
                     {projects.map((item, i) => (
                       <ProjectCard key={item.id} item={item} isDark={isDark} index={i}
                         tokens={{ cardBgRest, cardBgHov, cardBdrRst, cardBdrHov, chipBg, chipTxt, linkRst, green, heading, body, divider, goldBg, goldBdr, goldClr, greenBg, greenBdr }}
                         onNavigate={navigate}
-                        colSpan={item.id === "ubiox" ? 3 : undefined}
+                        colSpan={item.id === "ubiox" && !isMobile ? 3 : undefined}
                       />
                     ))}
                   </div>
