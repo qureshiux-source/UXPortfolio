@@ -1,17 +1,18 @@
 {
   "version": 2,
-  "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
-  "buildCommand": "cd ../.. && pnpm --filter @workspace/api-server run build",
-  "outputDirectory": "dist",
-  "functions": {
-    "dist/index.cjs": {
-      "runtime": "nodejs20.x"
+  "builds": [
+    {
+      "src": "dist/index.cjs",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": ["dist/**"]
+      }
     }
-  },
+  ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/dist/index.cjs"
+      "dest": "dist/index.cjs"
     }
   ]
 }
