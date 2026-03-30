@@ -1,9 +1,13 @@
 import express, { type Express } from "express";
 import cors from "cors";
-import pinoHttp = require("pino-http");
+
+// pino-http fix for your TS config (bundler mode, no interop)
+import * as pinoHttpModule from "pino-http";
+const pinoHttp =
+  (pinoHttpModule as any).default || (pinoHttpModule as any);
+
 import router from "./routes";
 import { logger } from "./lib/logger";
-import type { IncomingMessage, ServerResponse } from "http";
 
 const app: Express = express();
 
@@ -11,20 +15,20 @@ app.use(
   pinoHttp({
     logger,
     serializers: {
-      req(req: IncomingMessage & { id?: string }) {
+      req(req: any) {
         return {
           id: req.id,
           method: req.method,
           url: req.url?.split("?")[0],
         };
       },
-      res(res: ServerResponse) {
+      res(res: any) {
         return {
           statusCode: res.statusCode,
         };
       },
     },
-  }),
+  })
 );
 
 app.use(cors());
