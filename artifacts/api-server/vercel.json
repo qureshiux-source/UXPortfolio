@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
+  "buildCommand": "cd ../.. && pnpm --filter @workspace/api-server run build",
+  "outputDirectory": "dist",
+  "functions": {
+    "dist/index.cjs": {
+      "runtime": "nodejs20.x"
+    }
+  },
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/dist/index.cjs"
+    }
+  ]
+}

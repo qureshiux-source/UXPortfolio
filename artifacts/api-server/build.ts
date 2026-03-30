@@ -6,13 +6,14 @@ import { rm, readFile } from "fs/promises";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// server deps to bundle to reduce openat(2) syscalls
-// which helps cold start times without risking some
-// packages that are not bundle compatible
+// Packages to bundle into the output (reduces cold-start syscalls).
+// Workspace packages (workspace:*) are always bundled — ESBuild resolves
+// them via pnpm symlinks, so they never appear in the externals list.
 const allowlist = [
   "@google/generative-ai",
   "axios",
   "connect-pg-simple",
+  "cookie-parser",
   "cors",
   "date-fns",
   "drizzle-orm",
@@ -46,10 +47,14 @@ async function buildAll() {
   console.log("building server...");
   const pkgPath = path.resolve(__dirname, "package.json");
   const pkg = JSON.parse(await readFile(pkgPath, "utf-8"));
+
   const allDeps = [
     ...Object.keys(pkg.dependencies || {}),
     ...Object.keys(pkg.devDependencies || {}),
   ];
+
+  // Keep external: packages that are NOT in the allowlist AND are NOT
+  // workspace-local (workspace:* deps are always bundled by ESBuild).
   const externals = allDeps.filter(
     (dep) =>
       !allowlist.includes(dep) &&
@@ -68,7 +73,12 @@ async function buildAll() {
     minify: true,
     external: externals,
     logLevel: "info",
+    // ESBuild follows pnpm symlinks, so @workspace/* imports resolve
+    // correctly without any custom plugin.
+    sourcemap: false,
   });
+
+  console.log("build complete → dist/index.cjs");
 }
 
 buildAll().catch((err) => {
