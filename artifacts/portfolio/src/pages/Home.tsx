@@ -181,26 +181,48 @@ function Footer({ isDark, onOpenContact }: { isDark: boolean; onOpenContact: () 
 
         {/* Contact row */}
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          <button
-            onClick={onOpenContact}
-            style={{
-              all: "unset", cursor: "pointer",
-              fontFamily: "'Poppins', sans-serif",
-              fontSize: "0.86rem", fontWeight: 700, letterSpacing: "0.01em",
-              padding: "13px 28px", borderRadius: 100,
-              background: isDark ? "#ECECEC" : "#0A0A0A",
-              color: isDark ? "#0A0A0A" : "#F0F0F0",
-              display: "inline-flex", alignItems: "center", gap: 8,
-              alignSelf: "flex-start",
-              boxShadow: isDark ? "0 4px 20px rgba(0,0,0,0.5)" : "0 4px 20px rgba(0,0,0,0.12)",
-              transition: "opacity 0.2s",
-            }}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.opacity = "0.84"; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.opacity = "1"; }}
-          >
-            Get in Touch
-            <ArrowUpRight size={14} />
-          </button>
+          {/* Primary CTAs */}
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+            <button
+              onClick={onOpenContact}
+              style={{
+                all: "unset", cursor: "pointer",
+                fontFamily: "'Poppins', sans-serif",
+                fontSize: "0.86rem", fontWeight: 700, letterSpacing: "0.01em",
+                padding: "13px 28px", borderRadius: 100,
+                background: isDark ? "#ECECEC" : "#0A0A0A",
+                color: isDark ? "#0A0A0A" : "#F0F0F0",
+                display: "inline-flex", alignItems: "center", gap: 8,
+                boxShadow: isDark ? "0 4px 20px rgba(0,0,0,0.5)" : "0 4px 20px rgba(0,0,0,0.12)",
+                transition: "opacity 0.2s",
+              }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.opacity = "0.84"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.opacity = "1"; }}
+            >
+              Get in Touch
+              <ArrowUpRight size={14} />
+            </button>
+
+            <a
+              href="/resume.pdf"
+              download="Haseeb_Qureshi_Resume.pdf"
+              style={{
+                fontFamily: "'Poppins', sans-serif",
+                fontSize: "0.86rem", fontWeight: 700, letterSpacing: "0.01em",
+                padding: "13px 28px", borderRadius: 100,
+                background: "transparent",
+                border: `1px solid ${isDark ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.15)"}`,
+                color: isDark ? "#B0B0B0" : "#2A2A2A",
+                display: "inline-flex", alignItems: "center", gap: 8,
+                textDecoration: "none",
+                transition: "border-color 0.22s, color 0.22s",
+              }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = isDark ? "rgba(255,255,255,0.35)" : "rgba(0,0,0,0.35)"; el.style.color = isDark ? "#E0E0E0" : "#080808"; }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = isDark ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.15)"; el.style.color = isDark ? "#B0B0B0" : "#2A2A2A"; }}
+            >
+              <Download size={14} /> Resume
+            </a>
+          </div>
 
           {/* LinkedIn preview card */}
           <LinkedInCard isDark={isDark} />
@@ -221,7 +243,15 @@ function Footer({ isDark, onOpenContact }: { isDark: boolean; onOpenContact: () 
               </svg>,
             )}
             <span style={{ width: 1, height: 10, background: divider }} />
-            {footerLink("#", "Download CV", <Download size={11} />, false)}
+            <a
+              href="/resume.pdf"
+              download="Haseeb_Qureshi_Resume.pdf"
+              style={{ fontFamily: "'Raleway', sans-serif", fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: linkRst, textDecoration: "none", display: "flex", alignItems: "center", gap: 5, transition: "color 0.2s" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = linkHov; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = linkRst; }}
+            >
+              <Download size={11} /> Download CV
+            </a>
           </div>
 
           <span style={{ fontFamily: "'Raleway', sans-serif", fontSize: "0.54rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: dim }}>
@@ -323,25 +353,25 @@ export default function Home() {
             willChange: "scroll-position",
           }}
         >
-          <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
+          <section id="tour-0" style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
             <Hero onStartTour={startTour} />
           </section>
-          <section id="process" style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
+          <section id="tour-1" style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
             <WorkExperience />
           </section>
-          <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
+          <section id="tour-2" style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
             <CaseStudiesSection />
           </section>
-          <section id="projects" style={{ scrollSnapAlign: "start" }}>
+          <section id="tour-3" style={{ scrollSnapAlign: "start" }}>
             <ProjectsSection />
           </section>
-          <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
+          <section id="tour-4" style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
             <Skills />
           </section>
-          <section style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
+          <section id="tour-5" style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100vh" }}>
             <ToolsSection />
           </section>
-          <section style={{ scrollSnapAlign: "start" }}>
+          <section id="tour-6" style={{ scrollSnapAlign: "start" }}>
             <Credentials />
           </section>
           <Footer isDark={isDark} onOpenContact={() => setContactOpen(true)} />
