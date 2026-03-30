@@ -159,7 +159,7 @@ export function CaseStudiesSection() {
                 animate={{ y: isHov ? -2 : 0 }}
                 transition={{ duration: 0.35, ease: EASE }}
                 style={{
-                  background: isHov ? t.cardBgHov : t.cardBgRst,
+                  background: isHov ? t.cardBgHov : t.cardBgRest,
                   border: `1px solid ${isTourHl ? t.tourRing : (isHov ? t.cardBdrHov : t.cardBdrRst)}`,
                   borderRadius: 10,
                   padding: isMobile
@@ -286,7 +286,7 @@ export function ProjectsSection() {
                 style={{
                   gridColumn: (proj.colSpan && !isMobile) ? `span ${proj.colSpan}` : undefined,
                   position: "relative",
-                  background: isHov ? t.cardBgHov : t.cardBgRst,
+                  background: isHov ? t.cardBgHov : t.cardBgRest,
                   border: `1px solid ${isHov ? t.cardBdrHov : t.cardBdrRst}`,
                   borderRadius: 10,
                   padding: isMobile
@@ -371,7 +371,7 @@ export function ProjectsSection() {
             style={{
               gridColumn: isMobile ? undefined : "span 3",
               position: "relative",
-              background: hovered === 99 ? t.cardBgHov : t.cardBgRst,
+              background: hovered === 99 ? t.cardBgHov : t.cardBgRest,
               border: `1px solid ${hovered === 99 ? t.cardBdrHov : t.cardBdrRst}`,
               borderRadius: 10,
               padding: isMobile

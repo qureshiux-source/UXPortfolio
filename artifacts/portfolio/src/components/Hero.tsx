@@ -62,7 +62,7 @@ export function Hero({ onStartTour }: HeroProps) {
           position: "absolute", inset: 0, pointerEvents: "none", zIndex: 1,
           backgroundImage: NOISE_SVG, backgroundSize: "160px 160px",
           opacity: 0.07,
-          mixBlendMode: (isDark ? "overlay" : "multiply") as const,
+          mixBlendMode: (isDark ? "overlay" : "multiply") as "overlay" | "multiply",
         }} />
 
         <div style={{

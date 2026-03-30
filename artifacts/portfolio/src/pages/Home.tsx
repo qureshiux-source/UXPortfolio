@@ -128,7 +128,7 @@ function Footer({ isDark, onOpenContact, isMobile }: { isDark: boolean; onOpenCo
         position: "absolute", inset: 0, pointerEvents: "none",
         backgroundImage: NOISE_SVG, backgroundSize: "180px 180px",
         opacity: isDark ? 0.055 : 0.09,
-        mixBlendMode: (isDark ? "overlay" : "multiply") as const,
+        mixBlendMode: (isDark ? "overlay" : "multiply") as "overlay" | "multiply",
       }} />
       <div style={{
         position: "absolute", inset: 0, pointerEvents: "none",

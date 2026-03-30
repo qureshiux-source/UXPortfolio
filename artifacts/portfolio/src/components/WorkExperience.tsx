@@ -283,7 +283,7 @@ export function WorkExperience() {
         position: "absolute", inset: 0, pointerEvents: "none",
         backgroundImage: NOISE, backgroundSize: "180px 180px",
         opacity: isDark ? 0.055 : 0.09,
-        mixBlendMode: (isDark ? "overlay" : "multiply") as const,
+        mixBlendMode: (isDark ? "overlay" : "multiply") as "overlay" | "multiply",
         zIndex: 0,
       }} />
 
