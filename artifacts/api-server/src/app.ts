@@ -35,6 +35,11 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// 👇 **Fix: Add a root route**
+app.get("/", (_req, res) => {
+  res.send("Server is running 🚀");
+});
+
 app.use("/api", router);
 
 export default app;
