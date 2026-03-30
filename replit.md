@@ -91,6 +91,19 @@ Generated Zod schemas from the OpenAPI spec (e.g. `HealthCheckResponse`). Used b
 
 Generated React Query hooks and fetch client from the OpenAPI spec (e.g. `useHealthCheck`, `healthCheck`).
 
+### `artifacts/portfolio` (`@workspace/portfolio`)
+
+Personal portfolio for **Haseeb Qureshi** — UI/UX Design Lead & Accessibility Specialist. React + Vite SPA.
+
+- **Theme**: Matte black/white, green accent (`#5EFF80` dark / `#1A7A32` light). Default: **dark**. WCAG AAA.
+- **Typography**: Poppins (headings), Raleway (body)
+- **Routing**: wouter (base = `import.meta.env.BASE_URL`)
+- **Pages**: `/` (Home, scroll-snap sections), `/process`, `/projects`, `/case-study/dubai-dunes`
+- **Key components**: `Hero`, `Navbar`, `Credentials`, `ContactModal`, `LinkedInCard` (in Home footer)
+- **Contact info**: email `qureshi.ux@gmail.com`, WhatsApp `+92 3318921216`, LinkedIn `https://www.linkedin.com/in/haseeb-qureshi-5b8aa1351`
+- **ContactModal**: shared modal with email + WhatsApp CTAs. z-index 40000/40001 (above credential modal at 20000/20001)
+- **Credentials**: real Coursera + LinkedIn verification URLs. Microsoft Specialization ID: `GMJV0LOKUXWC`
+
 ### `scripts` (`@workspace/scripts`)
 
 Utility scripts package. Each script is a `.ts` file in `src/` with a corresponding npm script in `package.json`. Run scripts via `pnpm --filter @workspace/scripts run <script>`. Scripts can import any workspace package (e.g., `@workspace/db`) by adding it as a dependency in `scripts/package.json`.

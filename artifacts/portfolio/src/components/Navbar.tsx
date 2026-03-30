@@ -4,7 +4,7 @@ import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 
-const LINKEDIN_URL = "https://linkedin.com/in/haseeb-qureshi-design";
+const LINKEDIN_URL = "https://www.linkedin.com/in/haseeb-qureshi-5b8aa1351";
 
 function scrollTo(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
